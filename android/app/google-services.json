@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "3551348354",
+    "project_id": "bonogifts",
+    "storage_bucket": "bonogifts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3551348354:android:449cc91f6d5f429620969b",
+        "android_client_info": {
+          "package_name": "com.app.bonogift"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3551348354-268tr21trl4ifag4m92t7dips60r69ie.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.bonogift",
+            "certificate_hash": "b682daa3b4e34bb65da4892ada1eec7b2ba9deff"
+          }
+        },
+        {
+          "client_id": "3551348354-gbqbstnog73q83ltuus1bcs6e6imokbu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAPJRBZeaeIsabNzMQYaFbw0ZrRe6Ap5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3551348354-gbqbstnog73q83ltuus1bcs6e6imokbu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "3551348354-aokv6ihgoi0l92soptl942jp83593uv5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.marianatech.bonoGifts"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3551348354:android:4a4f3b09570c552520969b",
+        "android_client_info": {
+          "package_name": "com.marianatech.bono_gifts"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3551348354-0kusub3knnk9gt4l6tbuamlftq7g7hmg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marianatech.bono_gifts",
+            "certificate_hash": "b682daa3b4e34bb65da4892ada1eec7b2ba9deff"
+          }
+        },
+        {
+          "client_id": "3551348354-gdgb9giqpie253ffn7fr90lejf43blse.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marianatech.bono_gifts",
+            "certificate_hash": "6c558e48dd69ddf5a53ab070bc17f607b99b95c2"
+          }
+        },
+        {
+          "client_id": "3551348354-gbqbstnog73q83ltuus1bcs6e6imokbu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAPJRBZeaeIsabNzMQYaFbw0ZrRe6Ap5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3551348354-gbqbstnog73q83ltuus1bcs6e6imokbu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "3551348354-aokv6ihgoi0l92soptl942jp83593uv5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.marianatech.bonoGifts"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
