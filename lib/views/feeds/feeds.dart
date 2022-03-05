@@ -23,6 +23,7 @@ class _FeedsState extends State<Feeds> {
   @override
   Widget build(BuildContext context) {
     var formt = DateFormat('dd-MMM-yyyy');
+    final commentDateFormat = DateFormat('dd MMM yyyy');
     final pro = Provider.of<FeedsProvider>(context);
     return RefreshIndicator(
       onRefresh: () {
@@ -191,117 +192,28 @@ class _FeedsState extends State<Feeds> {
                                                     isScrollControlled: true,
                                                     context: context,
                                                     builder: (contxt) {
-                                                      return SafeArea(
-                                                        child: Container(
-                                                          color: Colors.transparent,
+                                                      return Scaffold(
+                                                        resizeToAvoidBottomInset: false,
+                                                        body: Padding(
+                                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                                           child: Container(
-                                                            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))),
-                                                            height: MediaQuery.of(context).size.height,
-                                                            child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [
-                                                                Column(
-                                                                  children: [
-                                                                    const SizedBox(
-                                                                      height: 20,
-                                                                    ),
-                                                                    const Divider(),
-                                                                    StreamBuilder(
-                                                                      stream: pro.colRef.doc(pro.feeds[i].docid).collection('comments').snapshots(),
-                                                                      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                                                                        if (snapshot.connectionState == ConnectionState.waiting) {
-                                                                          return const Center(
-                                                                            child: CircularProgressIndicator(),
-                                                                          );
-                                                                        } else if (snapshot.hasData) {
-                                                                          List<DocumentSnapshot> docs = snapshot.data!.docs;
-                                                                          return ListView.builder(
-                                                                            physics: const NeverScrollableScrollPhysics(),
-                                                                            itemCount: docs.length,
-                                                                            shrinkWrap: true,
-                                                                            itemBuilder: (context, i) {
-                                                                              return Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Container(
-                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                  decoration: BoxDecoration(
-                                                                                      color: Colors.grey.withOpacity(0.4),
-                                                                                      borderRadius: const BorderRadius.only(
-                                                                                        topLeft: Radius.circular(20),
-                                                                                        topRight: Radius.circular(20),
-                                                                                        bottomRight: Radius.circular(20),
-                                                                                      )),
-                                                                                  child: Row(
-                                                                                    children: [
-                                                                                      Column(
-                                                                                        children: [
-                                                                                          docs[i]['image'] == '' || docs[i]['image'] == null
-                                                                                              ? CircleAvatar(
-                                                                                                  child: Image.asset('assets/images/placeholder.jpg'),
-                                                                                                )
-                                                                                              : CircleAvatar(
-                                                                                                  backgroundImage: NetworkImage(docs[i]['image'].toString()),
-                                                                                                )
-                                                                                        ],
-                                                                                      ),
-                                                                                      const SizedBox(
-                                                                                        width: 10,
-                                                                                      ),
-                                                                                      Column(
-                                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                        children: [
-                                                                                          Text(docs[i]['name'] ?? ''),
-                                                                                          Text(docs[i]['text'] ?? ''),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            },
-                                                                          );
-                                                                        } else {
-                                                                          return const Center(
-                                                                            child: Text("No Comments"),
-                                                                          );
-                                                                        }
-                                                                      },
-                                                                    )
-                                                                  ],
+                                                            color: Colors.transparent,
+                                                            child: Container(
+                                                              decoration: const BoxDecoration(
+                                                                color: Colors.white,
+                                                                borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius.circular(10.0),
+                                                                  topRight: Radius.circular(10.0),
                                                                 ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Container(
-                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: Colors.grey.withOpacity(0.4)),
-                                                                    padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                      children: [
-                                                                        const SizedBox(
-                                                                          width: 10,
-                                                                        ),
-                                                                        Expanded(
-                                                                          child: TextField(
-                                                                            onChanged: (val) {
-                                                                              pro.setCommentText(val);
-                                                                            },
-                                                                            controller: pro.commnetController,
-                                                                            decoration: const InputDecoration(
-                                                                              hintText: "Write a comment...",
-                                                                              border: InputBorder.none,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        IconButton(
-                                                                            onPressed: () {
-                                                                              pro.addComment(pro.feeds[i].docid, context);
-                                                                            },
-                                                                            icon: const Icon(Icons.send))
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              ],
+                                                              ),
+                                                              //height: MediaQuery.of(context).size.height,
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                children: [
+                                                                  _getCommentsWidget(pro, i, commentDateFormat),
+                                                                  _writeCommentWidget(context, pro, i),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
@@ -403,7 +315,8 @@ class _FeedsState extends State<Feeds> {
                                   left: 0,
                                   right: 0,
                                   top: 0,
-                                  child: Container(/**/
+                                  child: Container(
+                                    /**/
                                     color: Colors.black.withOpacity(0.6),
                                     child: Column(
                                       children: [
@@ -464,6 +377,144 @@ class _FeedsState extends State<Feeds> {
                     )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _writeCommentWidget(BuildContext context, FeedsProvider pro, int i) {
+    return Container(
+      //height: MediaQuery.of(context).size.height * 0.1,
+      width: MediaQuery.of(context).size.width * 0.95,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: Colors.grey.withOpacity(0.4),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.only(bottom: 24),
+      child: Row(
+        children: [
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextField(
+              onChanged: (val) {
+                pro.setCommentText(val);
+              },
+              controller: pro.commnetController,
+              decoration: const InputDecoration(
+                hintText: "Write a comment...",
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              pro.addComment(pro.feeds[i].docid, context);
+            },
+            icon: const Icon(Icons.send),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _getCommentsWidget(FeedsProvider pro, int i, DateFormat commentDateFormat) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.9,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 32),
+            StreamBuilder(
+              stream: pro.colRef.doc(pro.feeds[i].docid).collection('comments').snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasData) {
+                  List<DocumentSnapshot> docs = snapshot.data!.docs;
+                  return Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          'Comments ${snapshot.data!.docs.length.toString()}',
+                        ),
+                      ),
+                      ListView.builder(
+                        primary: false,
+                        itemCount: docs.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, i) {
+                          DateTime dt = (docs[i]['date'] as Timestamp).toDate();
+                          return _getCommentWidget(docs, i, commentDateFormat, dt);
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: Text("No Comments"),
+                  );
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _getCommentWidget(List<DocumentSnapshot<Object?>> docs, int i, DateFormat commentDateFormat, DateTime dt) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.3),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+        ),
+        child: Row(
+          children: [
+            docs[i]['image'] == '' || docs[i]['image'] == null
+                ? CircleAvatar(
+                    child: Image.asset('assets/images/placeholder.jpg'),
+                  )
+                : CircleAvatar(
+                    backgroundImage: NetworkImage(docs[i]['image'].toString()),
+                  ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(docs[i]['name'] ?? ''),
+                      Container(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Text(
+                          commentDateFormat.format(dt),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      docs[i]['text'] ?? '',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
