@@ -193,10 +193,10 @@ class FeedsProvider extends ChangeNotifier {
             description: fed['des'],
             title: fed['title'],
             date: fed['timestamp'].toDate(),
-            profileImage: fed['profileImage'],
-            profileName: fed['profileName'],
+            profileImage: fed['profileImage'] ?? '',
+            profileName: fed['profileName'] ?? '',
             isDesOpen: false,
-            phone: fed['phone'],
+            phone: fed['phone'].toString(),
             docid: fed.id,
             like: fed['like'],
             share: fed['share'],
@@ -269,7 +269,7 @@ class FeedsProvider extends ChangeNotifier {
   }
 
   callGetLike(BuildContext context, String postDoc) {
-    getLikeButton(context, postDoc);
+    return getLikeButton(context, postDoc);
   }
 
   static String imagee = "assets/feeds_icons/like-icon.png";
@@ -287,7 +287,7 @@ class FeedsProvider extends ChangeNotifier {
       }
     });
     print(LikeClass.likeBtn);
-    Future.delayed(Duration(seconds: 1));
+    //Future.delayed(Duration(seconds: 1));
     return LikeClass.likeBtn;
     // print("nothing calledd");
   }

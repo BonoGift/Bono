@@ -45,7 +45,7 @@ class FeedsService {
   Future<bool> getLikePost(String userDoc, String postDoc) async {
     bool val = false;
     await FirebaseFirestore.instance.collection('users').doc(userDoc).collection('likedPosts').doc(postDoc).get().then((value) {
-      print("like post valeu $value");
+      print("like post value $value");
       if (value.exists) {
         val = true;
       } else {

@@ -1,5 +1,4 @@
-class FeedsModels{
-
+class FeedsModels {
   String image;
   String title;
   String description;
@@ -13,9 +12,18 @@ class FeedsModels{
   int share;
   bool isLiked;
 
-  FeedsModels({required this.image,required this.description,
-    required this.title,required this.date,required this.profileImage,
-    required this.profileName,required this.isDesOpen,required this.phone,
-    required this.docid,required this.like,required this.share,required this.isLiked});
-
+  FeedsModels({
+    required this.image,
+    required this.description,
+    required this.title,
+    required this.date,
+    required this.profileImage,
+    required this.profileName,
+    required this.isDesOpen,
+    required this.phone,
+    required this.docid,
+    required this.like,
+    required this.share,
+    required this.isLiked,
+  });
 }
