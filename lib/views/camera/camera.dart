@@ -99,10 +99,10 @@ class _CameraScreenState extends State<CameraScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(
-                          icon: Icon(
-                            pro.flash ? Icons.flash_on : Icons.flash_off,
+                          icon: Image.asset(
+                            'assets/images/icons/gallery_icon.png',
                             color: Colors.white,
-                            size: 28,
+                            width: 60,
                           ),
                           onPressed: () => pro.chooseImageFromGallery(context)),
                       GestureDetector(
