@@ -66,6 +66,7 @@ class FeedsProvider extends ChangeNotifier {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     bytesImage = await image?.readAsBytes();
+    if (image == null) return;
     Navigator.push(
       context,
       MaterialPageRoute(
