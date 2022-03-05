@@ -19,9 +19,27 @@ class _AddPostState extends State<AddPost> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xffeef9ff),
+      appBar: AppBar(
+        backgroundColor: const Color(0xffeef9ff),
+        elevation: 0,
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+            size: 24,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(
+            left: 20.0,
+            right: 20.0,
+            bottom: 20.0,
+          ),
           child: Form(
             key: keyy,
             child: SingleChildScrollView(
@@ -36,6 +54,7 @@ class _AddPostState extends State<AddPost> {
                         style: TextStyle(
                           fontSize: 50,
                           fontFamily: 'EdwardianScriptITC',
+                          color: Colors.black,
                         ),
                       ),
                     ],
