@@ -104,7 +104,7 @@ class _CameraScreenState extends State<CameraScreen> {
                             color: Colors.white,
                             size: 28,
                           ),
-                          onPressed: () => pro.onOFfFlash()),
+                          onPressed: () => pro.chooseImageFromGallery(context)),
                       GestureDetector(
                         onLongPress: () =>pro.recordVideo(),
                         onLongPressUp: () => pro.stopRecordVideo(context),

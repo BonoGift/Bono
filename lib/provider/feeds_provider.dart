@@ -17,7 +17,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
-class FeedsProvider extends ChangeNotifier{
+class FeedsProvider extends ChangeNotifier {
   XFile? image;
   Uint8List? bytesImage;
   String title = '';
@@ -31,58 +31,70 @@ class FeedsProvider extends ChangeNotifier{
   bool iscamerafront = true;
   double transform = 0;
   late List<CameraDescription> camera;
+
   CameraController get cameraController => _cameraController;
 
   static int index = 0;
 
-  setIndex(int ind){
+  setIndex(int ind) {
     index = ind;
     print(index);
     notifyListeners();
   }
 
-   List<AllDestinations> allDestinations = [
-    AllDestinations(name: 'Chat', icon: index == 0 ? chatIconBlue :chatIconGrey),
-    AllDestinations(name: 'Buy', icon:index == 1 ? giftIconBlue : giftIConGrey),
-    AllDestinations(name: 'Feeds', icon:index == 2 ? feedIconBlue:feedIConGrey),
-    AllDestinations(name: 'Camera', icon:index == 3 ? cameraIconBlue:cameraIconGrey),
+  List<AllDestinations> allDestinations = [
+    AllDestinations(name: 'Chat', icon: index == 0 ? chatIconBlue : chatIconGrey),
+    AllDestinations(name: 'Buy', icon: index == 1 ? giftIconBlue : giftIConGrey),
+    AllDestinations(name: 'Feeds', icon: index == 2 ? feedIconBlue : feedIConGrey),
+    AllDestinations(name: 'Camera', icon: index == 3 ? cameraIconBlue : cameraIconGrey),
     AllDestinations(name: 'Profile', icon: index == 4 ? profileIconBlue : profileIconGrey),
   ];
-  
+
   final colRef = FirebaseFirestore.instance.collection('userPosts');
 
-
-  dispostCameraController(){
+  dispostCameraController() {
     _cameraController.dispose();
   }
 
-  onOFfFlash(){
+  onOFfFlash() {
     flash = !flash;
-    flash
-        ? _cameraController
-        .setFlashMode(FlashMode.torch)
-        : _cameraController.setFlashMode(FlashMode.off);
+    flash ? _cameraController.setFlashMode(FlashMode.torch) : _cameraController.setFlashMode(FlashMode.off);
     notifyListeners();
   }
 
-  recordVideo()async{
+  chooseImageFromGallery(BuildContext context) async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    bytesImage = await image?.readAsBytes();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (builder) => CameraViewPage(
+          path: image!.path,
+          bytes: bytesImage!,
+        ),
+      ),
+    );
+  }
+
+  recordVideo() async {
     await _cameraController.startVideoRecording();
     isRecoring = true;
     notifyListeners();
   }
 
-  stopRecordVideo(BuildContext context)async{
-    XFile videopath =
-        await _cameraController.stopVideoRecording();
+  stopRecordVideo(BuildContext context) async {
+    XFile videopath = await _cameraController.stopVideoRecording();
 
-      isRecoring = false;
+    isRecoring = false;
 
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (builder) => VideoViewPage(
-              path: videopath.path,
-            ),),
+      context,
+      MaterialPageRoute(
+        builder: (builder) => VideoViewPage(
+          path: videopath.path,
+        ),
+      ),
     );
     notifyListeners();
   }
@@ -95,50 +107,50 @@ class FeedsProvider extends ChangeNotifier{
         context,
         MaterialPageRoute(
             builder: (builder) => CameraViewPage(
-              path: file.path,
-              bytes: bytesImage!,
-            )));
+                  path: file.path,
+                  bytes: bytesImage!,
+                )));
   }
 
-  flipCamera(){
-      iscamerafront = !iscamerafront;
-      transform = transform + pi;
+  flipCamera() {
+    iscamerafront = !iscamerafront;
+    transform = transform + pi;
     int cameraPos = iscamerafront ? 0 : 1;
-    _cameraController = CameraController(
-        camera[cameraPos], ResolutionPreset.high);
+    _cameraController = CameraController(camera[cameraPos], ResolutionPreset.high);
     cameraValue = _cameraController.initialize();
     notifyListeners();
   }
 
-  takePhotoProvider(BuildContext context){
+  takePhotoProvider(BuildContext context) {
     if (!isRecoring) takePhoto(context);
   }
 
-  getImage()async{
+  getImage() async {
     XFile? tempImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     image = tempImage;
     bytesImage = await image!.readAsBytes();
     notifyListeners();
   }
 
-  assignImage(Uint8List image){
+  assignImage(Uint8List image) {
     bytesImage = image;
     notifyListeners();
   }
 
-  getCamera()async{
+  getCamera() async {
     await availableCameras().then((value) {
-        camera = value;
+      camera = value;
       _cameraController = CameraController(camera[0], ResolutionPreset.high);
       cameraValue = _cameraController.initialize();
       notifyListeners();
     });
   }
 
-  setDescription(String des){
+  setDescription(String des) {
     description = des;
   }
-  setTitle(String titl){
+
+  setTitle(String titl) {
     title = titl;
   }
 
@@ -146,54 +158,60 @@ class FeedsProvider extends ChangeNotifier{
 
   List<FeedsModels> feeds = [];
 
-  uploadPost(BuildContext context){
-    final pro = Provider.of<SignUpProvider>(context,listen: false);
-    Map<String,dynamic> data = {
-      'title':title,
-      'des':description,
-      'image':bytesImage,
-      'phone':pro.phone,
+  uploadPost(BuildContext context) {
+    final pro = Provider.of<SignUpProvider>(context, listen: false);
+    Map<String, dynamic> data = {
+      'title': title,
+      'des': description,
+      'image': bytesImage,
+      'phone': pro.phone,
       'profileImage': pro.userImage,
-      'profileName':pro.name,
+      'profileName': pro.name,
     };
-    service.savePost(data,generateRandomString(20)).then((value) {
-      if(value){
+    service.savePost(data, generateRandomString(20)).then((value) {
+      if (value) {
         getFeedsPosts(context);
         Navigator.pop(context);
       }
     });
-
   }
 
-  openDescription(int i){
+  openDescription(int i) {
     feeds[i].isDesOpen = !feeds[i].isDesOpen;
     notifyListeners();
   }
 
-  Future<void> getFeedsPosts(BuildContext context)async{
+  Future<void> getFeedsPosts(BuildContext context) async {
     feeds.clear();
-    final pro = Provider.of<SignUpProvider>(context,listen: false);
-    await service.getFeedsPosts().then((value){
+    final pro = Provider.of<SignUpProvider>(context, listen: false);
+    await service.getFeedsPosts().then((value) {
       value.docs.forEach((fed) {
-        feeds.add(FeedsModels(image: fed['image url'], description: fed['des'],
-          title: fed['title'], date: fed['timestamp'].toDate(),
-          profileImage: fed['profileImage'],profileName: fed['profileName'],
-          isDesOpen: false,phone: fed['phone'],docid: fed.id,
-          like: fed['like'],
-          share: fed['share'],
-          isLiked: false,
-        ),
+        feeds.add(
+          FeedsModels(
+            image: fed['image url'],
+            description: fed['des'],
+            title: fed['title'],
+            date: fed['timestamp'].toDate(),
+            profileImage: fed['profileImage'],
+            profileName: fed['profileName'],
+            isDesOpen: false,
+            phone: fed['phone'],
+            docid: fed.id,
+            like: fed['like'],
+            share: fed['share'],
+            isLiked: false,
+          ),
         );
         print("Feeds list length ${feeds.length}");
         notifyListeners();
       });
       print("docs length ${value.docs.length}");
-      for(var f = 0; f < feeds.length;f++){
+      for (var f = 0; f < feeds.length; f++) {
         service.getLikePost(pro.phone!, feeds[f].docid).then((value) {
-          if(value == true){
+          if (value == true) {
             print("true");
             feeds[f].isLiked = true;
-          }else{
+          } else {
             print("false");
             feeds[f].isLiked = false;
           }
@@ -203,18 +221,18 @@ class FeedsProvider extends ChangeNotifier{
     });
   }
 
-  addComment(String docRed,BuildContext context){
+  addComment(String docRed, BuildContext context) {
     service.addComments(docRed, context, commnetController.text);
     commnetController.clear();
   }
 
-  incrementLike(int i){
-    if(feeds[i].isLiked == true){
+  incrementLike(int i) {
+    if (feeds[i].isLiked == true) {
       print("like");
       feeds[i].like = feeds[i].like - 1;
       print(feeds[i].like);
       notifyListeners();
-    }else{
+    } else {
       print("dlike");
       feeds[i].like = feeds[i].like + 1;
       print(feeds[i].like);
@@ -223,23 +241,22 @@ class FeedsProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  sharePost(String title,String image){
+  sharePost(String title, String image) {
     Share.share("Post From Bono\n$title,\n$image");
   }
 
-
-  setCommentText(String val){
+  setCommentText(String val) {
     commnetController = TextEditingController(text: val);
   }
 
-
   List<AssetEntity> imageList = [];
 
-
-  getPhotoGAllery()async{
+  getPhotoGAllery() async {
     var result = await PhotoManager.requestPermissionExtend();
     if (result.isAuth) {
-      List<AssetPathEntity> list = await PhotoManager.getAssetPathList(onlyAll: true,);
+      List<AssetPathEntity> list = await PhotoManager.getAssetPathList(
+        onlyAll: true,
+      );
       List<AssetEntity> media = await list[0].getAssetListPaged(0, 20);
       imageList = media;
       notifyListeners();
@@ -249,61 +266,63 @@ class FeedsProvider extends ChangeNotifier{
       /// if result is fail, you can call `PhotoManager.openSetting();`  to open android/ios applicaton's setting to get permission
     }
   }
-  callGetLike(BuildContext context,String postDoc){
-    getLikeButton(context,postDoc);
+
+  callGetLike(BuildContext context, String postDoc) {
+    getLikeButton(context, postDoc);
   }
+
   static String imagee = "assets/feeds_icons/like-icon.png";
-   String getLikeButton(BuildContext context,String postDoc){
-    final pro = Provider.of<SignUpProvider>(context,listen: false);
+
+  String getLikeButton(BuildContext context, String postDoc) {
+    final pro = Provider.of<SignUpProvider>(context, listen: false);
     // late String x;
-     service.getLikePost(pro.phone!, postDoc).then((value){
-      if(value == true){
+    service.getLikePost(pro.phone!, postDoc).then((value) {
+      if (value == true) {
         print("trueee caledd");
-         LikeClass.likeBtn = "assets/feeds_icons/like-icon.png";
-      }else{
+        LikeClass.likeBtn = "assets/feeds_icons/like-icon.png";
+      } else {
         print("falseeeeeee caledd");
         LikeClass.likeBtn = "assets/feeds_icons/like-icon-grey-.png";
       }
     });
-     print(LikeClass.likeBtn);
-     Future.delayed(Duration(seconds: 1));
-     return LikeClass.likeBtn;
+    print(LikeClass.likeBtn);
+    Future.delayed(Duration(seconds: 1));
+    return LikeClass.likeBtn;
     // print("nothing calledd");
   }
-  addLike(String docRed,int like,BuildContext context, int index){
-     feeds[index].isLiked = !feeds[index].isLiked;
-    final pro = Provider.of<SignUpProvider>(context,listen: false);
-    service.addLike(docRed, like,pro.phone!);
+
+  addLike(String docRed, int like, BuildContext context, int index) {
+    feeds[index].isLiked = !feeds[index].isLiked;
+    final pro = Provider.of<SignUpProvider>(context, listen: false);
+    service.addLike(docRed, like, pro.phone!);
     notifyListeners();
   }
 
   int like = 0;
 
-    getLikeCount(String docId)async{
-
+  getLikeCount(String docId) async {
     await FirebaseFirestore.instance.collection('userPosts').doc(docId).get().then((event) {
-       like = event.data()!['like'];
-       print("likeeeeeeeee $like");
+      like = event.data()!['like'];
+      print("likeeeeeeeee $like");
     });
     // return "0";
     notifyListeners();
-
   }
 
-    String? photo;
-    String? phonee;
-    DateTime? dob;
-    String? name;
-    String? building;
-    String? area;
-    String? street;
-    String? room;
-    String? country;
-    List postsUsers = [];
-    String? networkDiffDays;
+  String? photo;
+  String? phonee;
+  DateTime? dob;
+  String? name;
+  String? building;
+  String? area;
+  String? street;
+  String? room;
+  String? country;
+  List postsUsers = [];
+  String? networkDiffDays;
 
-  getNetworkUserData(String phone)async{
-    await service.getNetworkProfile(phone).then((data){
+  getNetworkUserData(String phone) async {
+    await service.getNetworkProfile(phone).then((data) {
       dob = data['dobFormat'].toDate();
       name = data['name'];
       photo = data['profile_url'];
@@ -317,9 +336,9 @@ class FeedsProvider extends ChangeNotifier{
       notifyListeners();
       print(data);
     });
-    await service.getUsersPost(phone).then((value){
+    await service.getUsersPost(phone).then((value) {
       postsUsers = [];
-      for(var i in value.docs){
+      for (var i in value.docs) {
         print("docs my post $i");
         postsUsers.add(i['image url']);
         print("docs my post length ${postsUsers.length}");
@@ -329,17 +348,17 @@ class FeedsProvider extends ChangeNotifier{
     });
     notifyListeners();
   }
-  getDateDiff(){
+
+  getDateDiff() {
     DateTime d = DateTime.now();
-    var daOfBirth = DateTime(d.year,dob!.month,dob!.day);
-    var todayDate = DateTime(d.year,d.month,d.day);
+    var daOfBirth = DateTime(d.year, dob!.month, dob!.day);
+    var todayDate = DateTime(d.year, d.month, d.day);
     var io = daOfBirth.difference(todayDate).inDays;
     networkDiffDays = io.toString();
     notifyListeners();
   }
-
-
 }
-class LikeClass{
+
+class LikeClass {
   static String likeBtn = 'assets/feeds_icons/like-icon-grey-.png';
 }
