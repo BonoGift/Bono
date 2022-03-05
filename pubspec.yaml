@@ -123,6 +123,11 @@ flutter:
     - assets/feeds_icons/
     - assets/receive.wav
     - assets/send.wav
+    -
+  fonts:
+      - family: EdwardianScriptITC
+        fonts:
+          - asset: assets/fonts/ITCEDSCR.TTF
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
