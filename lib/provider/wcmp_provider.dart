@@ -43,6 +43,8 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     try {
       allVendors = await wooCommerceMarketPlaceService.getAllVendors();
       nearbyVendors = allVendors.where((element) {
+        print(element.address?.city);
+
         return element.address?.city!.trim().toLowerCase() ==
             city.trim().toLowerCase();
       }).toList();
@@ -63,7 +65,12 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
           }
           if (!found) {
             categories.add(product.categories![product.categories!.length - 1]);
-            categoriesshow.add(CategoriesShow(isSelected: false,name: product.categories![product.categories!.length -1].name,id: product.categories![product.categories!.length -1].id,slug: product.categories![product.categories!.length -1].slug));
+            categoriesshow.add(CategoriesShow(
+                isSelected: false,
+                name: product.categories![product.categories!.length - 1].name,
+                id: product.categories![product.categories!.length - 1].id,
+                slug:
+                    product.categories![product.categories!.length - 1].slug));
           }
         }
       }
@@ -88,7 +95,7 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     return await signUpService.getUser(phone);
   }
 
-  assignSumery(String pricee,String weight,String namee,String imagee){
+  assignSumery(String pricee, String weight, String namee, String imagee) {
     size = weight;
     price = pricee;
     name = namee;
@@ -99,6 +106,7 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
   clearShops() {
     nearbyVendors.clear();
     categories.clear();
+    categoriesshow.clear();
     allVendors.clear();
     nearbyVendorProducts.clear();
     notifyListeners();

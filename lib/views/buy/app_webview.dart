@@ -1,3 +1,4 @@
+import 'package:bono_gifts/models/wcmp_api/order.dart';
 import 'package:bono_gifts/provider/paypal_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,20 @@ class _AppWebViewState extends State<AppWebView> {
                   .executePayment(
                       widget.executeUrl, payerID, widget.accessToken)
                   .then((id) {
-                // widget.onFinish(id);
+                Order order = Order(
+                  setPaid: true,
+                  paymentMethod: 'Paypal',
+                  paymentMethodTitle: 'Paypal',
+                  billing: Billing(),
+                  lineItems: [
+                    LineItems(),
+                  ],
+                  shippingLines: [
+                    ShippingLines(),
+                  ],
+                  shipping: Shipping(),
+                );
+                paypalProvider.createOrder(order);
                 Navigator.of(context).pop();
               });
             } else {

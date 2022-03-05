@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bono_gifts/models/wcmp_api/order.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
 import 'package:dio/dio.dart';
@@ -56,6 +57,21 @@ class WooCommerceMarketPlaceService {
       }
     }, onError: (error) {
       return <VendorProduct>[];
+    });
+  }
+
+  Future<Order?> createOrder(Order order) async {
+    return _dio.post('/wp-json/wc/v3/orders', data: order.toJson()).then(
+        (value) {
+      if (value.statusCode == 200) {
+        if (value.data != null) {
+          return Order.fromJson(value as Map<String, dynamic>);
+        }
+      } else {
+        return null;
+      }
+    }, onError: (error) {
+      return null;
     });
   }
 }
