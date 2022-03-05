@@ -229,15 +229,9 @@ class FeedsProvider extends ChangeNotifier {
 
   incrementLike(int i) {
     if (feeds[i].isLiked == true) {
-      print("like");
       feeds[i].like = feeds[i].like - 1;
-      print(feeds[i].like);
-      notifyListeners();
     } else {
-      print("dlike");
       feeds[i].like = feeds[i].like + 1;
-      print(feeds[i].like);
-      notifyListeners();
     }
     notifyListeners();
   }
@@ -292,10 +286,10 @@ class FeedsProvider extends ChangeNotifier {
     // print("nothing calledd");
   }
 
-  addLike(String docRed, int like, BuildContext context, int index) {
+  addLike(String docRed, int numberOfLikes, BuildContext context, int index) {
     feeds[index].isLiked = !feeds[index].isLiked;
     final pro = Provider.of<SignUpProvider>(context, listen: false);
-    service.addLike(docRed, like, pro.phone!);
+    service.addLike(docRed, numberOfLikes, pro.phone!);
     notifyListeners();
   }
 

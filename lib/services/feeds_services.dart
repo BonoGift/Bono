@@ -58,12 +58,12 @@ class FeedsService {
   addLike(String docRed, int like, String userDoc) {
     FirebaseFirestore.instance.collection('users').doc(userDoc).collection('likedPosts').doc(docRed).get().then((value) {
       if (value.exists) {
-        FirebaseFirestore.instance.collection('userPosts').doc(docRed).update({'like': like == 0 ? 0 : like - 1});
+        FirebaseFirestore.instance.collection('userPosts').doc(docRed).update({'like': like});
         FirebaseFirestore.instance.collection('users').doc(userDoc).collection('likedPosts').doc(docRed).delete();
         print("Exist");
       } else {
         print("Exist Not");
-        FirebaseFirestore.instance.collection('userPosts').doc(docRed).update({'like': like + 1});
+        FirebaseFirestore.instance.collection('userPosts').doc(docRed).update({'like': like});
         FirebaseFirestore.instance.collection('users').doc(userDoc).collection('likedPosts').doc(docRed).set({
           'id': docRed,
         });
