@@ -22,6 +22,7 @@ class SignUpProvider extends ChangeNotifier {
   DateTime todayDate = DateTime.now();
   TextEditingController deliTitleContr = TextEditingController(text: "Home");
   String deliTitle = 'Home';
+  String work = 'Work';
   TextEditingController room = TextEditingController();
   TextEditingController buildingName = TextEditingController();
   TextEditingController area = TextEditingController();

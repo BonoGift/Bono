@@ -6,6 +6,7 @@ import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/routes/custom_routes.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
+import 'package:country_code_picker/country_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        localizationsDelegates: [
+          CountryLocalizations.delegate,
+        ],
         onGenerateRoute: CustomRoutes.allRoutes,
         initialRoute: laoding,
         // home: HistoryPage(),
