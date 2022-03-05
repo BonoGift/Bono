@@ -101,11 +101,9 @@ class _FeedsState extends State<Feeds> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               pro.feeds.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : ListView.builder(
@@ -118,7 +116,7 @@ class _FeedsState extends State<Feeds> {
                             InkWell(
                               onTap: () {
                                 pro.getNetworkUserData(pro.feeds[i].phone);
-                                Future.delayed(Duration(seconds: 1), () {
+                                Future.delayed(const Duration(seconds: 1), () {
                                   Navigator.pushNamed(context, userProfile);
                                 });
                               },
@@ -136,9 +134,6 @@ class _FeedsState extends State<Feeds> {
                                       radius: 25,
                                       backgroundImage: NetworkImage(pro.feeds[i].profileImage),
                                     ),
-                                    // SizedBox(
-                                    //   height: 7,
-                                    // ),
                                     Text(
                                       formt.format(pro.feeds[i].date).toString(),
                                       style: const TextStyle(color: Colors.black, fontSize: 12),
@@ -147,10 +142,6 @@ class _FeedsState extends State<Feeds> {
                                 ),
                               ),
                             ),
-                            // const SizedBox(
-                            //   height: 10,
-                            // ),
-                            // const SizedBox(height: 5,),
                             Stack(
                               children: [
                                 Image.network(
@@ -167,14 +158,15 @@ class _FeedsState extends State<Feeds> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
+                                        const SizedBox(height: 10),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: InkWell(
                                             onTap: () {
-                                              pro.sharePost(pro.feeds[i].title, pro.feeds[i].image);
+                                              pro.sharePost(
+                                                pro.feeds[i].title,
+                                                pro.feeds[i].image,
+                                              );
                                             },
                                             child: Column(
                                               children: [
@@ -183,8 +175,8 @@ class _FeedsState extends State<Feeds> {
                                                   height: 40,
                                                   width: 40,
                                                 ),
-                                                Text(
-                                                  "0",
+                                                const Text(
+                                                  "",
                                                   style: TextStyle(color: Colors.white),
                                                 )
                                               ],
@@ -395,8 +387,8 @@ class _FeedsState extends State<Feeds> {
                                                   height: 40,
                                                   width: 40,
                                                 ),
-                                                Text(
-                                                  "0",
+                                                const Text(
+                                                  "",
                                                   style: TextStyle(color: Colors.white),
                                                 )
                                               ],
@@ -411,39 +403,51 @@ class _FeedsState extends State<Feeds> {
                                   left: 0,
                                   right: 0,
                                   top: 0,
-                                  child: Container(
-                                    color: Colors.grey.withOpacity(0.4),
+                                  child: Container(/**/
+                                    color: Colors.black.withOpacity(0.6),
                                     child: Column(
                                       children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SizedBox(
-                                              width: MediaQuery.of(context).size.width / 3,
-                                            ),
-                                            Expanded(
-                                                child: Text(
+                                        const SizedBox(height: 8),
+                                        SizedBox(
+                                          width: MediaQuery.of(context).size.width * 0.75,
+                                          child: Center(
+                                            child: Text(
                                               pro.feeds[i].title,
-                                              style: TextStyle(color: Colors.white, fontSize: 20),
-                                            )),
-                                            TextButton(
-                                                onPressed: () {
-                                                  pro.openDescription(i);
-                                                },
-                                                child: Text(pro.feeds[i].isDesOpen ? "Read Less" : "Read More"))
-                                          ],
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ),
                                         ),
+                                        const SizedBox(height: 8),
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: InkWell(
+                                            onTap: () {
+                                              pro.openDescription(i);
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.only(right: 8),
+                                              child: Text(
+                                                pro.feeds[i].isDesOpen ? "Read Less" : "Read More",
+                                                style: const TextStyle(color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
                                         pro.feeds[i].isDesOpen
-                                            ? Text(
-                                                pro.feeds[i].description.toString(),
-                                                style: const TextStyle(color: Colors.white, fontSize: 12),
+                                            ? Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                                child: Text(
+                                                  pro.feeds[i].description.toString(),
+                                                  style: const TextStyle(color: Colors.white, fontSize: 15),
+                                                ),
                                               )
                                             : Container(),
-                                        pro.feeds[i].isDesOpen
-                                            ? SizedBox(
-                                                height: 10,
-                                              )
-                                            : Container()
+                                        pro.feeds[i].isDesOpen ? const SizedBox(height: 10) : Container()
                                       ],
                                     ),
                                   ),
