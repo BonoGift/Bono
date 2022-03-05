@@ -18,6 +18,7 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
   final SignUpService signUpService = SignUpService();
 
   ApiState apiState = ApiState.none;
+  int? id;
   String? size;
   String? price;
   String? name;
@@ -95,7 +96,9 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     return await signUpService.getUser(phone);
   }
 
-  assignSumery(String pricee, String weight, String namee, String imagee) {
+  assignSumery(
+      int id, String pricee, String weight, String namee, String imagee) {
+    id = id;
     size = weight;
     price = pricee;
     name = namee;

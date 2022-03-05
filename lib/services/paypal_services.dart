@@ -6,14 +6,14 @@ import 'package:dio/dio.dart';
 class PaypalServices {
   late Dio _dio;
 
-  String domain = "https://api.sandbox.paypal.com"; // for sandbox mode
-//  String domain = "https://api.paypal.com"; // for production mode
+  // String domain = "https://api.sandbox.paypal.com"; // for sandbox mode
+  String domain = "https://api.paypal.com"; // for production mode
 
   // change clientId and secret with your own, provided by paypal
   String clientId =
-      'AXIeQdhSTYIMLnyJWqllbjYmmiJWNAeDQ-kW2GUZ_PsNB-dnF2r1iNSr7hrlFD5sB-YqomHhyLIMKIRY';
+      'AV4aSB3gKsN5lf8wbPbi2IlVt0G-MElTjHIlhIo0fvfqSyQNWzkqGKCiuMWtb49h_dzA0ayeVnCEk11f';
   String secret =
-      'EOo0ca0UCu7n5FhNUQunO6mlYNHwMDVlx6JsyBYn4YuPRKsTdNDiNJs_ONzHUfRnoJX9ClBDdMTmUXnr';
+      'EEYLpF4iDoBdIVjnRefvjzeeN7shf1GaCIUnLRGc_RYquD2As_2SxFmuMBUszVT70y7xK6_9_7zjHsEK';
 
   // for getting the access token from Paypal
   Future<String?> getAccessToken() async {

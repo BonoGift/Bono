@@ -1,9 +1,6 @@
 import 'package:bono_gifts/config/constants.dart';
-import 'package:bono_gifts/helper/decorated_container.dart';
-import 'package:bono_gifts/helper/decorated_image.dart';
 import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
-import 'package:bono_gifts/routes/routes_names.dart';
 import 'package:bono_gifts/views/buy/order_summry.dart';
 import 'package:bono_gifts/views/buy/select_network.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
@@ -59,8 +56,8 @@ class _BuyPageState extends State<BuyPage> {
               ),
               pro.userName != null
                   ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
                         padding: const EdgeInsets.only(
                             top: 10, bottom: 10, left: 15, right: 15),
                         decoration: BoxDecoration(
@@ -69,9 +66,10 @@ class _BuyPageState extends State<BuyPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                             PrimaryText(text: "To"),
+                            PrimaryText(text: "To"),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Container(
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
@@ -79,7 +77,8 @@ class _BuyPageState extends State<BuyPage> {
                                           color: Colors.black26, width: 4)),
                                   child: CircleAvatar(
                                     radius: 25,
-                                    backgroundImage: NetworkImage(pro.userImage!),
+                                    backgroundImage:
+                                        NetworkImage(pro.userImage!),
                                   )),
                             ),
                             Expanded(
@@ -90,15 +89,18 @@ class _BuyPageState extends State<BuyPage> {
                                     child: Text(
                                       pro.userName!,
                                       style: const TextStyle(
-                                          fontSize: 16, fontWeight: FontWeight.w400),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400),
                                     ),
                                   ),
-                                  const SizedBox(height: 4,),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
                                   FittedBox(
                                     child: Text(
                                       "Birthday ${pro.userDob != null ? form.format(pro.userDob!).toString() : ''} (In ${pro.diffDays} Days)",
                                       maxLines: 1,
-                                      style: TextStyle(color: Colors.blue) ,
+                                      style: TextStyle(color: Colors.blue),
                                     ),
                                   ),
                                 ],
@@ -109,14 +111,18 @@ class _BuyPageState extends State<BuyPage> {
                                   wcmp.clearShops();
                                   pro.clearAll();
                                 },
-                                icon: const Icon(Icons.clear, size: 30, color: Colors.black,))
+                                icon: const Icon(
+                                  Icons.clear,
+                                  size: 30,
+                                  color: Colors.black,
+                                ))
                           ],
                         ),
                       ),
-                  )
+                    )
                   : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -162,50 +168,62 @@ class _BuyPageState extends State<BuyPage> {
                           ),
                         ),
                       ),
-                  ),
+                    ),
               const SizedBox(
                 height: 20,
               ),
               pro.userName != null
                   ?
-              // Column(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           // const Text("Delivery Address : Available"),
-              //           Text("Location : ${pro.userAddress}"),
-              //           // Row(
-              //           //   mainAxisAlignment: MainAxisAlignment.end,
-              //           //   children: [
-              //           //     MaterialButton(
-              //           //       onPressed: () =>
-              //           //           Navigator.pushNamed(context, orderSummry),
-              //           //       color: Colors.grey,
-              //           //       child: const Text(
-              //           //         "Next",
-              //           //         style: TextStyle(color: Colors.white),
-              //           //       ),
-              //           //     )
-              //           //   ],
-              //           // )
-              //         ],
-              //       ),
-              Container(
-                width: double.infinity,
-                  color: Colors.grey[300],
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
-                      child: FittedBox(
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on, color: Colors.grey[600],),
-                            PrimaryText(text: "Delivery Location: ", fontSize: 17,),
-                            PrimaryText(text: "Available (xxxxxx, ${pro.userAddress})", fontSize: 14, color: Colors.black54,),
-                          ],
+                  // Column(
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: [
+                  //           // const Text("Delivery Address : Available"),
+                  //           Text("Location : ${pro.userAddress}"),
+                  //           // Row(
+                  //           //   mainAxisAlignment: MainAxisAlignment.end,
+                  //           //   children: [
+                  //           //     MaterialButton(
+                  //           //       onPressed: () =>
+                  //           //           Navigator.pushNamed(context, orderSummry),
+                  //           //       color: Colors.grey,
+                  //           //       child: const Text(
+                  //           //         "Next",
+                  //           //         style: TextStyle(color: Colors.white),
+                  //           //       ),
+                  //           //     )
+                  //           //   ],
+                  //           // )
+                  //         ],
+                  //       ),
+                  Container(
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 12),
+                          child: FittedBox(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: Colors.grey[600],
+                                ),
+                                PrimaryText(
+                                  text: "Delivery Location: ",
+                                  fontSize: 17,
+                                ),
+                                PrimaryText(
+                                  text:
+                                      "Available (xxxxxx, ${pro.userAddress})",
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ))
+                      ))
                   : Container(),
               giftWidget(wcmp, inde),
             ],
@@ -237,161 +255,176 @@ class _BuyPageState extends State<BuyPage> {
       case ApiState.completed:
         if (provider.nearbyVendors.isEmpty) {
           return const Center(
-                child: Text("No gift shops found near you."),
-              );
+            child: Text("No gift shops found near you."),
+          );
         } else {
-          return
-            SingleChildScrollView(
-              child: Column(
-                children: List.generate(
-                  provider.categoriesshow.length,
-                      (index) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 16.0,
+          return SingleChildScrollView(
+            child: Column(
+              children: List.generate(
+                provider.categoriesshow.length,
+                (index) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        children: [
+                          PrimaryText(
+                            text: provider.categoriesshow[index].name ?? '',
+                            textAlign: TextAlign.start,
+                            fontSize: 17,
+                          ),
+                          PrimaryText(
+                            text: ' (Same Day Delivery)',
+                            fontSize: 12,
+                            color: Colors.black54,
+                          )
+                        ],
                       ),
-                      Padding(
+                    ),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    Container(
+                      height: 140,
+                      color: Colors.grey[200],
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          children: [
-                            PrimaryText(
-                              text: provider.categoriesshow[index].name ?? '',
-                              textAlign: TextAlign.start,
-                              fontSize: 17,
-                            ),
-                            PrimaryText(text: ' (Same Day Delivery)', fontSize: 12, color: Colors.black54,)
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Container(
-                        height: 140,
-                        color: Colors.grey[200],
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, prodIndex) => Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6.0),
-                              child: InkWell(
-                                onTap: () {
-                                  provider.assignSumery(
-                                    provider
-                                        .filterByCategory(provider
-                                        .categories[index])[prodIndex]
-                                        .price!,
-                                    provider
-                                        .filterByCategory(provider
-                                        .categories[index])[prodIndex]
-                                        .weight!,
-                                    provider
-                                        .filterByCategory(provider
-                                        .categories[index])[prodIndex]
-                                        .name!,
-                                    provider
-                                        .filterByCategory(provider
-                                        .categories[index])[prodIndex]
-                                        .images!
-                                        .first
-                                        .src!,
-                                  );
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                          const OrderSummry()));
-                                },
-                                child: Container(
-                                  width: 90,
-                                  decoration: BoxDecoration(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, prodIndex) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: InkWell(
+                              onTap: () {
+                                provider.assignSumery(
+                                  provider
+                                      .filterByCategory(
+                                          provider.categories[index])[prodIndex]
+                                      .id!,
+                                  provider
+                                      .filterByCategory(
+                                          provider.categories[index])[prodIndex]
+                                      .price!,
+                                  provider
+                                      .filterByCategory(
+                                          provider.categories[index])[prodIndex]
+                                      .weight!,
+                                  provider
+                                      .filterByCategory(
+                                          provider.categories[index])[prodIndex]
+                                      .name!,
+                                  provider
+                                      .filterByCategory(
+                                          provider.categories[index])[prodIndex]
+                                      .images!
+                                      .first
+                                      .src!,
+                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const OrderSummry()));
+                              },
+                              child: Container(
+                                width: 90,
+                                decoration: BoxDecoration(
                                     color: Colors.white,
-                                      border: Border.all(
-                                          width: 3,
-                                          color: inde == prodIndex
-                                              ? Colors.white
-                                              : Colors.white)
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: 80,
-                                        child: Hero(
-                                          tag: provider
+                                    border: Border.all(
+                                        width: 3,
+                                        color: inde == prodIndex
+                                            ? Colors.white
+                                            : Colors.white)),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 80,
+                                      child: Hero(
+                                        tag: provider
+                                            .filterByCategory(provider
+                                                .categories[index])[prodIndex]
+                                            .images!
+                                            .first
+                                            .src
+                                            .toString(),
+                                        child: Image.network(
+                                          provider
                                               .filterByCategory(provider
-                                              .categories[index])[prodIndex]
+                                                  .categories[index])[prodIndex]
                                               .images!
                                               .first
-                                              .src.toString(),
-                                          child: Image.network(provider
-                                              .filterByCategory(provider
-                                              .categories[index])[prodIndex]
-                                              .images!
-                                              .first
-                                              .src.toString(), fit: BoxFit.cover,),
+                                              .src
+                                              .toString(),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                          children: [
-                                            const SizedBox(
-                                              height: 4.0,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const SizedBox(
+                                            height: 4.0,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 2.0),
+                                            child: Text(
+                                              provider
+                                                  .filterByCategory(
+                                                      provider.categories[
+                                                          index])[prodIndex]
+                                                  .name
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                                              child: Text(
-                                                provider.filterByCategory(provider.categories[index])[prodIndex].name.toString(),
-                                                textAlign: TextAlign.center,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                                          ),
+                                          const SizedBox(
+                                            height: 4.0,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: Text(
+                                              "Price ${provider.filterByCategory(provider.categories[index])[prodIndex].price.toString()}\$",
+                                              textAlign: TextAlign.center,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            const SizedBox(
-                                              height: 4.0,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                              child: Text(
-                                                  "Price ${provider.filterByCategory(provider.categories[index])[prodIndex].price.toString()}\$",
-                                                  textAlign: TextAlign.center,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            separatorBuilder: (context, index) =>
-                            const SizedBox(
-                              width: 8.0,
-                            ),
-                            itemCount: provider
-                                .filterByCategory(
-                                provider.categories[index])
-                                .length,
                           ),
+                          separatorBuilder: (context, index) => const SizedBox(
+                            width: 8.0,
+                          ),
+                          itemCount: provider
+                              .filterByCategory(provider.categories[index])
+                              .length,
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            );
+            ),
+          );
         }
       case ApiState.error:
-        return const Center(
-            child: Text("Error!"));
+        return const Center(child: Text("Error!"));
     }
   }
 }
