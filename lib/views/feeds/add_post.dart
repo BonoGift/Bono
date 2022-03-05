@@ -17,6 +17,7 @@ class _AddPostState extends State<AddPost> {
   Widget build(BuildContext context) {
     final pro = Provider.of<FeedsProvider>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xffeef9ff),
       body: SafeArea(
         child: Padding(
