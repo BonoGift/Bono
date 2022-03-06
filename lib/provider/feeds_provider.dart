@@ -187,6 +187,7 @@ class FeedsProvider extends ChangeNotifier {
     final pro = Provider.of<SignUpProvider>(context, listen: false);
     await service.getFeedsPosts().then((value) {
       value.docs.forEach((fed) {
+        //if(feeds.isNotEmpty) return;
         feeds.add(
           FeedsModels(
             image: fed['image url'],

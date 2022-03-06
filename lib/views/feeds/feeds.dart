@@ -184,36 +184,35 @@ class _FeedsState extends State<Feeds> {
                                             ),
                                           ),
                                         ),
+                                        /// here
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: InkWell(
                                               onTap: () {
                                                 showModalBottomSheet(
-                                                    isScrollControlled: true,
+                                                  isScrollControlled: true,
+                                                    useRootNavigator: true,
                                                     context: context,
                                                     builder: (contxt) {
                                                       return Scaffold(
-                                                        resizeToAvoidBottomInset: false,
-                                                        body: Padding(
-                                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                          child: Container(
-                                                            color: Colors.transparent,
-                                                            child: Container(
-                                                              decoration: const BoxDecoration(
-                                                                color: Colors.white,
-                                                                borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius.circular(10.0),
-                                                                  topRight: Radius.circular(10.0),
-                                                                ),
-                                                              ),
-                                                              //height: MediaQuery.of(context).size.height,
-                                                              child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                children: [
-                                                                  _getCommentsWidget(pro, i, commentDateFormat),
-                                                                  _writeCommentWidget(context, pro, i),
-                                                                ],
-                                                              ),
+                                                        backgroundColor: Colors.transparent,
+                                                        resizeToAvoidBottomInset: true,
+                                                        body: Container(
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(10.0),
+                                                              topRight: Radius.circular(10.0),
+                                                            ),
+                                                          ),
+                                                          //height: MediaQuery.of(context).size.height,
+                                                          child: SingleChildScrollView(
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              children: [
+                                                                _getCommentsWidget(pro, i, commentDateFormat),
+                                                                _writeCommentWidget(context, pro, i),
+                                                              ],
                                                             ),
                                                           ),
                                                         ),
