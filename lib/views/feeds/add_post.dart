@@ -22,6 +22,14 @@ class _AddPostState extends State<AddPost> {
       appBar: AppBar(
         backgroundColor: const Color(0xffeef9ff),
         elevation: 0,
+        title: const Text(
+          "Post Something",
+          style: TextStyle(
+            fontSize: 50,
+            fontFamily: 'EdwardianScriptITC',
+            color: Colors.black,
+          ),
+        ),
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
@@ -46,20 +54,7 @@ class _AddPostState extends State<AddPost> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "Post Something",
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontFamily: 'EdwardianScriptITC',
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 20),
                   const Text(
                     "Title",
                     style: TextStyle(fontSize: 17),
