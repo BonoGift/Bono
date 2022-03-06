@@ -42,6 +42,37 @@ class FeedsService {
     });
   }
 
+  likeComments(String postId, String commentId, String commentedId, BuildContext context) {
+    final pro = Provider.of<SignUpProvider>(context, listen: false);
+    if(commentedId.isEmpty){
+      FirebaseFirestore.instance.collection('userPosts').doc(postId).collection('comments').doc(commentId).collection('likedBy').add({
+        'name': pro.name,
+        'image': pro.userImage,
+        'date': DateTime.now(),
+      });
+      return;
+    }
+    FirebaseFirestore.instance.collection('userPosts').doc(postId).collection('comments').doc(commentId).collection('likedBy').doc(commentedId).get().then((value) {
+      if (value.exists) {
+        FirebaseFirestore.instance.collection('userPosts').doc(postId).collection('comments').doc(commentId).collection('likedBy').doc(commentedId).delete();
+      } else {
+        FirebaseFirestore.instance.collection('userPosts').doc(postId).collection('comments').doc(commentId).collection('likedBy').add({
+          'name': pro.name,
+          'image': pro.userImage,
+          'date': DateTime.now(),
+        });
+      }
+    });
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getPostComments(String postId) async {
+    return await FirebaseFirestore.instance.collection('userPosts').doc(postId).collection('comments').get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getCommentsLikedBy(String postId, String commentId) async {
+    return await FirebaseFirestore.instance.collection('userPosts').doc(postId).collection('comments').doc(commentId).collection('likedBy').get();
+  }
+
   Future<bool> getLikePost(String userDoc, String postDoc) async {
     bool val = false;
     await FirebaseFirestore.instance.collection('users').doc(userDoc).collection('likedPosts').doc(postDoc).get().then((value) {

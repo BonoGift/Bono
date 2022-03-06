@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../provider/sign_up_provider.dart';
+
 class Feeds extends StatefulWidget {
   @override
   _FeedsState createState() => _FeedsState();
@@ -184,13 +186,12 @@ class _FeedsState extends State<Feeds> {
                                             ),
                                           ),
                                         ),
-                                        /// here
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: InkWell(
                                               onTap: () {
                                                 showModalBottomSheet(
-                                                  isScrollControlled: true,
+                                                    isScrollControlled: true,
                                                     useRootNavigator: true,
                                                     context: context,
                                                     builder: (contxt) {
@@ -383,7 +384,6 @@ class _FeedsState extends State<Feeds> {
 
   Widget _writeCommentWidget(BuildContext context, FeedsProvider pro, int i) {
     return Container(
-      //height: MediaQuery.of(context).size.height * 0.1,
       width: MediaQuery.of(context).size.width * 0.95,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -409,6 +409,8 @@ class _FeedsState extends State<Feeds> {
           IconButton(
             onPressed: () {
               pro.addComment(pro.feeds[i].docid, context);
+              pro.commnetController.clear();
+              setState(() {});
             },
             icon: const Icon(Icons.send),
           ),
@@ -433,6 +435,8 @@ class _FeedsState extends State<Feeds> {
                   );
                 } else if (snapshot.hasData) {
                   List<DocumentSnapshot> docs = snapshot.data!.docs;
+                  String postId = pro.feeds[i].docid;
+                  //pro.getPostComment(context, postId);
                   return Column(
                     children: [
                       Container(
@@ -447,7 +451,14 @@ class _FeedsState extends State<Feeds> {
                         shrinkWrap: true,
                         itemBuilder: (context, i) {
                           DateTime dt = (docs[i]['date'] as Timestamp).toDate();
-                          return _getCommentWidget(docs, i, commentDateFormat, dt);
+                          return _getCommentWidget(
+                            docs,
+                            i,
+                            commentDateFormat,
+                            dt,
+                            pro,
+                            postId,
+                          );
                         },
                       ),
                     ],
@@ -465,56 +476,136 @@ class _FeedsState extends State<Feeds> {
     );
   }
 
-  Widget _getCommentWidget(List<DocumentSnapshot<Object?>> docs, int i, DateFormat commentDateFormat, DateTime dt) {
+  Widget _getCommentWidget(
+    List<DocumentSnapshot<Object?>> docs,
+    int i,
+    DateFormat commentDateFormat,
+    DateTime dt,
+    FeedsProvider pro,
+    String postId,
+  ) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.3),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-        ),
-        child: Row(
-          children: [
-            docs[i]['image'] == '' || docs[i]['image'] == null
-                ? CircleAvatar(
-                    child: Image.asset('assets/images/placeholder.jpg'),
-                  )
-                : CircleAvatar(
-                    backgroundImage: NetworkImage(docs[i]['image'].toString()),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.3),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
                   ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(docs[i]['name'] ?? ''),
-                      Container(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: Text(
-                          commentDateFormat.format(dt),
-                        ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    docs[i]['image'] == '' || docs[i]['image'] == null
+                        ? CircleAvatar(
+                            child: Image.asset('assets/images/placeholder.jpg'),
+                          )
+                        : CircleAvatar(
+                            backgroundImage: NetworkImage(docs[i]['image'].toString()),
+                          ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                docs[i]['name'] ?? '',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(right: 12),
+                                child: Text(
+                                  commentDateFormat.format(dt),
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: Text(
+                              docs[i]['text'] ?? '',
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+                        ],
                       ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      docs[i]['text'] ?? '',
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+              Positioned(
+                bottom: -20,
+                right: -4,
+                child: StreamBuilder(
+                    stream: pro.colRef.doc(postId).collection('comments').doc(docs[i].id).collection('likedBy').snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox.shrink();
+                      } else if (snapshot.hasData) {
+                        final signUpPro = Provider.of<SignUpProvider>(context, listen: false);
+
+                        List<DocumentSnapshot> documentsSnapshot = snapshot.data!.docs;
+                        List<String> name = [];
+                        String likedById = '';
+                        documentsSnapshot.forEach((element) {
+                          name.add(element['name']);
+                          if (element['name'] == signUpPro.name) {
+                            likedById = element.id;
+                          }
+                        });
+                        return InkWell(
+                          onTap: () {
+                            print('clicked');
+                            pro.likeComment(
+                              postId,
+                              docs[i].id,
+                              likedById,
+                              context,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 24,top: 24),
+                            //color: Colors.blue,
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  pro.checkCommentIsLikedByMe(context, name),
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                Text(
+                                  documentsSnapshot.isNotEmpty ? documentsSnapshot.length.toString() : '',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

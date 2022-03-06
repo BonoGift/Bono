@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/config/destination.dart';
+import 'package:bono_gifts/models/comments_model.dart';
 import 'package:bono_gifts/models/feeds_models.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/services/feeds_services.dart';
@@ -225,7 +226,15 @@ class FeedsProvider extends ChangeNotifier {
 
   addComment(String docRed, BuildContext context) {
     service.addComments(docRed, context, commnetController.text);
-    commnetController.clear();
+  }
+
+  String checkCommentIsLikedByMe(BuildContext context, List<String> likedBy) {
+    final pro = Provider.of<SignUpProvider>(context, listen: false);
+    return likedBy.contains(pro.name) ? 'assets/images/icons/comment_liked_icon.png' : 'assets/images/icons/comment_like_icon.png';
+  }
+
+  likeComment(String postId, String commentId, String commentedId, BuildContext context) {
+    service.likeComments(postId, commentId, commentedId, context);
   }
 
   incrementLike(int i) {
