@@ -396,6 +396,8 @@ class _FeedsState extends State<Feeds> {
           const SizedBox(width: 10),
           Expanded(
             child: TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               onChanged: (val) {
                 pro.setCommentText(val);
               },
@@ -543,7 +545,7 @@ class _FeedsState extends State<Feeds> {
                               textAlign: TextAlign.justify,
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 16),
                         ],
                       ),
                     ),
