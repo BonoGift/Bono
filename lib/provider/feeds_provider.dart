@@ -172,6 +172,7 @@ class FeedsProvider extends ChangeNotifier {
     };
     service.savePost(data, generateRandomString(20)).then((value) {
       if (value) {
+        bytesImage = null;
         getFeedsPosts(context);
         Navigator.pop(context);
       }

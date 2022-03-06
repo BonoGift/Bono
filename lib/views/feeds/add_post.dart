@@ -32,6 +32,8 @@ class _AddPostState extends State<AddPost> {
         ),
         leading: InkWell(
           onTap: () {
+            pro.bytesImage = null;
+            setState(() {});
             Navigator.pop(context);
           },
           child: const Icon(
@@ -44,8 +46,8 @@ class _AddPostState extends State<AddPost> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
+            left: 24.0,
+            right: 24.0,
             bottom: 20.0,
           ),
           child: Form(
