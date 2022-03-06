@@ -127,19 +127,31 @@ class _FeedsState extends State<Feeds> {
                                 padding: const EdgeInsets.all(8),
                                 color: Colors.white,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      pro.feeds[i].profileName,
-                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                                        child: Text(
+                                          pro.feeds[i].profileName,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                                     ),
-                                    CircleAvatar(
-                                      radius: 25,
-                                      backgroundImage: NetworkImage(pro.feeds[i].profileImage),
+                                    Expanded(
+                                      child: CircleAvatar(
+                                        radius: 32,
+                                        backgroundImage: NetworkImage(pro.feeds[i].profileImage),
+                                      ),
                                     ),
-                                    Text(
-                                      formt.format(pro.feeds[i].date).toString(),
-                                      style: const TextStyle(color: Colors.black, fontSize: 12),
+                                    Expanded(
+                                      child: Text(
+                                        formt.format(pro.feeds[i].date).toString(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(color: Colors.black, fontSize: 16),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -583,7 +595,7 @@ class _FeedsState extends State<Feeds> {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.only(left: 24,top: 24),
+                            padding: const EdgeInsets.only(left: 24, top: 24),
                             //color: Colors.blue,
                             child: Column(
                               children: [
