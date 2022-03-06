@@ -23,7 +23,6 @@ class FeedsProvider extends ChangeNotifier {
   Uint8List? bytesImage;
   String title = '';
   String description = '';
-  TextEditingController commnetController = TextEditingController();
 
   late CameraController _cameraController;
   late Future<void> cameraValue;
@@ -225,8 +224,9 @@ class FeedsProvider extends ChangeNotifier {
     });
   }
 
-  addComment(String docRed, BuildContext context) {
-    service.addComments(docRed, context, commnetController.text);
+  addComment(String docRed, String text, BuildContext context) async{
+    await service.addComments(docRed, context, text);
+    //notifyListeners();
   }
 
   String checkCommentIsLikedByMe(BuildContext context, List<String> likedBy) {
@@ -252,7 +252,7 @@ class FeedsProvider extends ChangeNotifier {
   }
 
   setCommentText(String val) {
-    commnetController = TextEditingController(text: val);
+    //commnetController = TextEditingController(text: val);
   }
 
   List<AssetEntity> imageList = [];

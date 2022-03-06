@@ -32,9 +32,9 @@ class FeedsService {
     return data;
   }
 
-  addComments(String docRed, BuildContext context, String text) {
+  addComments(String docRed, BuildContext context, String text) async{
     final pro = Provider.of<SignUpProvider>(context, listen: false);
-    FirebaseFirestore.instance.collection('userPosts').doc(docRed).collection('comments').add({
+    await FirebaseFirestore.instance.collection('userPosts').doc(docRed).collection('comments').add({
       'name': pro.name,
       'image': pro.userImage,
       'text': text,

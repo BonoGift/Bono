@@ -15,6 +15,8 @@ class Feeds extends StatefulWidget {
 }
 
 class _FeedsState extends State<Feeds> {
+  TextEditingController commnetController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -207,6 +209,7 @@ class _FeedsState extends State<Feeds> {
                                                     useRootNavigator: true,
                                                     context: context,
                                                     builder: (contxt) {
+                                                      commnetController.clear();
                                                       return Scaffold(
                                                         backgroundColor: Colors.transparent,
                                                         resizeToAvoidBottomInset: true,
@@ -402,18 +405,18 @@ class _FeedsState extends State<Feeds> {
         color: Colors.grey.withOpacity(0.4),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      margin: const EdgeInsets.only(bottom: 24),
+      margin: const EdgeInsets.only(bottom: 20, top: 8),
       child: Row(
         children: [
           const SizedBox(width: 10),
           Expanded(
-            child: TextField(
+            child: TextFormField(
               keyboardType: TextInputType.multiline,
               maxLines: null,
               onChanged: (val) {
-                pro.setCommentText(val);
+                //pro.setCommentText(val);
               },
-              controller: pro.commnetController,
+              controller: commnetController,
               decoration: const InputDecoration(
                 hintText: "Write a comment...",
                 border: InputBorder.none,
@@ -421,10 +424,10 @@ class _FeedsState extends State<Feeds> {
             ),
           ),
           IconButton(
-            onPressed: () {
-              pro.addComment(pro.feeds[i].docid, context);
-              pro.commnetController.clear();
-              setState(() {});
+            onPressed: () async {
+              if (commnetController.text.isEmpty) return;
+              await pro.addComment(pro.feeds[i].docid, commnetController.text, context);
+              FocusManager.instance.primaryFocus?.unfocus();
             },
             icon: const Icon(Icons.send),
           ),
@@ -441,7 +444,7 @@ class _FeedsState extends State<Feeds> {
           children: [
             const SizedBox(height: 32),
             StreamBuilder(
-              stream: pro.colRef.doc(pro.feeds[i].docid).collection('comments').snapshots(),
+              stream: pro.colRef.doc(pro.feeds[i].docid).collection('comments').orderBy('date', descending: true).snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -450,13 +453,13 @@ class _FeedsState extends State<Feeds> {
                 } else if (snapshot.hasData) {
                   List<DocumentSnapshot> docs = snapshot.data!.docs;
                   String postId = pro.feeds[i].docid;
-                  //pro.getPostComment(context, postId);
                   return Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
                           'Comments ${snapshot.data!.docs.length.toString()}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                       ListView.builder(
