@@ -93,6 +93,7 @@ class _AddPostState extends State<AddPost> {
                           pro.setTitle(val);
                           // pro.setName(val);
                         },
+                        textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: const EdgeInsets.only(left: 16),
@@ -147,6 +148,7 @@ class _AddPostState extends State<AddPost> {
                       margin: const EdgeInsets.all(0),
                       child: TextField(
                         maxLines: 5,
+                        textInputAction: TextInputAction.done,
                         onChanged: (val) {
                           // pro.setName(val);
                           pro.setDescription(val);
@@ -184,6 +186,7 @@ class _AddPostState extends State<AddPost> {
                     children: [
                       InkWell(
                         onTap: () {
+                          FocusScope.of(context).unfocus();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
