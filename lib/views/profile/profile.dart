@@ -16,13 +16,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-
   @override
   var formtr = DateFormat('MMM');
+
   @override
   Widget build(BuildContext context) {
-
     final pro = Provider.of<SignUpProvider>(context);
     return Scaffold(
       body: pro.name == null
@@ -74,8 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             // const SizedBox(width: 20,),
                             MaterialButton(
                               color: Colors.grey[800],
-                              onPressed: () =>
-                                  Navigator.pushNamed(context, editProfile),
+                              onPressed: () => Navigator.pushNamed(context, editProfile),
                               child: const Text(
                                 "Edit Profile",
                                 style: TextStyle(color: Colors.white),
@@ -89,8 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Text(
                         pro.name,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                       ),
                       Text(pro.phoneNumber.text),
                       Padding(
@@ -101,13 +97,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               const Icon(Icons.location_on),
                               const Text("Location:"),
-                              Text(
-                                  "${pro.country}/Confidential"),
+                              Text("${pro.country}/Confidential"),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8,),
+                      const SizedBox(
+                        height: 8,
+                      ),
                       Container(
                         height: 80,
                         width: getWidth(context),
@@ -117,23 +114,21 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: [
                             Text(
                               "Birthday ${pro.dobFormat.day} ${pro.dobFormat != null ? formtr.format(pro.dobFormat) : ''}",
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 18),
+                              style: const TextStyle(color: Colors.white, fontSize: 18),
                             ),
                             const SizedBox(
                               height: 5,
                             ),
                             Text(
                               "${pro.diffDays ?? 0} Days Left",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w500),
+                              style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 8,),
+                      const SizedBox(
+                        height: 8,
+                      ),
                       Container(
                         height: 40,
                         width: double.maxFinite,
@@ -142,19 +137,27 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children:const [
-                              Icon(Icons.add, color: Colors.white,),
-                               SizedBox(width: 6,),
+                            children: const [
+                              Icon(
+                                Icons.add_circle_outline,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 4),
                               Text(
-                                  "Photos", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),),
+                                "Post Something",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'EdwardianScriptITC',
+                                  fontSize: 24,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      pro.myPosts.length == 0
+                      const SizedBox(height: 5),
+                      pro.myPosts.isEmpty
                           ? Container(
                               height: 40,
                               color: lightBlue,
@@ -166,16 +169,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(
                         height: 5,
                       ),
-
-
-
-
                       GridView.builder(
                         itemCount: pro.myPosts.length,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
                           childAspectRatio: 0.6,
