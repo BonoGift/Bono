@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:country_codes/country_codes.dart';
+
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +38,6 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     addMarker();
   }
@@ -56,28 +54,23 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
             key: key,
             child: Column(
               children: [
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 const Text(
-                  "Let's veify your phone number",
+                  "Let's verify your phone number",
                   style: TextStyle(fontSize: 22, color: Colors.blue),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 const Text(
-                  "Please Enter your phone number We will send you an sms message to verify your number",
+                  "Please enter your phone number below, we will send you an SMS message to verify your number",
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Container(
                   decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(10)),
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Row(
                     children: [
                       CountryCodePicker(
@@ -97,6 +90,7 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
                       Expanded(
                         child: TextFormField(
                           keyboardType: TextInputType.phone,
+                          autofocus: true,
                           validator: (val) {
                             if (val!.isEmpty) {
                               return "Please Enter your phone";
@@ -106,16 +100,13 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
                             pro.setPhoneNum(val);
                           },
                           controller: pro.phoneNumber,
-                          decoration: const InputDecoration(
-                              hintText: "1234567890", border: InputBorder.none),
+                          decoration: const InputDecoration(border: InputBorder.none),
                         ),
                       )
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -162,8 +153,7 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
   }
 
   void animateCamera(LatLng latLng) {
-    _controller?.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: latLng, tilt: 45, zoom: 13.12, bearing: 12.0)));
+    _controller?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLng, tilt: 45, zoom: 13.12, bearing: 12.0)));
   }
 
   onMapCreated(GoogleMapController controller) {
@@ -195,10 +185,7 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
       final MarkerId markerId = MarkerId(value.latitude.toString());
       print('this is marker function');
       print(value);
-      final marker = Marker(
-          markerId: MarkerId(value.latitude.toString()),
-          position: LatLng(value.latitude, value.latitude),
-          icon: BitmapDescriptor.defaultMarkerWithHue(12));
+      final marker = Marker(markerId: MarkerId(value.latitude.toString()), position: LatLng(value.latitude, value.latitude), icon: BitmapDescriptor.defaultMarkerWithHue(12));
       setState(() {
         markers[markerId] = marker;
       });
@@ -207,15 +194,9 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
   }
 
   getDialCode(Position position) async {
-    List<Placemark> placeMarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    PhoneAuthentication.defaultDialCode =
-        placeMarks[0].isoCountryCode.toString();
-    final String location = placeMarks[0].street.toString() +
-        ' ' +
-        placeMarks[0].administrativeArea.toString() +
-        ' ' +
-        placeMarks[0].country.toString();
+    List<Placemark> placeMarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    PhoneAuthentication.defaultDialCode = placeMarks[0].isoCountryCode.toString();
+    final String location = placeMarks[0].street.toString() + ' ' + placeMarks[0].administrativeArea.toString() + ' ' + placeMarks[0].country.toString();
     storeLocation(location);
     print('--------this is code');
     print(PhoneAuthentication.defaultDialCode);
