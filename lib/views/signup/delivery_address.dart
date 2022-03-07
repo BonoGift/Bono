@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
-import 'package:bono_gifts/views/profile/edit_profiel.dart';
+import 'package:bono_gifts/views/profile/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';

@@ -5,7 +5,7 @@ import 'package:bono_gifts/views/feeds/add_post.dart';
 import 'package:bono_gifts/views/feeds/user_profile.dart';
 import 'package:bono_gifts/views/loading_page.dart';
 import 'package:bono_gifts/views/not_found_page.dart';
-import 'package:bono_gifts/views/profile/edit_profiel.dart';
+import 'package:bono_gifts/views/profile/edit_profile.dart';
 import 'package:bono_gifts/views/profile/profile.dart';
 import 'package:bono_gifts/views/signup/create_profile.dart';
 import 'package:bono_gifts/views/signup/phone_auth.dart';

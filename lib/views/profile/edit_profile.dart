@@ -421,15 +421,11 @@ class _EditProfileState extends State<EditProfile> {
                           },
                           decoration: InputDecoration(
                             // label: Text("Your Centered Label Text"),
-
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelText: "Nationality",
                             labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
                                 ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 35,
-                            ),
-
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 35),
                             hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
@@ -701,9 +697,7 @@ class _EditProfileState extends State<EditProfile> {
                     //     ],
                     //   ),
                     // ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
                         pro.makeWaitingState();
@@ -717,11 +711,20 @@ class _EditProfileState extends State<EditProfile> {
                                 )
                               : const Text(
                                   "Done",
-                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                  ),
                                 ),
                         ),
                         height: 50,
-                        decoration: const BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.all(Radius.circular(50))),
+                        decoration: const BoxDecoration(
+                          color: Colors.brown,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                        ),
                       ),
                     ),
                     // MaterialButton(
