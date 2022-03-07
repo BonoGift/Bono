@@ -22,8 +22,11 @@ class _WelcomePageState extends State<WelcomePage> {
         height: getHeight(context),
         width: getWidth(context),
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.fill, image: AssetImage(welcomeBg))),
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            image: AssetImage(welcomeBg),
+          ),
+        ),
         child: Stack(
           children: [
             const Align(
@@ -60,6 +63,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           "Terms of Conditions ",
                           style: TextStyle(
                             color: Colors.blue,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                         Text("& "),
@@ -67,13 +71,12 @@ class _WelcomePageState extends State<WelcomePage> {
                           "Privacy Policy",
                           style: TextStyle(
                             color: Colors.blue,
+                            decoration: TextDecoration.underline,
                           ),
                         )
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     MaterialButton(
                       color: Colors.blue,
                       minWidth: getWidth(context),
