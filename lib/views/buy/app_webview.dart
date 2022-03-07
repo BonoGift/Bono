@@ -1,8 +1,13 @@
+import 'package:bono_gifts/models/user_model.dart';
 import 'package:bono_gifts/models/wcmp_api/order.dart';
-import 'package:bono_gifts/provider/buy_provider.dart';
+import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
 import 'package:bono_gifts/provider/paypal_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
+import 'package:bono_gifts/views/bottom_nav_bar.dart';
+import 'package:bono_gifts/views/gift/controller/history_controller.dart';
+import 'package:bono_gifts/views/gift/model/history_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -29,10 +34,11 @@ class _AppWebViewState extends State<AppWebView> {
   @override
   Widget build(BuildContext context) {
     final PaypalProvider paypalProvider = Provider.of<PaypalProvider>(context);
-    final pro = Provider.of<SignUpProvider>(context);
-    final pror = Provider.of<BuyProvider>(context);
-    final wooCommerceMarketPlaceProvider =
+    final SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context);
+    final WooCommerceMarketPlaceProvider wooCommerceMarketPlaceProvider =
         Provider.of<WooCommerceMarketPlaceProvider>(context);
+    final HistoryProvider historyProvider =
+        Provider.of<HistoryProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -53,50 +59,77 @@ class _AppWebViewState extends State<AppWebView> {
               paypalProvider
                   .executePayment(
                       widget.executeUrl, payerID, widget.accessToken)
-                  .then((id) {
+                  .then((id) async {
+                UserModel receiver = wooCommerceMarketPlaceProvider.receiver!;
+
+                VendorProduct product =
+                    wooCommerceMarketPlaceProvider.selectedProduct!;
+
                 Order order = Order(
                   setPaid: true,
                   paymentMethod: 'Paypal',
                   paymentMethodTitle: 'Paypal',
                   billing: Billing(
-                    email: pro.email,
+                    email: signUpProvider.email,
                     address1:
-                        '${pro.street.text} ${pro.city.text} ${pro.country}',
+                        '${signUpProvider.room.text} ${signUpProvider.buildingName} ${signUpProvider.street.text} ${signUpProvider.area} ${signUpProvider.city.text} ${signUpProvider.country}',
                     address2: "",
                     postcode: "",
                     state: "",
-                    city: pro.city.text,
-                    country: pro.country,
-                    firstName: pro.name,
-                    lastName: pro.name,
-                    phone: pro.phoneNumber.text,
+                    city: signUpProvider.city.text,
+                    country: signUpProvider.country,
+                    firstName: signUpProvider.name.split(' ').first,
+                    lastName: signUpProvider.name.split(' ').last,
+                    phone: signUpProvider.phoneNumber.text,
                   ),
                   lineItems: [
                     LineItems(
                       quantity: 1,
                       variationId: 0,
-                      productId: wooCommerceMarketPlaceProvider.id,
+                      productId: product.id,
                     ),
                   ],
                   shippingLines: [
                     ShippingLines(
-                      methodId: 'Paypal',
-                      methodTitle: 'Paypal',
-                      total: wooCommerceMarketPlaceProvider.price,
+                      methodId: 'Delivery',
+                      methodTitle: 'Delivery',
+                      total: wooCommerceMarketPlaceProvider.deliveryPrice
+                          .toString(),
                     ),
                   ],
                   shipping: Shipping(
-                      firstName: pror.userName,
-                      lastName: pror.userName,
-                      address1: pror.userAddress,
-                      country: '',
-                      state: '',
-                      city: '',
-                      address2: '',
-                      postcode: ''),
+                    firstName: receiver.name.split(' ').first,
+                    lastName: receiver.name.split(' ').last,
+                    address1:
+                        '${receiver.villa} ${receiver.buildingName} ${receiver.street} ${receiver.area} ${receiver.city} ${receiver.country}',
+                    country: receiver.country,
+                    state: '',
+                    city: receiver.city,
+                    address2: '',
+                    postcode: '',
+                  ),
                 );
-                paypalProvider.createOrder(order);
-                Navigator.of(context).pop();
+
+                await wooCommerceMarketPlaceProvider.createOrder(order);
+
+                HistoryModel historyModel = HistoryModel(
+                    date: Timestamp.now(),
+                    price:
+                        wooCommerceMarketPlaceProvider.finalPrice().toDouble(),
+                    trackingStatus: 'processing',
+                    senderNumber: signUpProvider.phoneNumber.text,
+                    senderName: signUpProvider.name,
+                    receiverNumber: receiver.phoneNumber,
+                    receiverName: receiver.name,
+                    receiverImage: receiver.profileUrl,
+                    giftImage: product.images!.first.src!,
+                    senderImage: signUpProvider.userImage);
+                await historyProvider.addOrderHistory(historyModel);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const BottomNavBar()),
+                    (route) => route.isFirst);
               });
             } else {
               Navigator.of(context).pop();

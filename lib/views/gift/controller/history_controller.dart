@@ -2,7 +2,6 @@ import 'package:bono_gifts/views/gift/model/history_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryProvider extends ChangeNotifier {
@@ -14,49 +13,55 @@ class HistoryProvider extends ChangeNotifier {
 
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-   getHistoryFromFirebase() async {
+  getHistoryFromFirebase() async {
+    clearHistories();
     var data = await _firebaseFirestore.collection('history').get();
-    var doc = data.docs.map((e) => e.data()).toList();
-    // var check = await _firebaseFirestore.collectionGroup('/');
-    print('***** inside get history method');
-    print('********** this is data');
-    print(data);
-    print('****** this is all doc');
-    print(doc[0]['date']);
-    // print(date);
-    print(isReceived(doc[0]['receiver-number'].toString().trim()));
-    print(doc[0]['receiver-number']);
-    // var tim = DateTime.fromMicrosecondsSinceEpoch(doc[0]['date'])
-    print(doc);
-    if (doc.isNotEmpty) {
-      for (var element in doc) {
-        addToList(allHistory, element);
-        if (element['receiver-number'] == getPhone().toString()) {
-          addToList(receivedHistory, element);
-        } else {
-          addToList(sendHistory, element);
+    List<HistoryModel> histories =
+        data.docs.map((e) => HistoryModel.fromJson(e.data())).toList();
+    if (histories.isNotEmpty) {
+      for (HistoryModel history in histories) {
+        print(
+            "Status ${history.receiverNumber} == ${getPhone().toString()} : ${history.receiverNumber == getPhone().toString()}");
+        if (history.receiverNumber == await getPhone()) {
+          addToList(allHistory, history, true);
+          addToList(receivedHistory, history, true);
+        } else if (history.senderNumber == await getPhone()) {
+          addToList(allHistory, history, false);
+
+          addToList(sendHistory, history, false);
         }
       }
     }
     notifyListeners();
   }
 
-  addToList(List<HistoryModel> list, element) {
-    Timestamp timestamp = element['date'];
-    DateTime dateTime = timestamp.toDate();
-    var date = format.format(dateTime);
-    list.add(HistoryModel(
-        date: date,
-        giftImage: element['gift-images'],
-        price: double.parse(element['price'].toString()),
-        receiverImage: element['receiver-image'],
-        receiverName: element['receiver-name'],
-        receiverNumber: element['receiver-number'],
-        senderImage: element['sender-image'],
-        senderName: element['sender-name'],
-        senderNumber: element['sender-number'],
-        trackingStatus: element['tracking-status']));
+  addToList(List<HistoryModel> list, HistoryModel history, bool isReceived) {
+    // Timestamp timestamp = history.date;
+    // DateTime dateTime = timestamp.toDate();
+    // var date = format.format(dateTime);
+    HistoryModel historyModel = HistoryModel(
+        date: history.date,
+        giftImage: history.giftImage,
+        price: history.price,
+        receiverImage: history.receiverImage,
+        receiverName: history.receiverName,
+        receiverNumber: history.receiverNumber,
+        senderImage: history.senderImage,
+        senderName: history.senderName,
+        senderNumber: history.senderNumber,
+        trackingStatus: history.trackingStatus);
+
+    historyModel.isReceived = isReceived;
+    list.add(historyModel);
     notifyListeners();
+  }
+
+  Future<void> addOrderHistory(HistoryModel history) async {
+    try {
+      await _firebaseFirestore.collection('history').add(history.toJson());
+    } on FirebaseException catch (e) {
+      print(e.message);
+    }
   }
 
   bool isReceived(String num) {
@@ -71,10 +76,16 @@ class HistoryProvider extends ChangeNotifier {
     return isTrue;
   }
 
-  getPhone() async {
+  Future<String> getPhone() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String phone = prefs.getString('phone').toString();
     // print('this is number from local storage ------' + phone);
     return phone;
+  }
+
+  clearHistories() {
+    allHistory.clear();
+    receivedHistory.clear();
+    sendHistory.clear();
   }
 }

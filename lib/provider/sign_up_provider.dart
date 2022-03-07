@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
+
+import 'package:bono_gifts/models/user_model.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
 import 'package:bono_gifts/services/sign_up_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -118,11 +120,17 @@ class SignUpProvider extends ChangeNotifier {
     if (kDebugMode) {
       print('---------------- this is request');
     }
-    Permission.camera.request().then((value) {}).then((value) { // request camera
-      Permission.location.request().then((value) {}).then((value) { // request location
-        Permission.mediaLibrary.request().then((value) {}).then((value) { // request media library
-          Permission.photos.request().then((value) {}).then((value) { // request photos
-            Permission.microphone.request().then((value) {}); // request microphone
+    Permission.camera.request().then((value) {}).then((value) {
+      // request camera
+      Permission.location.request().then((value) {}).then((value) {
+        // request location
+        Permission.mediaLibrary.request().then((value) {}).then((value) {
+          // request media library
+          Permission.photos.request().then((value) {}).then((value) {
+            // request photos
+            Permission.microphone
+                .request()
+                .then((value) {}); // request microphone
           });
         });
       });
@@ -222,6 +230,12 @@ class SignUpProvider extends ChangeNotifier {
       notifyListeners();
     });
     getMyPhoto();
+  }
+
+  Future<UserModel> getUserById(String phone) async {
+    Map<String, dynamic> data = await service.getUser(phone);
+    UserModel userModel = UserModel.fromDocument(data);
+    return userModel;
   }
 
   saveToShared(bool isInit) async {

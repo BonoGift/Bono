@@ -1,22 +1,24 @@
+import 'package:bono_gifts/models/paypal_order_model.dart';
+import 'package:bono_gifts/models/user_model.dart';
+import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
 import 'package:bono_gifts/payments/payment.dart';
-import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/paypal_provider.dart';
+import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/buy/app_webview.dart';
 import 'package:bono_gifts/views/buy/widgets/primary_button.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PaymnetScreen extends StatefulWidget {
-  const PaymnetScreen({Key? key}) : super(key: key);
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({Key? key}) : super(key: key);
 
   @override
-  _PaymnetScreenState createState() => _PaymnetScreenState();
+  _PaymentScreenState createState() => _PaymentScreenState();
 }
 
-class _PaymnetScreenState extends State<PaymnetScreen> {
+class _PaymentScreenState extends State<PaymentScreen> {
   bool google = false;
   bool apple = false;
   bool paypal = true;
@@ -43,93 +45,79 @@ class _PaymnetScreenState extends State<PaymnetScreen> {
     super.initState();
   }
 
-  Map<String, dynamic> getOrderParams(
-    BuildContext context,
-  ) {
-    final pro = Provider.of<BuyProvider>(context, listen: false);
-    final pror =
+  PaypalOrderModel getOrderParams(
+    BuildContext context, {
+    required UserModel receiver,
+  }) {
+    final WooCommerceMarketPlaceProvider wooCommerceMarketPlaceProvider =
         Provider.of<WooCommerceMarketPlaceProvider>(context, listen: false);
+    final SignUpProvider signUpProvider =
+        Provider.of<SignUpProvider>(context, listen: false);
 
-    // you can change default currency according to your need
-    Map<dynamic, dynamic> defaultCurrency = {
-      "symbol": "USD ",
-      "decimalDigits": 2,
-      "symbolBeforeTheNumber": true,
-      "currency": "USD"
-    };
-
-    List items = [
-      {
-        "name": pror.name,
-        "quantity": 1,
-        "price": pror.price,
-        "currency": defaultCurrency["currency"]
-      }
-    ];
-
-    // checkout invoice details
-    String totalAmount = finalPrice(pror.price!, 3).toString();
-    String subTotalAmount = pror.price!;
-    String shippingCost = '3';
-    int shippingDiscountCost = 0;
-    String userFirstName = pro.userName.toString();
-    String userLastName = pro.userName.toString();
-    String addressCity = 'Karachi';
-    String addressStreet = '';
-    String addressZipCode = '75660';
-    String addressCountry = 'Pakistan';
-    String addressState = 'Sindh';
-    String addressPhoneNumber = '+923152284272';
-
-    bool isEnableShipping = false;
-    bool isEnableAddress = false;
+    VendorProduct product = wooCommerceMarketPlaceProvider.selectedProduct!;
+    print("Product: ${product.toJson().toString()}");
 
     String returnURL = 'return.example.com';
     String cancelURL = 'cancel.example.com';
 
-    Map<String, dynamic> temp = {
-      "intent": "sale",
-      "payer": {"payment_method": "paypal"},
-      "transactions": [
-        {
-          "amount": {
-            "total": totalAmount,
-            "currency": defaultCurrency["currency"],
-            "details": {
-              "subtotal": subTotalAmount,
-              "shipping": shippingCost,
-              "shipping_discount": ((-1.0) * shippingDiscountCost).toString()
-            }
-          },
-          "description": "The payment transaction description.",
-          "payment_options": {
-            "allowed_payment_method": "INSTANT_FUNDING_SOURCE"
-          },
-          "item_list": {
-            "items": items,
-            if (isEnableShipping && isEnableAddress)
-              "shipping_address": {
-                "recipient_name": userFirstName + " " + userLastName,
-                "line1": addressStreet,
-                "line2": "",
-                "city": addressCity,
-                "country_code": addressCountry,
-                "postal_code": addressZipCode,
-                "phone": addressPhoneNumber,
-                "state": addressState
-              },
-          }
-        }
+    PaypalOrderModel paypalOrderModel = PaypalOrderModel(
+      intent: "sale",
+      noteToPayer: "Contact us for any questions on your order",
+      payer: Payer(paymentMethod: "paypal"),
+      redirectUrls: RedirectUrls(
+        returnUrl: returnURL,
+        cancelUrl: cancelURL,
+      ),
+      transactions: [
+        Transactions(
+          amount: Amount(
+            currency: "USD",
+            total: wooCommerceMarketPlaceProvider.finalPrice().toString(),
+            details: Details(
+                tax: "0",
+                handlingFee: "0",
+                insurance: "0",
+                shipping:
+                    wooCommerceMarketPlaceProvider.deliveryPrice.toString(),
+                shippingDiscount: "0",
+                subtotal: product.price),
+          ),
+          description: product.description,
+          itemList: ItemList(
+            items: [
+              Items(
+                  name: product.name,
+                  description: product.description,
+                  price: product.price,
+                  quantity: "1",
+                  currency: "USD",
+                  sku: product.id.toString(),
+                  tax: "0"),
+            ],
+            shippingAddress: ShippingAddress(
+                recipientName: receiver.name,
+                city: receiver.city,
+                phone: receiver.phoneNumber,
+                countryCode: "AE",
+                state: "Dubai",
+                postalCode: "00000",
+                line1:
+                    "${receiver.buildingName} ${receiver.street} ${receiver.area}",
+                line2: " "),
+          ),
+          paymentOptions:
+              PaymentOptions(allowedPaymentMethod: "INSTANT_FUNDING_SOURCE"),
+        ),
       ],
-      "note_to_payer": "Contact us for any questions on your order.",
-      "redirect_urls": {"return_url": returnURL, "cancel_url": cancelURL}
-    };
-    return temp;
+    );
+
+    return paypalOrderModel;
   }
 
   @override
   Widget build(BuildContext context) {
-    final pror = Provider.of<WooCommerceMarketPlaceProvider>(context);
+    final WooCommerceMarketPlaceProvider wooCommerceMarketPlaceProvider =
+        Provider.of<WooCommerceMarketPlaceProvider>(context);
     var activeColor = aliceBlue;
     var inActiveColor = Colors.grey[200];
     return SafeArea(
@@ -195,7 +183,7 @@ class _PaymnetScreenState extends State<PaymnetScreen> {
                       height: 20,
                     ),
                     Text(
-                      'Total: ${finalPrice(pror.price.toString(), 3).toString()}\$',
+                      'Total: ${wooCommerceMarketPlaceProvider.finalPrice().toString()}\$',
                       style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w900,
@@ -226,15 +214,21 @@ class _PaymnetScreenState extends State<PaymnetScreen> {
                             onPressed: () {
                               print('pay clicked');
                               if (google == true) {
-                                Payments.requestGooglePay(context,
-                                    finalPrice(pror.price.toString(), 3));
+                                Payments.requestGooglePay(
+                                    context,
+                                    wooCommerceMarketPlaceProvider
+                                        .finalPrice());
                               } else if (paypal == true) {
                                 // Payments.requestPayPal(
                                 //     context, finalPrice(pror.price.toString(), 3));
                                 context
                                     .read<PaypalProvider>()
                                     .createPaypalPayment(
-                                        getOrderParams(context), accessToken)
+                                        getOrderParams(context,
+                                            receiver:
+                                                wooCommerceMarketPlaceProvider
+                                                    .receiver!),
+                                        accessToken)
                                     .then((value) => Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -460,12 +454,6 @@ class _PaymnetScreenState extends State<PaymnetScreen> {
               ),
       ),
     );
-  }
-
-  int finalPrice(String price, int delivery) {
-    final int actualPrice = int.parse(price.toString());
-    final int totalPrice = actualPrice + delivery;
-    return totalPrice;
   }
 
   Color getColor(bool value) {

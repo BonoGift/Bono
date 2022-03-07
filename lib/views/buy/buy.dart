@@ -1,4 +1,5 @@
 import 'package:bono_gifts/config/constants.dart';
+import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
 import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/buy/order_summry.dart';
@@ -29,7 +30,7 @@ class _BuyPageState extends State<BuyPage> {
     var form = DateFormat('dd-MMM');
     final pro = Provider.of<BuyProvider>(context);
     final wcmp = Provider.of<WooCommerceMarketPlaceProvider>(context);
-    int inde = 1000000;
+    int index = 1000000;
 
     return SafeArea(
       child: Scaffold(
@@ -225,7 +226,7 @@ class _BuyPageState extends State<BuyPage> {
                         ),
                       ))
                   : Container(),
-              giftWidget(wcmp, inde),
+              giftWidget(wcmp, index),
             ],
           ),
         ),
@@ -233,7 +234,7 @@ class _BuyPageState extends State<BuyPage> {
     );
   }
 
-  Widget giftWidget(WooCommerceMarketPlaceProvider provider, int inde) {
+  Widget giftWidget(WooCommerceMarketPlaceProvider provider, int index) {
     switch (provider.apiState) {
       case ApiState.none:
         return Container();
@@ -300,30 +301,10 @@ class _BuyPageState extends State<BuyPage> {
                             padding: const EdgeInsets.symmetric(vertical: 6.0),
                             child: InkWell(
                               onTap: () {
-                                provider.assignSumery(
-                                  provider
-                                      .filterByCategory(
-                                          provider.categories[index])[prodIndex]
-                                      .id!,
-                                  provider
-                                      .filterByCategory(
-                                          provider.categories[index])[prodIndex]
-                                      .price!,
-                                  provider
-                                      .filterByCategory(
-                                          provider.categories[index])[prodIndex]
-                                      .weight!,
-                                  provider
-                                      .filterByCategory(
-                                          provider.categories[index])[prodIndex]
-                                      .name!,
-                                  provider
-                                      .filterByCategory(
-                                          provider.categories[index])[prodIndex]
-                                      .images!
-                                      .first
-                                      .src!,
-                                );
+                                VendorProduct vendorProduct =
+                                    provider.filterByCategory(
+                                        provider.categories[index])[prodIndex];
+                                provider.selectVendor(vendorProduct);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -336,7 +317,7 @@ class _BuyPageState extends State<BuyPage> {
                                     color: Colors.white,
                                     border: Border.all(
                                         width: 3,
-                                        color: inde == prodIndex
+                                        color: index == prodIndex
                                             ? Colors.white
                                             : Colors.white)),
                                 child: Column(

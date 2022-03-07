@@ -6,6 +6,7 @@ import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/routes/custom_routes.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
+import 'package:bono_gifts/views/gift/controller/history_controller.dart';
 import 'package:country_code_picker/country_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<BuyProvider>(
           create: (context) => BuyProvider(),
+        ),
+        ChangeNotifierProvider<HistoryProvider>(
+          create: (context) => HistoryProvider(),
         ),
       ],
       child: MaterialApp(

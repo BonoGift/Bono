@@ -1,4 +1,7 @@
 import 'package:bono_gifts/models/product_models.dart';
+import 'package:bono_gifts/models/user_model.dart';
+import 'package:bono_gifts/models/wcmp_api/order.dart';
+import 'package:bono_gifts/models/wcmp_api/order_response_model.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
 import 'package:bono_gifts/services/sign_up_service.dart';
@@ -27,8 +30,19 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
   String? dob;
   DateTime todayDate = DateTime.now();
 
+  int deliveryPrice = 3;
+
+  VendorProduct? selectedProduct;
+
+  UserModel? receiver;
+  UserModel? sender;
+
   List<Vendor> allVendors = <Vendor>[];
   List<Vendor> nearbyVendors = <Vendor>[];
+  List<OrderResponseModel> allOrders = <OrderResponseModel>[];
+  List<OrderResponseModel> receiverOrders = <OrderResponseModel>[];
+  List<OrderResponseModel> senderOrders = <OrderResponseModel>[];
+
   List<Categories> categories = [];
   List<CategoriesShow> categoriesshow = [];
   List<VendorProduct> nearbyVendorProducts = <VendorProduct>[];
@@ -96,13 +110,8 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     return await signUpService.getUser(phone);
   }
 
-  assignSumery(
-      int id, String pricee, String weight, String namee, String imagee) {
-    id = id;
-    size = weight;
-    price = pricee;
-    name = namee;
-    image = imagee;
+  selectVendor(VendorProduct product) {
+    selectedProduct = product;
     notifyListeners();
   }
 
@@ -112,6 +121,52 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     categoriesshow.clear();
     allVendors.clear();
     nearbyVendorProducts.clear();
+    notifyListeners();
+  }
+
+  int finalPrice() {
+    final int actualPrice = int.parse(selectedProduct!.price!);
+    final int totalPrice = actualPrice + deliveryPrice;
+    return totalPrice;
+  }
+
+  selectReceiver(UserModel receiver) {
+    print("Receiver assign ${receiver.toMap().toString()}");
+    this.receiver = receiver;
+    notifyListeners();
+  }
+
+  selectSender(UserModel sender) {
+    this.sender = sender;
+    notifyListeners();
+  }
+
+  Future<Order?> createOrder(Order order) async {
+    return wooCommerceMarketPlaceService.createOrder(order);
+  }
+
+  Future<void> fetchOrders(String senderPhone) async {
+    allOrders.clear();
+    receiverOrders.clear();
+    senderOrders.clear();
+
+    apiState = ApiState.loading;
+    try {
+      List<OrderResponseModel> orders =
+          await wooCommerceMarketPlaceService.getAllOrders();
+      for (OrderResponseModel order in orders) {
+        if (order.billing?.phone == senderPhone) {
+          allOrders.add(order);
+        } else if (order.billing?.phone == senderPhone) {
+          senderOrders.add(order);
+        }
+      }
+      apiState = ApiState.completed;
+    } catch (e) {
+      apiState = ApiState.error;
+
+      print(e.toString());
+    }
     notifyListeners();
   }
 }

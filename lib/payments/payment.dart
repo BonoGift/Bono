@@ -70,7 +70,6 @@ class Payments {
   }
 
   payWithPayPal(payment) async {
-
     final cardRequest = BraintreeCreditCardRequest(
         cardNumber: '4111 1111 1111 1111',
         cvv: '234',

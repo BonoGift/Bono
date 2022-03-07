@@ -1,4 +1,3 @@
-import 'package:bono_gifts/models/wcmp_api/order.dart';
 import 'package:bono_gifts/services/paypal_services.dart';
 import 'package:bono_gifts/services/wcmp_service.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +18,5 @@ class PaypalProvider with ChangeNotifier {
 
   Future<String?> executePayment(url, payerId, accessToken) async {
     return _paypalServices.executePayment(url, payerId, accessToken);
-  }
-
-  Future<Order?> createOrder(Order order) async {
-    return wooCommerceMarketPlaceService.createOrder(order);
   }
 }

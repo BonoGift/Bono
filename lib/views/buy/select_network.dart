@@ -1,5 +1,6 @@
 import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/chat_provider.dart';
+import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/chat/chat.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class _SelectNetwokrState extends State<SelectNetwokr> {
   Widget build(BuildContext context) {
     final proChat = Provider.of<ChatProvider>(context);
     final pro = Provider.of<BuyProvider>(context);
+    final SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context);
     final wcmp = Provider.of<WooCommerceMarketPlaceProvider>(context);
     return SafeArea(
       child: Scaffold(
@@ -35,6 +37,7 @@ class _SelectNetwokrState extends State<SelectNetwokr> {
                         InkWell(
                           onTap: () async {
                             pro.assignVals(
+                              wcmp,
                               proChat.friendsList[i].name,
                               proChat.friendsList[i].photo,
                               proChat.friendsList[i].phone,
@@ -98,6 +101,7 @@ class _SelectNetwokrState extends State<SelectNetwokr> {
                         InkWell(
                           onTap: () async {
                             pro.assignVals(
+                              wcmp,
                               proChat.familyList[i].name,
                               proChat.familyList[i].photo,
                               proChat.familyList[i].phone,
@@ -150,12 +154,13 @@ class _SelectNetwokrState extends State<SelectNetwokr> {
                         InkWell(
                           onTap: () async {
                             pro.assignVals(
+                              wcmp,
                               proChat.workList[i].name,
                               proChat.workList[i].photo,
                               proChat.workList[i].phone,
                             );
-                            Map<String, dynamic> user =
-                                await wcmp.getUserInfo(proChat.workList[i].phone);
+                            Map<String, dynamic> user = await wcmp
+                                .getUserInfo(proChat.workList[i].phone);
                             wcmp.fetchVendors(user['city'] ?? 'unknown');
 
                             Navigator.pop(context);
@@ -201,6 +206,7 @@ class _SelectNetwokrState extends State<SelectNetwokr> {
                         InkWell(
                           onTap: () async {
                             pro.assignVals(
+                              wcmp,
                               proChat.schoolList[i].name,
                               proChat.schoolList[i].photo,
                               proChat.schoolList[i].phone,
@@ -252,6 +258,7 @@ class _SelectNetwokrState extends State<SelectNetwokr> {
                         InkWell(
                           onTap: () async {
                             pro.assignVals(
+                              wcmp,
                               proChat.neghiborList[i].name,
                               proChat.neghiborList[i].photo,
                               proChat.neghiborList[i].phone,
@@ -303,6 +310,7 @@ class _SelectNetwokrState extends State<SelectNetwokr> {
                         InkWell(
                           onTap: () async {
                             pro.assignVals(
+                              wcmp,
                               proChat.othersList[i].name,
                               proChat.othersList[i].photo,
                               proChat.othersList[i].phone,

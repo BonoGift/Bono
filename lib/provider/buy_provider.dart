@@ -1,9 +1,11 @@
+import 'package:bono_gifts/provider/sign_up_provider.dart';
+import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class BuyProvider extends ChangeNotifier{
-
+class BuyProvider extends ChangeNotifier {
   FirebaseFirestore fire = FirebaseFirestore.instance;
+  final SignUpProvider signUpProvider = SignUpProvider();
 
   String? userName;
   String? userImage;
@@ -12,10 +14,12 @@ class BuyProvider extends ChangeNotifier{
   String? userAddress;
   String? diffDays;
 
-  assignVals(String name,String image,String phone){
+  assignVals(WooCommerceMarketPlaceProvider provider, String name, String image,
+      String phone) async {
+    provider.selectReceiver(await signUpProvider.getUserById(phone));
     userName = name;
     userImage = image;
-    fire.collection('users').doc(phone).get().then((value){
+    fire.collection('users').doc(phone).get().then((value) {
       print(value.data());
       userDob = value.data()?['dobFormat'].toDate();
       userAddress = value.data()?['country'];
@@ -24,7 +28,7 @@ class BuyProvider extends ChangeNotifier{
     });
   }
 
-  clearAll(){
+  clearAll() {
     userName = null;
     userImage = null;
     userDob = null;
@@ -32,13 +36,11 @@ class BuyProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  getDateDiff(){
+  getDateDiff() {
     DateTime d = DateTime.now();
-    var daOfBirth = DateTime(d.year,userDob!.month,userDob!.day);
-    var todayDate = DateTime(d.year,d.month,d.day);
+    var daOfBirth = DateTime(d.year, userDob!.month, userDob!.day);
+    var todayDate = DateTime(d.year, d.month, d.day);
     var io = daOfBirth.difference(todayDate).inDays;
     diffDays = io.toString();
-
   }
-
 }

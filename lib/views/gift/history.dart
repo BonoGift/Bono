@@ -3,39 +3,37 @@ import 'package:bono_gifts/views/gift/controller/history_controller.dart';
 import 'package:bono_gifts/views/gift/widgets/history_list.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HistoryPage extends StatefulWidget {
-
   @override
   State<HistoryPage> createState() => _HistoryPageState();
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  final HistoryProvider historyProvider = HistoryProvider();
-
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    historyProvider.dispose();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    historyProvider.getHistoryFromFirebase();
-    Future.delayed(const Duration(milliseconds: 1000), (){
-      setState(() {
-      });
+    Provider.of<HistoryProvider>(context, listen: false)
+        .getHistoryFromFirebase();
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final double _height = MediaQuery.of(context).size.height;
+    final HistoryProvider historyProvider =
+        Provider.of<HistoryProvider>(context);
     return DefaultTabController(
       length: 3,
       child: SafeArea(
@@ -57,7 +55,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)),
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => BuyPage()));
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => BuyPage()));
                     },
                     child: PrimaryText(
                       text: 'Buy Gift',
@@ -88,7 +87,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
                     child:
-                        Divider(height: 1, thickness:2, color: Colors.black12),
+                        Divider(height: 1, thickness: 2, color: Colors.black12),
                   ),
                 ],
               ),
@@ -98,19 +97,16 @@ class _HistoryPageState extends State<HistoryPage> {
               fontSize: 25,
             ),
           ),
-          body:  TabBarView(
+          body: TabBarView(
             children: [
               HistoryList(
                 historyList: historyProvider.allHistory,
-                isReceived: true,
-              ),
-              HistoryList(
-                historyList: historyProvider.sendHistory,
-                isReceived: true,
               ),
               HistoryList(
                 historyList: historyProvider.receivedHistory,
-                isReceived: false,
+              ),
+              HistoryList(
+                historyList: historyProvider.sendHistory,
               ),
             ],
           ),

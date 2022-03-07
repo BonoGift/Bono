@@ -1,10 +1,9 @@
-import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/buy_provider.dart';
+import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/buy/payment_screen.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -18,13 +17,14 @@ class OrderSummry extends StatefulWidget {
 }
 
 class _OrderSummryState extends State<OrderSummry> {
-  DurationVal? _duration = DurationVal.first;
   var formtr = DateFormat('MMM');
   @override
   Widget build(BuildContext context) {
     var form = DateFormat('dd-MMM');
     final pro = Provider.of<BuyProvider>(context);
-    final pror = Provider.of<WooCommerceMarketPlaceProvider>(context);
+    final WooCommerceMarketPlaceProvider wooCommerceMarketPlaceProvider =
+        Provider.of<WooCommerceMarketPlaceProvider>(context);
+    final SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[100],
@@ -143,9 +143,21 @@ class _OrderSummryState extends State<OrderSummry> {
                                   Padding(
                                     padding: const EdgeInsets.all(1.0),
                                     child: Hero(
-                                      tag: pror.image.toString(),
+                                      tag: wooCommerceMarketPlaceProvider
+                                              .selectedProduct
+                                              ?.images
+                                              ?.first
+                                              .src
+                                              .toString() ??
+                                          '',
                                       child: Image.network(
-                                        pror.image.toString(),
+                                        wooCommerceMarketPlaceProvider
+                                                .selectedProduct
+                                                ?.images
+                                                ?.first
+                                                .src
+                                                .toString() ??
+                                            '',
                                         height: 148,
                                         fit: BoxFit.contain,
                                       ),
@@ -174,7 +186,7 @@ class _OrderSummryState extends State<OrderSummry> {
                   //   width: double.infinity,
                   //   color: Colors.transparent,
                   //   child: Image.network(
-                  //     pror.image!,
+                  //     wooCommerceMarketPlaceProvider.selectedProduct?.image!,
                   //     fit: BoxFit.cover,
                   //     height: 200,
                   //     width: 200,
@@ -200,7 +212,9 @@ class _OrderSummryState extends State<OrderSummry> {
                         leading: Container(),
                         title: FittedBox(
                           child: Text(
-                            pror.name!,
+                            wooCommerceMarketPlaceProvider
+                                    .selectedProduct?.name ??
+                                '',
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
@@ -228,14 +242,15 @@ class _OrderSummryState extends State<OrderSummry> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // Text("Size : ${pror.size}"),
+                            // Text("Size : ${wooCommerceMarketPlaceProvider.selectedProduct?.size}"),
 
                             FittedBox(
                               child: Row(
                                 children: [
                                   const Text('Price: '),
                                   PrimaryText(
-                                    text: "${pror.price}\$",
+                                    text:
+                                        "${wooCommerceMarketPlaceProvider.selectedProduct?.price}\$",
                                     fontSize: 16,
                                   )
                                 ],
@@ -258,7 +273,7 @@ class _OrderSummryState extends State<OrderSummry> {
                                   Text('Total: '),
                                   PrimaryText(
                                     text:
-                                        "${finalPrice(pror.price.toString(), 3)}\$",
+                                        "${wooCommerceMarketPlaceProvider.finalPrice()}\$",
                                     fontSize: 16,
                                   )
                                 ],
@@ -400,7 +415,7 @@ class _OrderSummryState extends State<OrderSummry> {
               //                   onChanged: (date) {
               //                     var formt = DateFormat('dd-MMM-yyyy');
               //
-              //                     pror.setDOB(
+              //                     wooCommerceMarketPlaceProvider.selectedProduct?.setDOB(
               //                         formt.format(date).toString(), date);
               //                   },
               //                   onConfirm: (date) {},
@@ -420,9 +435,9 @@ class _OrderSummryState extends State<OrderSummry> {
               //                                 BorderRadius.circular(8),
               //                             border: Border.all()),
               //                         child: Center(
-              //                           child: Text(pror.dob != null
-              //                               ? pror.dob!.substring(7, 11)
-              //                               : pror.todayDate.year.toString()),
+              //                           child: Text(wooCommerceMarketPlaceProvider.selectedProduct?.dob != null
+              //                               ? wooCommerceMarketPlaceProvider.selectedProduct?.dob!.substring(7, 11)
+              //                               : wooCommerceMarketPlaceProvider.selectedProduct?.todayDate.year.toString()),
               //                         ),
               //                       ),
               //                       SizedBox(
@@ -435,10 +450,10 @@ class _OrderSummryState extends State<OrderSummry> {
               //                                 BorderRadius.circular(8),
               //                             border: Border.all()),
               //                         child: Center(
-              //                           child: Text(pror.dob != null
-              //                               ? pror.dob!.substring(3, 6)
+              //                           child: Text(wooCommerceMarketPlaceProvider.selectedProduct?.dob != null
+              //                               ? wooCommerceMarketPlaceProvider.selectedProduct?.dob!.substring(3, 6)
               //                               : formtr
-              //                                   .format(pror.todayDate)
+              //                                   .format(wooCommerceMarketPlaceProvider.selectedProduct?.todayDate)
               //                                   .toString()),
               //                         ),
               //                       ),
@@ -452,9 +467,9 @@ class _OrderSummryState extends State<OrderSummry> {
               //                                 BorderRadius.circular(8),
               //                             border: Border.all()),
               //                         child: Center(
-              //                           child: Text(pror.dob != null
-              //                               ? pror.dob!.substring(0, 2)
-              //                               : pror.todayDate.day.toString()),
+              //                           child: Text(wooCommerceMarketPlaceProvider.selectedProduct?.dob != null
+              //                               ? wooCommerceMarketPlaceProvider.selectedProduct?.dob!.substring(0, 2)
+              //                               : wooCommerceMarketPlaceProvider.selectedProduct?.todayDate.day.toString()),
               //                         ),
               //                       )
               //                     ],
@@ -497,14 +512,8 @@ class _OrderSummryState extends State<OrderSummry> {
     );
   }
 
-  int finalPrice(String price, int delivery) {
-    final int actualPrice = int.parse(price.toString());
-    final int totalPrice = actualPrice + delivery;
-    return totalPrice;
-  }
-
   goToPaymentScreen() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (contxt) =>  PaymnetScreen()));
+        context, MaterialPageRoute(builder: (contxt) => PaymentScreen()));
   }
 }
