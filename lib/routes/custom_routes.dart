@@ -10,7 +10,7 @@ import 'package:bono_gifts/views/profile/profile.dart';
 import 'package:bono_gifts/views/signup/create_profile.dart';
 import 'package:bono_gifts/views/signup/phone_auth.dart';
 import 'package:bono_gifts/views/signup/select_dob.dart';
-import 'package:bono_gifts/views/signup/veify_otp.dart';
+import 'package:bono_gifts/views/signup/verify_otp.dart';
 import 'package:bono_gifts/views/signup/welcome_page.dart';
 import 'package:flutter/material.dart';
 
