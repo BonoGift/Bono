@@ -2,10 +2,12 @@ import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/feeds_provider.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
 import 'package:bono_gifts/views/chat/chat_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../provider/sign_up_provider.dart';
 
@@ -16,6 +18,7 @@ class Feeds extends StatefulWidget {
 
 class _FeedsState extends State<Feeds> {
   TextEditingController commnetController = TextEditingController();
+  GlobalKey testKey = GlobalKey();
 
   @override
   void initState() {
@@ -24,11 +27,20 @@ class _FeedsState extends State<Feeds> {
     pro.getFeedsPosts(context);
   }
 
+  void getSize() {
+    print('here');
+    final RenderBox renderBox = testKey.currentContext?.findRenderObject() as RenderBox;
+
+    final Size size = renderBox.size; // or _widgetKey.currentContext?.size
+    print('Size: ${size.width}, ${size.height}');
+  }
+
   @override
   Widget build(BuildContext context) {
     var formt = DateFormat('dd-MMM-yyyy');
     final commentDateFormat = DateFormat('dd MMM yyyy');
     final pro = Provider.of<FeedsProvider>(context);
+
     return RefreshIndicator(
       onRefresh: () {
         return pro.getFeedsPosts(context);
@@ -107,289 +119,324 @@ class _FeedsState extends State<Feeds> {
                 ),
               ),
               const SizedBox(height: 10),
-              pro.feeds.isEmpty
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: pro.feeds.length,
-                      itemBuilder: (ctx, i) {
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                pro.getNetworkUserData(pro.feeds[i].phone);
-                                Future.delayed(const Duration(seconds: 1), () {
-                                  Navigator.pushNamed(context, userProfile);
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                color: Colors.white,
-                                child: Row(
-                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                        child: Text(
-                                          pro.feeds[i].profileName,
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              if (pro.feeds.isEmpty)
+                const Center(
+                  child: CircularProgressIndicator(),
+                )
+              else
+                ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: pro.feeds.length,
+                  itemBuilder: (ctx, i) {
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            pro.getNetworkUserData(pro.feeds[i].phone);
+                            Future.delayed(const Duration(seconds: 1), () {
+                              Navigator.pushNamed(context, userProfile);
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            color: Colors.white,
+                            child: Row(
+                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text(
+                                      pro.feeds[i].profileName,
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                ClipOval(
+                                  child: CachedNetworkImage(
+                                    imageUrl: pro.feeds[i].profileImage,
+                                    progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                      width: 64,
+                                      height: 64,
+                                      child: Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.white,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.grey,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: CircleAvatar(
-                                        radius: 32,
-                                        backgroundImage: NetworkImage(pro.feeds[i].profileImage),
+                                    fit: BoxFit.cover,
+                                    width: 64,
+                                    height: 64,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    formt.format(pro.feeds[i].date).toString(),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Stack(
+                          children: [
+                            CachedNetworkImage(
+                              progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                width: getWidth(context),
+                                height: getHeight(context) * 0.7,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.white,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              imageUrl: pro.feeds[i].image,
+                              width: getWidth(context),
+                              height: getHeight(context) * 0.7,
+                              fit: BoxFit.cover,
+                            ),
+                            /*Image.network(
+                                  pro.feeds[i].image,
+                                  width: getWidth(context),
+                                  fit: BoxFit.cover,
+                                ),*/
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              // alignment: Alignment.bottomRight,
+                              child: Container(
+                                // color:Colors.black.withOpacity(0.2),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          pro.sharePost(
+                                            pro.feeds[i].title,
+                                            pro.feeds[i].image,
+                                          );
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              sharedIcon,
+                                              height: 40,
+                                              width: 40,
+                                            ),
+                                            const Text(
+                                              "",
+                                              style: TextStyle(color: Colors.white),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Text(
-                                        formt.format(pro.feeds[i].date).toString(),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(color: Colors.black, fontSize: 16),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                          onTap: () {
+                                            showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                useRootNavigator: true,
+                                                context: context,
+                                                builder: (contxt) {
+                                                  commnetController.clear();
+                                                  return Scaffold(
+                                                    backgroundColor: Colors.transparent,
+                                                    resizeToAvoidBottomInset: true,
+                                                    body: Container(
+                                                      decoration: const BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(10.0),
+                                                          topRight: Radius.circular(10.0),
+                                                        ),
+                                                      ),
+                                                      //height: MediaQuery.of(context).size.height,
+                                                      child: SingleChildScrollView(
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            _getCommentsWidget(pro, i, commentDateFormat),
+                                                            _writeCommentWidget(context, pro, i),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                });
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                commentIcon,
+                                                height: 40,
+                                                width: 40,
+                                              ),
+                                              StreamBuilder(
+                                                stream: FirebaseFirestore.instance.collection('userPosts').doc(pro.feeds[i].docid).collection('comments').snapshots(),
+                                                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                                  if (snapshot.data == null) {
+                                                    return const Text(
+                                                      "0",
+                                                      style: TextStyle(color: Colors.white),
+                                                    );
+                                                  } else {
+                                                    return Text(
+                                                      snapshot.data!.docs.length.toString(),
+                                                      style: const TextStyle(color: Colors.white),
+                                                    );
+                                                  }
+                                                },
+                                              )
+                                            ],
+                                          )),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          pro.incrementLike(i);
+                                          pro.addLike(pro.feeds[i].docid, pro.feeds[i].like, context, i);
+                                          pro.callGetLike(context, pro.feeds[i].docid);
+                                          // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(recieverName: pro.feeds[i].profileName,profileImage: pro.feeds[i].profileImage,recieverPhone:pro.feeds[i].phone)));
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              pro.feeds[i].isLiked ? "assets/feeds_icons/like-icon.png" : "assets/feeds_icons/like-icon-grey-.png",
+                                              height: 40,
+                                              width: 40,
+                                            ),
+                                            Text(
+                                              pro.feeds[i].like.toString(),
+                                              style: const TextStyle(color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(recieverName: pro.feeds[i].profileName, profileImage: pro.feeds[i].profileImage, recieverPhone: pro.feeds[i].phone)));
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              chatIconNew,
+                                              height: 40,
+                                              width: 40,
+                                            ),
+                                            // Text("0",style: TextStyle(color: Colors.white),)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              giftICon,
+                                              height: 40,
+                                              width: 40,
+                                            ),
+                                            const Text(
+                                              "",
+                                              style: TextStyle(color: Colors.white),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                            Stack(
-                              children: [
-                                Image.network(
-                                  pro.feeds[i].image,
-                                  width: getWidth(context),
-                                  fit: BoxFit.cover,
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  // alignment: Alignment.bottomRight,
-                                  child: Container(
-                                    // color:Colors.black.withOpacity(0.2),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        const SizedBox(height: 10),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              pro.sharePost(
-                                                pro.feeds[i].title,
-                                                pro.feeds[i].image,
-                                              );
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Image.asset(
-                                                  sharedIcon,
-                                                  height: 40,
-                                                  width: 40,
-                                                ),
-                                                const Text(
-                                                  "",
-                                                  style: TextStyle(color: Colors.white),
-                                                )
-                                              ],
-                                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                /**/
+                                color: Colors.black.withOpacity(0.6),
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width * 0.75,
+                                      child: Center(
+                                        child: Text(
+                                          pro.feeds[i].title,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                              onTap: () {
-                                                showModalBottomSheet(
-                                                    isScrollControlled: true,
-                                                    useRootNavigator: true,
-                                                    context: context,
-                                                    builder: (contxt) {
-                                                      commnetController.clear();
-                                                      return Scaffold(
-                                                        backgroundColor: Colors.transparent,
-                                                        resizeToAvoidBottomInset: true,
-                                                        body: Container(
-                                                          decoration: const BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius: BorderRadius.only(
-                                                              topLeft: Radius.circular(10.0),
-                                                              topRight: Radius.circular(10.0),
-                                                            ),
-                                                          ),
-                                                          //height: MediaQuery.of(context).size.height,
-                                                          child: SingleChildScrollView(
-                                                            child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              children: [
-                                                                _getCommentsWidget(pro, i, commentDateFormat),
-                                                                _writeCommentWidget(context, pro, i),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    });
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  Image.asset(
-                                                    commentIcon,
-                                                    height: 40,
-                                                    width: 40,
-                                                  ),
-                                                  StreamBuilder(
-                                                    stream: FirebaseFirestore.instance.collection('userPosts').doc(pro.feeds[i].docid).collection('comments').snapshots(),
-                                                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                                      if (snapshot.data == null) {
-                                                        return const Text(
-                                                          "0",
-                                                          style: TextStyle(color: Colors.white),
-                                                        );
-                                                      } else {
-                                                        return Text(
-                                                          snapshot.data!.docs.length.toString(),
-                                                          style: const TextStyle(color: Colors.white),
-                                                        );
-                                                      }
-                                                    },
-                                                  )
-                                                ],
-                                              )),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              pro.incrementLike(i);
-                                              pro.addLike(pro.feeds[i].docid, pro.feeds[i].like, context, i);
-                                              pro.callGetLike(context, pro.feeds[i].docid);
-                                              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(recieverName: pro.feeds[i].profileName,profileImage: pro.feeds[i].profileImage,recieverPhone:pro.feeds[i].phone)));
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Image.asset(
-                                                  pro.feeds[i].isLiked ? "assets/feeds_icons/like-icon.png" : "assets/feeds_icons/like-icon-grey-.png",
-                                                  height: 40,
-                                                  width: 40,
-                                                ),
-                                                Text(
-                                                  pro.feeds[i].like.toString(),
-                                                  style: const TextStyle(color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(recieverName: pro.feeds[i].profileName, profileImage: pro.feeds[i].profileImage, recieverPhone: pro.feeds[i].phone)));
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Image.asset(
-                                                  chatIconNew,
-                                                  height: 40,
-                                                  width: 40,
-                                                ),
-                                                // Text("0",style: TextStyle(color: Colors.white),)
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: InkWell(
-                                            onTap: () {},
-                                            child: Column(
-                                              children: [
-                                                Image.asset(
-                                                  giftICon,
-                                                  height: 40,
-                                                  width: 40,
-                                                ),
-                                                const Text(
-                                                  "",
-                                                  style: TextStyle(color: Colors.white),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  top: 0,
-                                  child: Container(
-                                    /**/
-                                    color: Colors.black.withOpacity(0.6),
-                                    child: Column(
-                                      children: [
-                                        const SizedBox(height: 8),
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width * 0.75,
-                                          child: Center(
+                                    const SizedBox(height: 8),
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: InkWell(
+                                        onTap: () {
+                                          pro.openDescription(i);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.only(right: 8),
+                                          child: Text(
+                                            pro.feeds[i].isDesOpen ? "Read Less" : "Read More",
+                                            style: const TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    pro.feeds[i].isDesOpen
+                                        ? Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                                             child: Text(
-                                              pro.feeds[i].title,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                                              pro.feeds[i].description.toString(),
+                                              style: const TextStyle(color: Colors.white, fontSize: 15),
                                             ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Align(
-                                          alignment: Alignment.topRight,
-                                          child: InkWell(
-                                            onTap: () {
-                                              pro.openDescription(i);
-                                            },
-                                            child: Container(
-                                              padding: const EdgeInsets.only(right: 8),
-                                              child: Text(
-                                                pro.feeds[i].isDesOpen ? "Read Less" : "Read More",
-                                                style: const TextStyle(color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        pro.feeds[i].isDesOpen
-                                            ? Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                                                child: Text(
-                                                  pro.feeds[i].description.toString(),
-                                                  style: const TextStyle(color: Colors.white, fontSize: 15),
-                                                ),
-                                              )
-                                            : Container(),
-                                        pro.feeds[i].isDesOpen ? const SizedBox(height: 10) : Container()
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            Container(
-                              height: 10,
-                              color: Colors.grey[100],
+                                          )
+                                        : Container(),
+                                    pro.feeds[i].isDesOpen ? const SizedBox(height: 10) : Container()
+                                  ],
+                                ),
+                              ),
                             )
                           ],
-                        );
-                      },
-                    )
+                        ),
+                        Container(
+                          height: 10,
+                          color: Colors.grey[100],
+                        )
+                      ],
+                    );
+                  },
+                )
             ],
           ),
         ),

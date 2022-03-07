@@ -49,19 +49,27 @@ class SignUpProvider extends ChangeNotifier {
   List<String> myPosts = [];
 
   getImage() async {
-    XFile? tempImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    XFile? tempImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 25,
+    );
     image = tempImage;
     bytesImage = await image!.readAsBytes();
     notifyListeners();
   }
 
   setDialCode(String code) => dailCode = code;
+
   setOTP(String otpCOde) => otp = otpCOde;
+
   setRoom(String sRoom) => room = TextEditingController(text: sRoom);
+
   setBuild(String sBuild) => buildingName = TextEditingController(text: sBuild);
+
   setArea(String sArea) => area = TextEditingController(text: sArea);
+
   setStreet(String sStreet) => street = TextEditingController(text: sStreet);
+
   setCity(String sCity) => city = TextEditingController(text: sCity);
 
   setPhoneNum(String phone) {
@@ -70,6 +78,7 @@ class SignUpProvider extends ChangeNotifier {
   }
 
   setName(String namee) => name = namee;
+
   setEmail(String emaill) => email = emaill;
 
   setDOB(String dobb, DateTime date) {
@@ -104,8 +113,7 @@ class SignUpProvider extends ChangeNotifier {
       latitude = pos.latitude;
       longitude = pos.longitude;
       addMarker();
-      List<Placemark> newPlace =
-          await placemarkFromCoordinates(pos.latitude, pos.longitude);
+      List<Placemark> newPlace = await placemarkFromCoordinates(pos.latitude, pos.longitude);
       setStreet(newPlace.last.street!);
       setArea(newPlace.last.name!);
       setCity(newPlace.last.locality!);
@@ -128,9 +136,7 @@ class SignUpProvider extends ChangeNotifier {
           // request media library
           Permission.photos.request().then((value) {}).then((value) {
             // request photos
-            Permission.microphone
-                .request()
-                .then((value) {}); // request microphone
+            Permission.microphone.request().then((value) {}); // request microphone
           });
         });
       });
@@ -147,12 +153,10 @@ class SignUpProvider extends ChangeNotifier {
   }
 
   final service = SignUpService();
+
   addMarker() {
     MarkerId markerId = const MarkerId("map");
-    Marker marker = Marker(
-        markerId: markerId,
-        icon: BitmapDescriptor.defaultMarker,
-        position: LatLng(latitude!, longitude!));
+    Marker marker = Marker(markerId: markerId, icon: BitmapDescriptor.defaultMarker, position: LatLng(latitude!, longitude!));
     markers[markerId] = marker;
   }
 
@@ -256,10 +260,7 @@ class SignUpProvider extends ChangeNotifier {
 
     print("=============================----------------$ph");
 
-    if (phone != null ||
-        phone != '' ||
-        phoneNumber.text != null ||
-        phoneNumber.text != '') {
+    if (phone != null || phone != '' || phoneNumber.text != null || phoneNumber.text != '') {
       getUser();
     }
   }
@@ -304,9 +305,7 @@ class SignUpProvider extends ChangeNotifier {
       if (!value) {
         otpErro = 'Invalid OTP';
       } else {
-        await service
-            .checkIfUserAlready('$dailCode${phoneNumber.text}')
-            .then((value) {
+        await service.checkIfUserAlready('$dailCode${phoneNumber.text}').then((value) {
           print(value);
           if (value.exists == true) {
             print("USer called Exist");

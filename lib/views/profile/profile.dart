@@ -2,11 +2,11 @@ import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/helper/decorated_image.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -46,10 +46,31 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: const Text("Sign out"),
                             ),
                             // const SizedBox(width: 20,),
-                            CircleAvatar(
+                            ClipOval(
+                              child: CachedNetworkImage(
+                                imageUrl: pro.userImage,
+                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                  width: 100,
+                                  height: 100,
+                                  child: Shimmer.fromColors(
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.white,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
+                              ),
+                            ),
+                            /*CircleAvatar(
                               radius: 50,
                               backgroundImage: NetworkImage(pro.userImage),
-                            ),
+                            ),*/
                             // const SizedBox(width: 20,),
                             MaterialButton(
                               color: Colors.grey[800],

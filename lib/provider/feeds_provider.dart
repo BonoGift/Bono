@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/config/destination.dart';
-import 'package:bono_gifts/models/comments_model.dart';
 import 'package:bono_gifts/models/feeds_models.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/services/feeds_services.dart';
@@ -64,7 +63,10 @@ class FeedsProvider extends ChangeNotifier {
 
   chooseImageFromGallery(BuildContext context) async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 25,
+    );
     bytesImage = await image?.readAsBytes();
     if (image == null) return;
     Navigator.push(
@@ -224,7 +226,7 @@ class FeedsProvider extends ChangeNotifier {
     });
   }
 
-  addComment(String docRed, String text, BuildContext context) async{
+  addComment(String docRed, String text, BuildContext context) async {
     await service.addComments(docRed, context, text);
     //notifyListeners();
   }

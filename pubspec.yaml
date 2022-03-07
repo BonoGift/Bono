@@ -92,6 +92,8 @@ dependencies:
 
 
   change_app_package_name: ^1.0.0
+  cached_network_image: ^3.2.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:
