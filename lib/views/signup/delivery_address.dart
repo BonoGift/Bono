@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:bono_gifts/config/constants.dart';
-import 'package:bono_gifts/main.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
 import 'package:bono_gifts/views/profile/edit_profiel.dart';
@@ -11,6 +9,7 @@ import 'package:provider/provider.dart';
 
 class DeliveryAddress extends StatefulWidget {
   final bool isFromDob;
+
   const DeliveryAddress({Key? key, required this.isFromDob}) : super(key: key);
 
   @override
@@ -30,6 +29,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
   }
 
   GoogleMapController? _controller;
+
   onMapCreated(GoogleMapController controller) {
     completer.complete(controller);
     _controller = controller;
@@ -41,8 +41,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      Provider.of<SignUpProvider>(context, listen: false)
-          .setLocation(_controller!);
+      Provider.of<SignUpProvider>(context, listen: false).setLocation(_controller!);
     });
   }
 
@@ -280,13 +279,14 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                 SizedBox(
                   height: 500,
                   child: GoogleMap(
-                    initialCameraPosition:
-                    CameraPosition(target: latLng, zoom: 40.0),
+                    initialCameraPosition: CameraPosition(target: latLng, zoom: 40.0),
                     onMapCreated: onMapCreated,
-                    myLocationEnabled: true, myLocationButtonEnabled: false,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
                     tiltGesturesEnabled: true,
                     compassEnabled: true,
-                    scrollGesturesEnabled: true, zoomControlsEnabled: false,
+                    scrollGesturesEnabled: true,
+                    zoomControlsEnabled: false,
                     zoomGesturesEnabled: true,
                     markers: Set<Marker>.of(pro.markers.values),
                     // polylines: Set<Polyline>.of(_polylines.values),
@@ -316,8 +316,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                           children: const [
                             Text(
                               "Add a delivery Address",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -330,9 +329,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                           children: [
                             Text(
                               "(You will receive gifts in this address)",
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey.withOpacity(.9)),
+                              style: TextStyle(fontSize: 13, color: Colors.grey.withOpacity(.9)),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -351,41 +348,32 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                             // label: Text("Your Centered Label Text"),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelText: "Title",
-                            labelStyle: TextStyle(
-                                height: 0.8,
-                                color: Colors.grey.withOpacity(
-                                    .9) // 0,1 - label will sit on top of border
-                            ),
+                            labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+                                ),
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 35,
                             ),
 
-                            hintStyle:
-                            TextStyle(color: Colors.grey.withOpacity(.9)),
+                            hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                           ),
                         ),
@@ -407,49 +395,34 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                                 },
                                 decoration: InputDecoration(
                                   // label: Text("Your Centered Label Text"),
-                                  floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelText: "Building",
-                                  labelStyle: TextStyle(
-                                      height: 0.8,
-                                      color: Colors.grey.withOpacity(
-                                          .9) // 0,1 - label will sit on top of border
-                                  ),
+                                  labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+                                      ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 35,
                                   ),
 
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.withOpacity(.9)),
+                                  hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                 ),
                               ),
@@ -470,49 +443,34 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                                 },
                                 decoration: InputDecoration(
                                   // label: Text("Your Centered Label Text"),
-                                  floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelText: "Room No.",
-                                  labelStyle: TextStyle(
-                                      height: 0.8,
-                                      color: Colors.grey.withOpacity(
-                                          .9) // 0,1 - label will sit on top of border
-                                  ),
+                                  labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+                                      ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 35,
                                   ),
 
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.withOpacity(.9)),
+                                  hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                 ),
                               ),
@@ -537,49 +495,34 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                                 controller: pro.area,
                                 decoration: InputDecoration(
                                   // label: Text("Your Centered Label Text"),
-                                  floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelText: "Area",
-                                  labelStyle: TextStyle(
-                                      height: 0.8,
-                                      color: Colors.grey.withOpacity(
-                                          .9) // 0,1 - label will sit on top of border
-                                  ),
+                                  labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+                                      ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 35,
                                   ),
 
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.withOpacity(.9)),
+                                  hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                 ),
                               ),
@@ -600,49 +543,34 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                                 controller: pro.city,
                                 decoration: InputDecoration(
                                   // label: Text("Your Centered Label Text"),
-                                  floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelText: "City",
-                                  labelStyle: TextStyle(
-                                      height: 0.8,
-                                      color: Colors.grey.withOpacity(
-                                          .9) // 0,1 - label will sit on top of border
-                                  ),
+                                  labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+                                      ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 35,
                                   ),
 
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey.withOpacity(.9)),
+                                  hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                   focusedErrorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(50),
-                                    borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey.withOpacity(.9)),
+                                    borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                                   ),
                                 ),
                               ),
@@ -662,41 +590,32 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                             // label: Text("Your Centered Label Text"),
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelText: "Location",
-                            labelStyle: TextStyle(
-                                height: 0.8,
-                                color: Colors.grey.withOpacity(
-                                    .9) // 0,1 - label will sit on top of border
-                            ),
+                            labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+                                ),
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 35,
                             ),
 
-                            hintStyle:
-                            TextStyle(color: Colors.grey.withOpacity(.9)),
+                            hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.grey.withOpacity(.9)),
+                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
                             ),
                           ),
                         ),
@@ -714,18 +633,10 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                                   height: 45,
                                   child: const Center(
                                       child: Text(
-                                        "Cancle",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(50)),
-                                      border: Border.all(
-                                          color: Colors.grey.withOpacity(.9)),
-                                      color: Colors.white),
+                                    "Cancle",
+                                    style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                                  )),
+                                  decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(50)), border: Border.all(color: Colors.grey.withOpacity(.9)), color: Colors.white),
                                 ),
                               ),
                             ),
@@ -735,22 +646,21 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, createProfile);
+                                  Navigator.pushNamed(context, profilePage);
                                 },
                                 child: Container(
                                   height: 45,
                                   child: const Center(
-                                      child: Text(
-                                        "Done",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                  decoration: const BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(50)),
-                                      color: Colors.blue),
+                                    child: Text(
+                                      "Done",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50)), color: Colors.blue),
                                 ),
                               ),
                             ),
