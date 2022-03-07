@@ -719,9 +719,9 @@ class _EditProfileState extends State<EditProfile> {
                                 ),
                         ),
                         height: 50,
-                        decoration: const BoxDecoration(
-                          color: Colors.brown,
-                          borderRadius: BorderRadius.all(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(50),
                           ),
                         ),
