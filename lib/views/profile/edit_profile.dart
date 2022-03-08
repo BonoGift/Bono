@@ -81,7 +81,7 @@ class _EditProfileState extends State<EditProfile> {
                                               child: CircleAvatar(radius: 70, backgroundImage: AssetImage("assets/images/profile.png")),
                                             ),
                                       Align(
-                                        alignment: Alignment(1.0, 0.9),
+                                        alignment: const Alignment(1.0, 0.9),
                                         child: TextButton(onPressed: () => pro.getImage(), child: Text("Edit")),
                                       ),
                                     ],
@@ -115,9 +115,7 @@ class _EditProfileState extends State<EditProfile> {
                             ],
                           ),
 
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     // Container(
                     //   decoration: BoxDecoration(
                     //       border: Border.all(),

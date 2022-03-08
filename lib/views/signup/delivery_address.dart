@@ -646,7 +646,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, profilePage);
+                                  Navigator.pushNamed(context, editProfile);
                                 },
                                 child: Container(
                                   height: 45,

@@ -73,7 +73,7 @@ class FeedsProvider extends ChangeNotifier {
       context,
       MaterialPageRoute(
         builder: (builder) => CameraViewPage(
-          path: image!.path,
+          path: image.path,
           bytes: bytesImage!,
         ),
       ),
