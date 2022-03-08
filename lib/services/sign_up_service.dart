@@ -26,8 +26,7 @@ class SignUpService {
         print(verificationId);
         print(resendToken);
         verId = verificationId;
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: verificationId, smsCode: smsCode);
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
         print(credential.smsCode);
         print("USer id valid");
         verId = verificationId;
@@ -56,16 +55,13 @@ class SignUpService {
   }
 
   Future<DocumentSnapshot> checkIfUserAlready(String phone) async {
-    Future<DocumentSnapshot> val =
-        firestore.collection('users').doc(phone).get();
+    Future<DocumentSnapshot> val = firestore.collection('users').doc(phone).get();
     return val;
   }
 
   Future<bool> saveToFirebase(Map<String, dynamic> map) async {
-    String defaultImage =
-        "https://firebasestorage.googleapis.com/v0/b/bonogifts.appspot.com/o/profile.png?alt=media&token=dec6afee-44f3-4876-8f2b-dbb2be0dd4d8";
-    final DocumentReference ref =
-        FirebaseFirestore.instance.collection('users').doc(map['phone']);
+    String defaultImage = "https://firebasestorage.googleapis.com/v0/b/bonogifts.appspot.com/o/profile.png?alt=media&token=dec6afee-44f3-4876-8f2b-dbb2be0dd4d8";
+    final DocumentReference ref = FirebaseFirestore.instance.collection('users').doc(map['phone']);
 
     if (map['image'] == null) {
       print("Image null");
@@ -84,17 +80,13 @@ class SignUpService {
         'city': map['city'],
         'street': map['street'],
         'searchPhone': map['searchPhone'],
-        'searchPhone1':
-            '00${map['phone'].toString().substring(1, map['phone'].length)}'
+        'searchPhone1': '00${map['phone'].toString().substring(1, map['phone'].length)}',
       };
 
       await ref.set(userData);
     } else {
       print("Image NOT null");
-      var snapshot = await FirebaseStorage.instance
-          .ref()
-          .child('Profile Pictures/${map['phone']}')
-          .putData(map['image']);
+      var snapshot = await FirebaseStorage.instance.ref().child('Profile Pictures/${map['phone']}').putData(map['image']);
 
       var url = (await snapshot.ref.getDownloadURL()).toString();
       var userData = {
@@ -112,8 +104,7 @@ class SignUpService {
         'area': map['area'],
         'street': map['street'],
         'searchPhone': map['searchPhone'],
-        'searchPhone1':
-            '00${map['phone'].toString().substring(1, map['phone'].length)}'
+        'searchPhone1': '00${map['phone'].toString().substring(1, map['phone'].length)}',
       };
       await ref.set(userData);
     }
@@ -121,59 +112,59 @@ class SignUpService {
   }
 
   Future<bool> updateUserProfile(Map<String, dynamic> map, String phone) async {
-    String defaultImage =
-        "https://firebasestorage.googleapis.com/v0/b/bonogifts.appspot.com/o/profile.png?alt=media&token=dec6afee-44f3-4876-8f2b-dbb2be0dd4d8";
-    final DocumentReference ref =
-        FirebaseFirestore.instance.collection('users').doc(map['phone']);
+    String defaultImage = "https://firebasestorage.googleapis.com/v0/b/bonogifts.appspot.com/o/profile.png?alt=media&token=dec6afee-44f3-4876-8f2b-dbb2be0dd4d8";
+    final DocumentReference ref = FirebaseFirestore.instance.collection('users').doc(map['phone']);
 
-    if (map['image'] == null) {
-      print("Image null");
-      var userData = {
-        'name': map['name'],
-        'email': map['email'],
-        'phone': map['phone'],
-        'timestamp': DateTime.now(),
-        'dobFormat': map['dobFormat'],
-        'country': map['country'],
-        'city': map['city'],
-        'villa': map['villa'],
-        'buildingName': map['buildingName'],
-        'area': map['area'],
-        'street': map['street'],
-      };
-      await ref.update(userData);
-    } else {
-      print("Image NOT null");
-      var snapshot = await FirebaseStorage.instance
-          .ref()
-          .child('Profile Pictures/${map['phone']}')
-          .putData(map['image']);
+    try {
+      if (map['image'] == null) {
+        print("Image null");
+        var userData = {
+          'name': map['name'],
+          'email': map['email'],
+          'phone': map['phone'],
+          'timestamp': DateTime.now(),
+          'dobFormat': map['dobFormat'],
+          'country': map['country'],
+          'city': map['city'],
+          'villa': map['villa'],
+          'buildingName': map['buildingName'],
+          'area': map['area'],
+          'street': map['street'],
+        };
+        await ref.update(userData);
+      } else {
+        print("Image NOT null");
+        var snapshot = await FirebaseStorage.instance.ref().child('Profile Pictures/${map['phone']}').putData(map['image']);
 
-      var url = (await snapshot.ref.getDownloadURL()).toString();
-      var userData = {
-        'name': map['name'],
-        'email': map['email'],
-        'phone': map['phone'],
-        'profile_url': url,
-        'image url': url,
-        'timestamp': DateTime.now(),
-        'dobFormat': map['dobFormat'],
-        'country': map['country'],
-        'city': map['city'],
-        'villa': map['villa'],
-        'buildingName': map['buildingName'],
-        'area': map['area'],
-        'street': map['street'],
-      };
-      await ref.update(userData);
+        var url = (await snapshot.ref.getDownloadURL()).toString();
+        var userData = {
+          'name': map['name'],
+          'email': map['email'],
+          'phone': map['phone'],
+          'profile_url': url,
+          'image url': url,
+          'timestamp': DateTime.now(),
+          'dobFormat': map['dobFormat'],
+          'country': map['country'],
+          'city': map['city'],
+          'villa': map['villa'],
+          'buildingName': map['buildingName'],
+          'area': map['area'],
+          'street': map['street'],
+        };
+        await ref.update(userData);
+      }
+      return true;
+    } catch (e) {
+      print('Update User Profile Error $e');
+      return false;
     }
-    return true;
   }
 
   Future<Map<String, dynamic>> getUser(String phone) async {
     Map<String, dynamic>? data;
     await firestore.collection('users').doc(phone).get().then((value) {
-      data = value.data()!;
+      data = value.data();
     });
     return data!;
   }
@@ -187,11 +178,7 @@ class SignUpService {
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getMyPhotoy(String phone) async {
-    Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore
-        .instance
-        .collection('userPosts')
-        .where('phone', isEqualTo: phone)
-        .get();
+    Future<QuerySnapshot<Map<String, dynamic>>> data = FirebaseFirestore.instance.collection('userPosts').where('phone', isEqualTo: phone).get();
     return data;
   }
 }

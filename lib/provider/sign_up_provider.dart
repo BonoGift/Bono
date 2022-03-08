@@ -194,21 +194,32 @@ class SignUpProvider extends ChangeNotifier {
       'name': name,
       'dob': dob,
       'dobFormat': dobFormat,
-      'email': email,
+      'email': email ?? '',
       'image': bytesImage,
       'city': city.text.trim(),
-      'country': country,
+      'country': country ?? '',
       'villa': room.text,
       'buildingName': buildingName.text,
       'area': area.text,
       'street': street.text,
     };
-    service.updateUserProfile(userMap, phone!).then((value) {
-      saveToShared(false);
-      makeWaitingDone();
-      if (value) {
-        getUser();
-        Navigator.pop(context);
+    phone = phoneNumber.text;
+    await service.checkIfUserAlready('$dailCode${phoneNumber.text}').then((value) {
+      print(value);
+      if (value.exists) {
+        saveToShared(true);
+        service.updateUserProfile(userMap, phone!).then((value) {
+          saveToShared(false);
+          makeWaitingDone();
+          if (value) {
+            getUser();
+            Navigator.pop(context);
+          }
+        });
+        //Navigator.pushNamed(context, laoding);
+      } else {
+        signUpUser(context,true);
+        //Navigator.pushNamed(context, dobPage);
       }
     });
   }
@@ -318,20 +329,6 @@ class SignUpProvider extends ChangeNotifier {
         });
       }
       notifyListeners();
-    });
-  }
-
-  checkIfUSer(String phone) {
-    service.checkIfUserAlready(phone).then((value) {
-      print(value);
-      if (value.exists == true) {
-        print("User Exit");
-        // saveToShared();
-        // Navigator.pushNamed(context, bottomNav);
-      } else {
-        print("User Not Exist");
-        // Navigator.pushNamed(context, dobPage);
-      }
     });
   }
 
