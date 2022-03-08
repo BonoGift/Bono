@@ -116,34 +116,6 @@ class _EditProfileState extends State<EditProfile> {
                           ),
 
                     const SizedBox(height: 20),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //       border: Border.all(),
-                    //       borderRadius: BorderRadius.circular(20)
-                    //   ),
-                    //   height: 42,
-                    //   child: Center(
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.only(left:8.0),
-                    //       child: TextFormField(
-                    //         controller: TextEditingController(text:pro.name),
-                    //         validator: (val){
-                    //           if(val!.isEmpty){
-                    //             return "Name is Required";
-                    //           }
-                    //         },
-                    //         onChanged: (val){
-                    //           pro.setName(val);
-                    //         },
-                    //         textAlign: TextAlign.center,
-                    //         decoration: const InputDecoration(
-                    //           border: InputBorder.none,
-                    //           hintText: "Enter Your Name",
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     TextFormField(
                       textAlign: TextAlign.center,
                       controller: TextEditingController(text: pro.name),
@@ -189,7 +161,6 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                     const SizedBox(height: 10),
-
                     const SizedBox(height: 10),
                     TextFormField(
                       textAlign: TextAlign.center,
