@@ -51,7 +51,7 @@ class SignUpProvider extends ChangeNotifier {
   getImage() async {
     XFile? tempImage = await ImagePicker().pickImage(
       source: ImageSource.gallery,
-      imageQuality: 25,
+      imageQuality: 10,
     );
     image = tempImage;
     bytesImage = await image!.readAsBytes();
