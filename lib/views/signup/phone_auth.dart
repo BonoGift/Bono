@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PhoneAuthentication extends StatefulWidget {
   const PhoneAuthentication({Key? key}) : super(key: key);
-  static String defaultDialCode = '+1';
+  static String defaultDialCode = '+971';
 
   @override
   _PhoneAuthenticationState createState() => _PhoneAuthenticationState();
