@@ -326,7 +326,7 @@ class FeedsProvider extends ChangeNotifier {
   String? street;
   String? room;
   String? country;
-  List postsUsers = [];
+  List<String> postsUsers = [];
   String? networkDiffDays;
 
   getNetworkUserData(String phone) async {

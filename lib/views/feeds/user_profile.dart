@@ -3,6 +3,7 @@ import 'package:bono_gifts/provider/feeds_provider.dart';
 import 'package:bono_gifts/views/buy/buy.dart';
 import 'package:bono_gifts/views/chat/chat_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,8 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  final CarouselController _controller = CarouselController();
+
   @override
   Widget build(BuildContext context) {
     var formtr = DateFormat('MMM');
@@ -153,10 +156,118 @@ class _UserProfileState extends State<UserProfile> {
                                   ),
                                 )
                               : Container(),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           GridView.builder(
+                            itemCount: pro.postsUsers.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisSpacing: 4.0,
+                              mainAxisSpacing: 8.0,
+                              childAspectRatio: 0.6,
+                              crossAxisCount: 3,
+                            ),
+                            itemBuilder: (ctx, i) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  border: Border.all(color: const Color(0xFFFFFAFA), width: 5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return StatefulBuilder(
+                                            builder: (
+                                              BuildContext context,
+                                              void Function(void Function()) setState,
+                                            ) {
+                                              return Container(
+                                                color: Colors.black,
+                                                height: getHeight(context),
+                                                child: Stack(
+                                                  children: [
+                                                    CarouselSlider(
+                                                      carouselController: _controller,
+                                                      items: _getCarouselItemsWidget(pro.postsUsers),
+                                                      options: CarouselOptions(
+                                                        initialPage: i,
+                                                        height: double.infinity,
+                                                        viewportFraction: 1.0,
+                                                        enlargeCenterPage: false,
+                                                        onPageChanged: (index, reason) {
+                                                          setState(() {
+                                                            i = index;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      bottom: 24,
+                                                      left: 0,
+                                                      right: 0,
+                                                      child: AnimatedContainer(
+                                                        duration: const Duration(milliseconds: 500),
+                                                        child: Wrap(
+                                                          alignment: WrapAlignment.center,
+                                                          spacing: 8,
+                                                          children: pro.postsUsers.map((element) {
+                                                            int index = pro.postsUsers.indexOf(element);
+                                                            return Container(
+                                                              width: 12,
+                                                              height: 12,
+                                                              decoration: BoxDecoration(
+                                                                shape: BoxShape.circle,
+                                                                color: i == index ? Colors.yellow : Colors.grey,
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      top: 16,
+                                                      left: 16,
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pop(context);
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.close_sharp,
+                                                          size: 24,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        });
+                                  },
+                                  child: CachedNetworkImage(
+                                    imageUrl: pro.postsUsers[i],
+                                    progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                      child: Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.white,
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                          /*GridView.builder(
                             itemCount: pro.postsUsers.length,
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -173,7 +284,7 @@ class _UserProfileState extends State<UserProfile> {
                                 fit: BoxFit.fill,
                               );
                             },
-                          )
+                          )*/
                         ],
                       ),
                       Positioned(
@@ -195,5 +306,27 @@ class _UserProfileState extends State<UserProfile> {
               ),
             ),
     );
+  }
+
+  List<Widget> _getCarouselItemsWidget(List<String> items) {
+    return items.map((e) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: CachedNetworkImage(
+          imageUrl: e,
+          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.white,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }).toList();
   }
 }
