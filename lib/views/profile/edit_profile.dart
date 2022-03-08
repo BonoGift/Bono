@@ -188,13 +188,9 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
 
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     TextFormField(
                       textAlign: TextAlign.center,
                       controller: TextEditingController(
@@ -256,58 +252,8 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                     ),
-                    // InkWell(
-                    //   onTap: () {
-                    //     DatePicker.showPicker(
-                    //       context,
-                    //       showTitleActions: true,
-                    //       // minTime: DateTime(1950, 3, 5),
-                    //       // maxTime: DateTime.now(),
-                    //       onChanged: (date) {
-                    //         var formt = DateFormat('dd-MMM-yyyy');
-                    //
-                    //         pro.setDOB(formt.format(date).toString(), date);
-                    //       },
-                    //       onConfirm: (date) {},
-                    //     );
-                    //     // currentTime: DateTime.now(), locale: LocaleType.en);
-                    //   },
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //         border: Border.all(),
-                    //         borderRadius: BorderRadius.circular(10)),
-                    //     child: Center(
-                    //       child: Padding(
-                    //         padding: const EdgeInsets.only(left: 8.0),
-                    //         child: Container(
-                    //           height: 40,
-                    //           // padding: const EdgeInsets.all(6),
-                    //           child: Row(
-                    //             mainAxisAlignment: MainAxisAlignment.center,
-                    //             children: [
-                    //               // Container(
-                    //               //   width: getWidth(context) / 6,
-                    //               // ),
-                    //               Center(
-                    //                 child: Text(
-                    //                   pro.dob ?? formt.format(pro.todayDate),
-                    //                 ),
-                    //               ),
-                    //               // TextButton(onPressed: (){}, child: Text("edit"))
-                    //             ],
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       textAlign: TextAlign.center,
                       validator: (val) {
@@ -355,13 +301,8 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       textAlign: TextAlign.center,
                       controller: TextEditingController(text: pro.email),
@@ -402,13 +343,9 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
 
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
 
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     Stack(
                       children: [
                         TextFormField(
@@ -478,44 +415,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ],
                     ),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //       border: Border.all(),
-                    //       borderRadius: BorderRadius.circular(10)),
-                    //   child: Center(
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.only(left: 8.0),
-                    //       child: SizedBox(
-                    //         height: 45,
-                    //         child: Row(
-                    //           mainAxisAlignment: MainAxisAlignment.center,
-                    //           children: [
-                    //             // Container(
-                    //             //   width: getWidth(context) / 6,
-                    //             // ),
-                    //             CountryCodePicker(
-                    //               onChanged: (val) =>
-                    //                   pro.setDialCode(val.dialCode!),
-                    //               enabled: true,
-                    //               showFlagMain: true,
-                    //               showCountryOnly: true,
-                    //               initialSelection: pro.code,
-                    //               // showCountryOnly: true,
-                    //               // showOnlyCountryWhenClosed: false,
-                    //               alignLeft: false,
-                    //               // showDropDownButton: true,
-                    //               showOnlyCountryWhenClosed: true,
-                    //             ),
-                    //             // TextButton(onPressed: (){}, child: Text("edit"))
-                    //           ],
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
@@ -526,9 +426,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 3,
-                    ),
+                    const SizedBox(height: 3),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -546,7 +444,7 @@ class _EditProfileState extends State<EditProfile> {
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeliveryAddress(isFromDob: false)));
                           },
-                          child: Text(
+                          child: const Text(
                             "+ ADD MORE",
                             style: TextStyle(fontSize: 14),
                           ),
@@ -591,13 +489,8 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       textAlign: TextAlign.center,
                       readOnly: true,
@@ -635,71 +528,13 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                     ),
-
-                    // Container(
-                    //   height: 42,
-                    //   decoration: BoxDecoration(
-                    //       border: Border.all(),
-                    //       borderRadius: BorderRadius.circular(10)),
-                    //   child: Center(
-                    //     child: Padding(
-                    //         padding: const EdgeInsets.only(left: 8.0),
-                    //         child: SizedBox(
-                    //           height: 45,
-                    //           // padding: const EdgeInsets.all(6),
-                    //           child: Row(
-                    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //             children: [
-                    //               Container(
-                    //                 width: getWidth(context) / 6,
-                    //               ),
-                    //               Text(pro.deliTitle),
-                    //               TextButton(
-                    //                 onPressed: () {
-                    //                   Navigator.push(
-                    //                       context,
-                    //                       MaterialPageRoute(
-                    //                           builder: (contxt) =>
-                    //                               const DeliveryAddress(
-                    //                                   isFromDob: false)));
-                    //                 },
-                    //                 child: Text("edit"),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         )),
-                    //   ),
-                    // ),
-                    // MaterialButton(
-                    //   color: Colors.blue,
-                    //   onPressed: () {
-                    //     Navigator.of(context).push(MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             DeliveryAddress(isFromDob: false)));
-                    //   },
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: [
-                    //       const Text(
-                    //         "Add More Delivery Address",
-                    //         style: TextStyle(color: Colors.white),
-                    //       ),
-                    //       const SizedBox(
-                    //         width: 10,
-                    //       ),
-                    //       Image.asset(
-                    //         addBtn,
-                    //         height: 20,
-                    //         width: 20,
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
                     const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
-                        pro.makeWaitingState();
-                        pro.updateProfile(context);
+                        if (key.currentState!.validate()) {
+                          pro.makeWaitingState();
+                          pro.updateProfile(context);
+                        }
                       },
                       child: Container(
                         child: Center(
@@ -725,24 +560,6 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                     ),
-                    // MaterialButton(
-                    //   minWidth: getWidth(context),
-                    //   height: 50,
-                    //   color: Colors.blue,
-                    //   onPressed: () {
-                    //     pro.makeWaitingState();
-                    //     pro.updateProfile(context);
-                    //   },
-                    //   child: pro.isWaitingCon
-                    //       ? const CircularProgressIndicator(
-                    //           valueColor:
-                    //               AlwaysStoppedAnimation<Color>(Colors.white),
-                    //         )
-                    //       : const Text(
-                    //           "Done",
-                    //           style: TextStyle(color: Colors.white),
-                    //         ),
-                    // )
                   ],
                 ),
               ),
