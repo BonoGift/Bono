@@ -39,7 +39,7 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
   @override
   void initState() {
     super.initState();
-    addMarker();
+    //addMarker();
   }
 
   @override
@@ -63,7 +63,7 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
                 const SizedBox(height: 20),
                 const Text(
                   "Please enter your phone number below, we will send you an SMS message to verify your number",
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.justify,
                 ),
                 const SizedBox(height: 20),
                 Container(
