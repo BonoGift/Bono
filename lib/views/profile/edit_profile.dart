@@ -114,278 +114,16 @@ class _EditProfileState extends State<EditProfile> {
                               ),
                             ],
                           ),
-
                     const SizedBox(height: 20),
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: TextEditingController(text: pro.name),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Name is Required";
-                        }
-                      },
-                      onChanged: (val) {
-                        pro.setName(val);
-                      },
-                      decoration: InputDecoration(
-                        // label: Text("Your Centered Label Text"),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: "Full name*",
-                        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
-                            ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 35,
-                        ),
-                        hintText: "Enter Your Name",
-                        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: TextEditingController(
-                        text: pro.dob ?? formt.format(pro.todayDate),
-                      ),
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Name is Required";
-                        }
-                      },
-                      onChanged: (val) {
-                        pro.setName(val);
-                      },
-                      readOnly: true,
-                      onTap: () {
-                        DatePicker.showPicker(
-                          context,
-                          showTitleActions: true,
-                          // minTime: DateTime(1950, 3, 5),
-                          // maxTime: DateTime.now(),
-                          onChanged: (date) {
-                            var formt = DateFormat('dd.MMM.yyyy');
-
-                            pro.setDOB(formt.format(date).toString(), date);
-                          },
-                          onConfirm: (date) {},
-                        );
-                      },
-                      decoration: InputDecoration(
-                        // label: Text("Your Centered Label Text"),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: "Birthday*",
-                        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
-                            ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 35,
-                        ),
-                        hintText: "Enter Your Name",
-                        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      validator: (val) {
-                        if (val!.isEmpty) {
-                          return "Phone is Required";
-                        }
-                      },
-                      onChanged: (val) {
-                        pro.setPhoneNum(val);
-                      },
-                      controller: pro.phoneNumber,
-                      readOnly: true,
-                      onTap: () {},
-                      decoration: InputDecoration(
-                        // label: Text("Your Centered Label Text"),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: "Phone number*",
-                        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
-                            ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 35,
-                        ),
-                        hintText: "Enter Your Mobile Number",
-                        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: TextEditingController(text: pro.email),
-                      onChanged: (val) {
-                        pro.setEmail(val);
-                      },
-                      decoration: InputDecoration(
-                        // label: Text("Your Centered Label Text"),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        labelText: "Email",
-                        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
-                            ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 35,
-                        ),
-                        hintText: "someone@email.com",
-                        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    const SizedBox(height: 10),
-                    Stack(
-                      children: [
-                        TextFormField(
-                          textAlign: TextAlign.center,
-                          readOnly: true,
-                          onTap: () {
-                            disposeKeyboard();
-                          },
-                          decoration: InputDecoration(
-                            // label: Text("Your Centered Label Text"),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: "Nationality",
-                            labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
-                                ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 35),
-                            hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: SizedBox(
-                              height: 45,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Container(
-                                  //   width: getWidth(context) / 6,
-                                  // ),
-                                  CountryCodePicker(
-                                    onChanged: (val) => pro.setDialCode(val.dialCode!),
-                                    enabled: true,
-                                    showFlagMain: true,
-                                    showCountryOnly: true,
-                                    initialSelection: pro.code,
-                                    // showCountryOnly: true,
-                                    // showOnlyCountryWhenClosed: false,
-                                    alignLeft: false,
-                                    // showDropDownButton: true,
-                                    showOnlyCountryWhenClosed: true,
-                                  ),
-                                  // TextButton(onPressed: (){}, child: Text("edit"))
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    _getUserNameWidget(pro),
+                    const SizedBox(height: 20),
+                    _getDobWidget(pro, context),
+                    const SizedBox(height: 20),
+                    _getPhoneNumberWidget(pro),
+                    const SizedBox(height: 20),
+                    _getEmailWidget(pro),
+                    const SizedBox(height: 20),
+                    _getNatianalityWidget(pro),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -422,7 +160,6 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ],
                     ),
-
                     TextFormField(
                       textAlign: TextAlign.center,
                       readOnly: true,
@@ -536,6 +273,280 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _getNatianalityWidget(SignUpProvider pro) {
+    return Stack(
+      children: [
+        TextFormField(
+          textAlign: TextAlign.center,
+          readOnly: true,
+          onTap: () {
+            disposeKeyboard();
+          },
+          decoration: InputDecoration(
+            // label: Text("Your Centered Label Text"),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelText: "Nationality",
+            labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+                ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 35),
+            hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50),
+              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50),
+              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50),
+              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50),
+              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50),
+              borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: SizedBox(
+              height: 45,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Container(
+                  //   width: getWidth(context) / 6,
+                  // ),
+                  CountryCodePicker(
+                    onChanged: (val) => pro.setDialCode(val.dialCode!),
+                    enabled: true,
+                    showFlagMain: true,
+                    showCountryOnly: true,
+                    initialSelection: pro.code,
+                    // showCountryOnly: true,
+                    // showOnlyCountryWhenClosed: false,
+                    alignLeft: false,
+                    // showDropDownButton: true,
+                    showOnlyCountryWhenClosed: true,
+                  ),
+                  // TextButton(onPressed: (){}, child: Text("edit"))
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  TextFormField _getEmailWidget(SignUpProvider pro) {
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: TextEditingController(text: pro.email),
+      onChanged: (val) {
+        pro.setEmail(val);
+      },
+      decoration: InputDecoration(
+        // label: Text("Your Centered Label Text"),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        labelText: "Email",
+        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+            ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 35,
+        ),
+        hintText: "someone@email.com",
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+      ),
+    );
+  }
+
+  TextFormField _getPhoneNumberWidget(SignUpProvider pro) {
+    return TextFormField(
+      textAlign: TextAlign.center,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Phone is Required";
+        }
+      },
+      onChanged: (val) {
+        pro.setPhoneNum(val);
+      },
+      controller: pro.phoneNumber,
+      readOnly: true,
+      onTap: () {},
+      decoration: InputDecoration(
+        // label: Text("Your Centered Label Text"),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        labelText: "Phone number*",
+        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+            ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 35,
+        ),
+        hintText: "Enter Your Mobile Number",
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+      ),
+    );
+  }
+
+  TextFormField _getDobWidget(SignUpProvider pro, BuildContext context) {
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: TextEditingController(
+        text: pro.dob ?? formt.format(pro.todayDate),
+      ),
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Name is Required";
+        }
+      },
+      onChanged: (val) {
+        pro.setName(val);
+      },
+      readOnly: true,
+      onTap: () {
+        DatePicker.showPicker(
+          context,
+          showTitleActions: true,
+          // minTime: DateTime(1950, 3, 5),
+          // maxTime: DateTime.now(),
+          onChanged: (date) {
+            var formt = DateFormat('dd.MMM.yyyy');
+
+            pro.setDOB(formt.format(date).toString(), date);
+          },
+          onConfirm: (date) {},
+        );
+      },
+      decoration: InputDecoration(
+        // label: Text("Your Centered Label Text"),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        labelText: "Birthday*",
+        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+            ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 35,
+        ),
+        hintText: "Enter Your Name",
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+      ),
+    );
+  }
+
+  TextFormField _getUserNameWidget(SignUpProvider pro) {
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: TextEditingController(text: pro.name),
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Name is Required";
+        }
+      },
+      onChanged: (val) {
+        pro.setName(val);
+      },
+      decoration: InputDecoration(
+        // label: Text("Your Centered Label Text"),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        labelText: "Full name*",
+        labelStyle: TextStyle(height: 0.8, color: Colors.grey.withOpacity(.9) // 0,1 - label will sit on top of border
+            ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 35,
+        ),
+        hintText: "Enter Your Name",
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(.9)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(.9)),
         ),
       ),
     );

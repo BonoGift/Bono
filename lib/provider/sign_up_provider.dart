@@ -16,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpProvider extends ChangeNotifier {
   TextEditingController phoneNumber = TextEditingController();
-  String code = WidgetsBinding.instance!.window.locale.countryCode!;
+  String code = '+971';
   String? dailCode;
   int time = 60;
   late Timer timer;
@@ -175,6 +175,7 @@ class SignUpProvider extends ChangeNotifier {
       'area': area.text,
       'street': street.text,
       'searchPhone': '0${phoneNumber.text}',
+      'dailCode': dailCode,
     };
     service.saveToFirebase(userMap).then((value) {
       saveToShared(true);
@@ -202,10 +203,10 @@ class SignUpProvider extends ChangeNotifier {
       'buildingName': buildingName.text,
       'area': area.text,
       'street': street.text,
+      'dailCode': dailCode,
     };
     phone = phoneNumber.text;
-    await service.checkIfUserAlready('$dailCode${phoneNumber.text}').then((value) {
-      print(value);
+    await service.checkIfUserAlready(phoneNumber.text).then((value) {
       if (value.exists) {
         saveToShared(true);
         service.updateUserProfile(userMap, phone!).then((value) {
@@ -218,7 +219,7 @@ class SignUpProvider extends ChangeNotifier {
         });
         //Navigator.pushNamed(context, laoding);
       } else {
-        signUpUser(context,true);
+        signUpUser(context, true);
         //Navigator.pushNamed(context, dobPage);
       }
     });
@@ -241,6 +242,7 @@ class SignUpProvider extends ChangeNotifier {
       buildingName = TextEditingController(text: data['buildingName']);
       area = TextEditingController(text: data['area']);
       street = TextEditingController(text: data['street']);
+      code = data['dailCode'];
       getDateDiff();
       notifyListeners();
     });

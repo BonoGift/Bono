@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               const Icon(Icons.location_on),
                               const Text("Location:"),
-                              Text("${pro.country}/Confidential"),
+                              Text("${pro.country ?? ''}/Confidential"),
                             ],
                           ),
                         ),
