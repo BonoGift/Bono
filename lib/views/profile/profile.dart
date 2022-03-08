@@ -41,7 +41,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               onPressed: () => pro.logout(context),
                               child: const Text("Sign out"),
                             ),
-                            // const SizedBox(width: 20,),
                             ClipOval(
                               child: CachedNetworkImage(
                                 imageUrl: pro.userImage,
@@ -63,11 +62,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 height: 100,
                               ),
                             ),
-                            /*CircleAvatar(
-                              radius: 50,
-                              backgroundImage: NetworkImage(pro.userImage),
-                            ),*/
-                            // const SizedBox(width: 20,),
                             MaterialButton(
                               color: Colors.grey[800],
                               onPressed: () => Navigator.pushNamed(context, editProfile),
@@ -79,9 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      const SizedBox(height: 5),
                       Text(
                         pro.name,
                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
@@ -100,9 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                       Container(
                         height: 80,
                         width: getWidth(context),
@@ -114,9 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               "Birthday ${pro.dobFormat.day} ${pro.dobFormat != null ? formtr.format(pro.dobFormat) : ''}",
                               style: const TextStyle(color: Colors.white, fontSize: 18),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            const SizedBox(height: 5),
                             Text(
                               "${pro.diffDays ?? 0} Days Left",
                               style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w500),
@@ -124,9 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                       Container(
                         height: 40,
                         width: double.maxFinite,
@@ -171,18 +157,51 @@ class _ProfilePageState extends State<ProfilePage> {
                         itemCount: pro.myPosts.length,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          crossAxisSpacing: 8.0,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 4.0,
                           mainAxisSpacing: 8.0,
                           childAspectRatio: 0.6,
-                          maxCrossAxisExtent: 100,
+                          crossAxisCount: 3,
                         ),
                         itemBuilder: (ctx, i) {
-                          // return Image.network(
-                          //   pro.myPosts[i],
-                          //   // height: 100,
-                          //   fit: BoxFit.cover,
-                          // );
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              border: Border.all(color: Colors.grey, width: 5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                print('haha');
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        color: Colors.black,
+                                        child: Image.network(
+                                          pro.myPosts[i],
+                                        ),
+                                      );
+                                    });
+                              },
+                              child: CachedNetworkImage(
+                                imageUrl: pro.myPosts[i],
+                                //width: double.infinity,
+                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                  child: Shimmer.fromColors(
+                                    baseColor: Colors.grey[300]!,
+                                    highlightColor: Colors.white,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          );
                           return DecoratedImage(
                             image: pro.myPosts[i],
                             fit: BoxFit.cover,
