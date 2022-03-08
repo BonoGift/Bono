@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             ClipOval(
                               child: CachedNetworkImage(
-                                imageUrl: pro.userImage,
+                                imageUrl: pro.userImage.isEmpty ? 'https://firebasestorage.googleapis.com/v0/b/bonogifts.appspot.com/o/profile.png?alt=media&token=dec6afee-44f3-4876-8f2b-dbb2be0dd4d8' : pro.userImage,
                                 progressIndicatorBuilder: (context, url, progress) => SizedBox(
                                   width: 100,
                                   height: 100,
@@ -79,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         pro.name,
                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                       ),
-                      Text(pro.phoneNumber.text),
+                      Text('${pro.dailCode} ${pro.phoneNumber.text}'),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 3.0),
                         child: FittedBox(
