@@ -24,9 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final pro = Provider.of<SignUpProvider>(context);
     return Scaffold(
       body: pro.name == null
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
