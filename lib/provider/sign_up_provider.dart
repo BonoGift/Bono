@@ -242,7 +242,7 @@ class SignUpProvider extends ChangeNotifier {
       buildingName = TextEditingController(text: data['buildingName']);
       area = TextEditingController(text: data['area']);
       street = TextEditingController(text: data['street']);
-      code = data['dailCode'];
+      code = data['dailCode'] ?? '';
       getDateDiff();
       notifyListeners();
     });
