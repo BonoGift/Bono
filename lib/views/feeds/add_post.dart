@@ -266,31 +266,44 @@ class _AddPostState extends State<AddPost> {
                         ),
                       ),
                       const SizedBox(width: 32),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.0),
-                        ),
-                        color: const Color(0xff3a3839),
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-                        onPressed: isClicked
-                            ? null
-                            : () {
-                                if (keyy.currentState!.validate() || pro.image != null) {
-                                  setState(() {
-                                    isClicked = true;
-                                  });
-                                  pro.uploadPost(context);
-                                } else {
-                                  setState(() {
-                                    photoErro = "Please Select Photo";
-                                  });
-                                }
-                              },
-                        child: isClicked
-                            ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              )
-                            : const Text(
+                      isClicked
+                          ? MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                              color: const Color(0xff3a3839),
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
+                              onPressed: () {},
+                              child: const Text(
+                                "Posting...",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            )
+                          : MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                              color: const Color(0xff3a3839),
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 32),
+                              onPressed: isClicked
+                                  ? null
+                                  : () {
+                                      if (keyy.currentState!.validate() || pro.image != null) {
+                                        setState(() {
+                                          isClicked = true;
+                                        });
+                                        pro.uploadPost(context);
+                                      } else {
+                                        setState(() {
+                                          photoErro = "Please Select Photo";
+                                        });
+                                      }
+                                    },
+                              child: const Text(
                                 "Post",
                                 style: TextStyle(
                                   color: Colors.white,
@@ -298,7 +311,7 @@ class _AddPostState extends State<AddPost> {
                                   fontSize: 18,
                                 ),
                               ),
-                      )
+                            )
                     ],
                   )
                 ],
