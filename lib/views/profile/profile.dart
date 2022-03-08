@@ -114,30 +114,33 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Container(
-                        height: 40,
-                        width: double.maxFinite,
-                        color: Colors.lightBlueAccent,
-                        child: Center(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.add_circle_outline,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 4),
-                              Text(
-                                "Post Something",
-                                style: TextStyle(
+                      InkWell(
+                        onTap: () => Navigator.pushNamed(context, addPOst),
+                        child: Container(
+                          height: 40,
+                          width: double.maxFinite,
+                          color: Colors.lightBlueAccent,
+                          child: Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.add_circle_outline,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'EdwardianScriptITC',
-                                  fontSize: 24,
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: 4),
+                                Text(
+                                  "Post Something",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'EdwardianScriptITC',
+                                    fontSize: 24,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
