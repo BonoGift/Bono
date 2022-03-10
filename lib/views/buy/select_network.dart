@@ -6,12 +6,14 @@ import 'package:bono_gifts/views/chat/chat.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SelectNetwokr extends StatefulWidget {
+class SelectNetwork extends StatefulWidget {
+  const SelectNetwork({Key? key}) : super(key: key);
+
   @override
-  _SelectNetwokrState createState() => _SelectNetwokrState();
+  _SelectNetworkState createState() => _SelectNetworkState();
 }
 
-class _SelectNetwokrState extends State<SelectNetwokr> {
+class _SelectNetworkState extends State<SelectNetwork> {
   @override
   Widget build(BuildContext context) {
     final proChat = Provider.of<ChatProvider>(context);
