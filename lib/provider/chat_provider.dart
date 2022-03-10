@@ -19,15 +19,15 @@ class ChatProvider extends ChangeNotifier {
   List<String> phones = [];
   List<String> contactList = [];
 
-  List<NewtWorkModel> friendsList = [];
-  List<NewtWorkModel> familyList = [];
-  List<NewtWorkModel> workList = [];
-  List<NewtWorkModel> neghiborList = [];
-  List<NewtWorkModel> schoolList = [];
-  List<NewtWorkModel> othersList = [];
+  List<NetWorkModel> friendsList = [];
+  List<NetWorkModel> familyList = [];
+  List<NetWorkModel> workList = [];
+  List<NetWorkModel> neighborList = [];
+  List<NetWorkModel> schoolList = [];
+  List<NetWorkModel> othersList = [];
 
 
-  List<NewtWorkModel> moveList = [];
+  List<NetWorkModel> moveList = [];
 
   List<String> newList = [];
   List<ContModel> nameCont = [];
@@ -103,7 +103,7 @@ class ChatProvider extends ChangeNotifier {
     friendsList = [];
     familyList = [];
     workList = [];
-    neghiborList = [];
+    neighborList = [];
     schoolList = [];
     othersList = [];
     final pro = Provider.of<SignUpProvider>(context,listen: false);
@@ -144,11 +144,11 @@ class ChatProvider extends ChangeNotifier {
         schoolList.removeAt(i);
       }
     }
-    for(var i = 0; i < neghiborList.length;i++){
-      if(neghiborList[i].name.toLowerCase().contains(searchPertren.toLowerCase())){
+    for(var i = 0; i < neighborList.length;i++){
+      if(neighborList[i].name.toLowerCase().contains(searchPertren.toLowerCase())){
 
       }else{
-        neghiborList.removeAt(i);
+        neighborList.removeAt(i);
       }
     }
     for(var i = 0; i < othersList.length;i++){
@@ -192,7 +192,7 @@ class ChatProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  List<NewtWorkModel> netWorkLsit = [];
+  List<NetWorkModel> netWorkLsit = [];
 
   final service = ChatService();
 
@@ -213,7 +213,7 @@ class ChatProvider extends ChangeNotifier {
       service.fetchSearch1(contactList, i, 'searchPhone1').then((value) {
         for (var d = 0; d < value.docs.length; d++) {
           print(value.docs[d]['name']);
-          netWorkLsit.add(NewtWorkModel(
+          netWorkLsit.add(NetWorkModel(
               name: value.docs[d]['name'],
               phone: value.docs[d]['phone'],
               photo: value.docs[d]['profile_url'],
@@ -224,7 +224,7 @@ class ChatProvider extends ChangeNotifier {
       service.fetchSearch1(contactList, i, 'phone').then((value) {
         for (var d = 0; d < value.docs.length; d++) {
           print(value.docs[d]['name']);
-          netWorkLsit.add(NewtWorkModel(
+          netWorkLsit.add(NetWorkModel(
               name: value.docs[d]['name'],
               phone: value.docs[d]['phone'],
               photo: value.docs[d]['profile_url'],
@@ -235,7 +235,7 @@ class ChatProvider extends ChangeNotifier {
       service.fetchSearch1(contactList, i, 'searchPhone').then((value) {
         for (var d = 0; d < value.docs.length; d++) {
           print(value.docs[d]['name']);
-          netWorkLsit.add(NewtWorkModel(
+          netWorkLsit.add(NetWorkModel(
               name: value.docs[d]['name'],
               phone: value.docs[d]['phone'],
               photo: value.docs[d]['profile_url'],
@@ -268,7 +268,7 @@ class ChatProvider extends ChangeNotifier {
     friendsList = [];
     familyList = [];
     workList = [];
-    neghiborList = [];
+    neighborList = [];
     schoolList = [];
     othersList = [];
     notifyListeners();
@@ -283,24 +283,24 @@ class ChatProvider extends ChangeNotifier {
         for(var dd in value.docs){
           switch(dd['status']){
             case 0:
-              friendsList.add(NewtWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
+              friendsList.add(NetWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
               print(friendsList.toString() + '--------- friendList');
               notifyListeners();
               break;
             case 1:
-              familyList.add(NewtWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
+              familyList.add(NetWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
               break;
             case 2:
-              workList.add(NewtWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
+              workList.add(NetWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
               break;
             case 3:
-              schoolList.add(NewtWorkModel(phone:dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
+              schoolList.add(NetWorkModel(phone:dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
               break;
             case 4:
-              neghiborList.add(NewtWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
+              neighborList.add(NetWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
               break;
             case 5:
-              othersList.add(NewtWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
+              othersList.add(NetWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
               break;
           }
           notifyListeners();

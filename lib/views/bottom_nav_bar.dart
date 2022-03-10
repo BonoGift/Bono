@@ -8,6 +8,8 @@ import 'package:bono_gifts/views/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'buy/buy.dart';
+
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key, this.index = 2}) : super(key: key);
   final int index;
@@ -20,8 +22,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   late int index;
   List<Widget> allPages = [
     Chat(),
-    // BuyPage(),
-    const HistoryPage(fromHomepage: true),
+    const BuyPage(),
+    //const HistoryPage(fromHomepage: true),
     Feeds(),
     const CameraScreen(),
     const ProfilePage()

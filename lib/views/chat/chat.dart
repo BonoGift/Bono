@@ -875,7 +875,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                             ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount: proChat.neghiborList.length,
+                              itemCount: proChat.neighborList.length,
                               itemBuilder: (contxt, i) {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -888,9 +888,9 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => ChatScreen(
-                                                recieverName: proChat.neghiborList[i].name,
-                                                profileImage: proChat.neghiborList[i].photo,
-                                                recieverPhone: proChat.neghiborList[i].phone,
+                                                recieverName: proChat.neighborList[i].name,
+                                                profileImage: proChat.neighborList[i].photo,
+                                                recieverPhone: proChat.neighborList[i].phone,
                                               ),
                                             ),
                                           );
@@ -898,17 +898,17 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         child: Row(
                                           children: [
                                             CircleAvatar(
-                                              backgroundImage: NetworkImage(proChat.neghiborList[i].photo),
+                                              backgroundImage: NetworkImage(proChat.neighborList[i].photo),
                                             ),
                                             const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  proChat.neghiborList[i].name,
+                                                  proChat.neighborList[i].name,
                                                   style: TextStyle(fontSize: 18),
                                                 ),
-                                                Text(proChat.neghiborList[i].phone),
+                                                Text(proChat.neighborList[i].phone),
                                               ],
                                             ),
                                           ],
@@ -916,17 +916,17 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                       ),
                                       Checkbox(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                          value: proChat.neghiborList[i].isSelect,
+                                          value: proChat.neighborList[i].isSelect,
                                           onChanged: (val) {
                                             proChat.addinMoveList(
                                                 MoveListModel(
-                                                  name: proChat.neghiborList[i].name,
-                                                  photo: proChat.neghiborList[i].phone,
-                                                  phone: proChat.neghiborList[i].phone,
+                                                  name: proChat.neighborList[i].name,
+                                                  photo: proChat.neighborList[i].phone,
+                                                  phone: proChat.neighborList[i].phone,
                                                   status: 4,
                                                 ),
-                                                proChat.neghiborList[i].isSelect);
-                                            proChat.checkBoxSelect(i, proChat.neghiborList);
+                                                proChat.neighborList[i].isSelect);
+                                            proChat.checkBoxSelect(i, proChat.neighborList);
                                           })
                                     ],
                                   ),

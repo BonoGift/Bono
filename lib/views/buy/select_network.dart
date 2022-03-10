@@ -3,8 +3,10 @@ import 'package:bono_gifts/provider/chat_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/chat/chat.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SelectNetwork extends StatefulWidget {
   const SelectNetwork({Key? key}) : super(key: key);
@@ -28,7 +30,7 @@ class _SelectNetworkState extends State<SelectNetwork> {
               alPhabat("Friends"),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: proChat.friendsList.length,
                 itemBuilder: (contxt, i) {
                   return Padding(
@@ -44,26 +46,48 @@ class _SelectNetworkState extends State<SelectNetwork> {
                               proChat.friendsList[i].photo,
                               proChat.friendsList[i].phone,
                             );
-                            Map<String, dynamic> user = await wcmp
-                                .getUserInfo(proChat.friendsList[i].phone);
+                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
                             wcmp.fetchVendors(user['city'] ?? 'unknown');
                             Navigator.pop(context);
                           },
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(proChat.friendsList[i].photo),
+                              ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: proChat.friendsList[i].photo,
+                                  width: 40,
+                                  height: 40,
+                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/profile.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     proChat.friendsList[i].name,
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   Text(proChat.friendsList[i].phone),
                                 ],
@@ -92,7 +116,7 @@ class _SelectNetworkState extends State<SelectNetwork> {
               alPhabat("Family"),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: proChat.familyList.toSet().toList().length,
                 itemBuilder: (contxt, i) {
                   return Padding(
@@ -108,8 +132,7 @@ class _SelectNetworkState extends State<SelectNetwork> {
                               proChat.familyList[i].photo,
                               proChat.familyList[i].phone,
                             );
-                            Map<String, dynamic> user = await wcmp
-                                .getUserInfo(proChat.familyList[i].phone);
+                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.familyList[i].phone);
                             print(user.toString());
                             wcmp.fetchVendors(user['city'] ?? 'unknown');
 
@@ -117,19 +140,42 @@ class _SelectNetworkState extends State<SelectNetwork> {
                           },
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(proChat.familyList[i].photo),
+                              ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: proChat.familyList[i].photo,
+                                  width: 40,
+                                  height: 40,
+                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/profile.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     proChat.familyList[i].name,
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   Text(proChat.familyList[i].phone),
                                 ],
@@ -145,7 +191,7 @@ class _SelectNetworkState extends State<SelectNetwork> {
               alPhabat("Work"),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: proChat.workList.length,
                 itemBuilder: (contxt, i) {
                   return Padding(
@@ -161,27 +207,49 @@ class _SelectNetworkState extends State<SelectNetwork> {
                               proChat.workList[i].photo,
                               proChat.workList[i].phone,
                             );
-                            Map<String, dynamic> user = await wcmp
-                                .getUserInfo(proChat.workList[i].phone);
+                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.workList[i].phone);
                             wcmp.fetchVendors(user['city'] ?? 'unknown');
 
                             Navigator.pop(context);
                           },
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(proChat.workList[i].photo),
+                              ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: proChat.workList[i].photo,
+                                  width: 40,
+                                  height: 40,
+                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/profile.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     proChat.workList[i].name,
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   Text(proChat.workList[i].phone),
                                 ],
@@ -197,7 +265,7 @@ class _SelectNetworkState extends State<SelectNetwork> {
               alPhabat("School"),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: proChat.schoolList.length,
                 itemBuilder: (contxt, i) {
                   return Padding(
@@ -213,27 +281,49 @@ class _SelectNetworkState extends State<SelectNetwork> {
                               proChat.schoolList[i].photo,
                               proChat.schoolList[i].phone,
                             );
-                            Map<String, dynamic> user = await wcmp
-                                .getUserInfo(proChat.schoolList[i].phone);
+                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.schoolList[i].phone);
                             wcmp.fetchVendors(user['city'] ?? 'unknown');
 
                             Navigator.pop(context);
                           },
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(proChat.schoolList[i].photo),
+                              ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: proChat.schoolList[i].photo,
+                                  width: 40,
+                                  height: 40,
+                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/profile.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     proChat.schoolList[i].name,
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   Text(proChat.schoolList[i].phone),
                                 ],
@@ -249,8 +339,8 @@ class _SelectNetworkState extends State<SelectNetwork> {
               alPhabat("Neigbhour"),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: proChat.neghiborList.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: proChat.neighborList.length,
                 itemBuilder: (contxt, i) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -261,33 +351,55 @@ class _SelectNetworkState extends State<SelectNetwork> {
                           onTap: () async {
                             pro.assignVals(
                               wcmp,
-                              proChat.neghiborList[i].name,
-                              proChat.neghiborList[i].photo,
-                              proChat.neghiborList[i].phone,
+                              proChat.neighborList[i].name,
+                              proChat.neighborList[i].photo,
+                              proChat.neighborList[i].phone,
                             );
-                            Map<String, dynamic> user = await wcmp
-                                .getUserInfo(proChat.neghiborList[i].phone);
+                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.neighborList[i].phone);
                             wcmp.fetchVendors(user['city'] ?? 'unknown');
 
                             Navigator.pop(context);
                           },
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(proChat.neghiborList[i].photo),
+                              ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: proChat.neighborList[i].photo,
+                                  width: 40,
+                                  height: 40,
+                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/profile.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    proChat.neghiborList[i].name,
-                                    style: TextStyle(fontSize: 18),
+                                    proChat.neighborList[i].name,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
-                                  Text(proChat.neghiborList[i].phone),
+                                  Text(proChat.neighborList[i].phone),
                                 ],
                               ),
                             ],
@@ -317,27 +429,49 @@ class _SelectNetworkState extends State<SelectNetwork> {
                               proChat.othersList[i].photo,
                               proChat.othersList[i].phone,
                             );
-                            Map<String, dynamic> user = await wcmp
-                                .getUserInfo(proChat.othersList[i].phone);
+                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.othersList[i].phone);
                             wcmp.fetchVendors(user['city'] ?? 'unknown');
 
                             Navigator.pop(context);
                           },
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(proChat.othersList[i].photo),
+                              ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: proChat.othersList[i].photo,
+                                  width: 40,
+                                  height: 40,
+                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                    return ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/profile.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     proChat.othersList[i].name,
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   Text(proChat.othersList[i].phone),
                                 ],
