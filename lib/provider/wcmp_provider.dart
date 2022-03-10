@@ -2,8 +2,10 @@ import 'package:bono_gifts/models/product_models.dart';
 import 'package:bono_gifts/models/user_model.dart';
 import 'package:bono_gifts/models/wcmp_api/order.dart';
 import 'package:bono_gifts/models/wcmp_api/order_response_model.dart';
+import 'package:bono_gifts/models/wcmp_api/shipping_method_response.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
+import 'package:bono_gifts/models/wcmp_api/zones_response.dart';
 import 'package:bono_gifts/services/sign_up_service.dart';
 import 'package:bono_gifts/services/wcmp_service.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
   String? dob;
   DateTime todayDate = DateTime.now();
 
-  int deliveryPrice = 3;
+  double deliveryPrice = 0.0;
 
   VendorProduct? selectedProduct;
 
@@ -71,7 +73,11 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
       for (VendorProduct product in nearbyVendorProducts) {
         if (product.categories != null) {
           bool found = false;
+          print('Product Category Name ' +
+              product.categories!.first.name.toString());
+
           for (Categories category in categories) {
+            print('Category Name ' + category.name.toString());
             if (category.name ==
                 product.categories![product.categories!.length - 1].name) {
               found = true;
@@ -126,13 +132,14 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
 
   int finalPrice() {
     final int actualPrice = int.parse(selectedProduct!.price!);
-    final int totalPrice = actualPrice + deliveryPrice;
+    final int totalPrice = actualPrice + deliveryPrice.toInt();
     return totalPrice;
   }
 
   selectReceiver(UserModel receiver) {
     print("Receiver assign ${receiver.toMap().toString()}");
     this.receiver = receiver;
+    calculateTax(receiver.country).then((value) => deliveryPrice = value);
     notifyListeners();
   }
 
@@ -141,8 +148,20 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Order?> createOrder(Order order) async {
-    return wooCommerceMarketPlaceService.createOrder(order);
+  Future<OrderResponseModel?> createOrder(Order order) async {
+    apiState = ApiState.loading;
+    try {
+      OrderResponseModel? orderResponseModel =
+          await wooCommerceMarketPlaceService.createOrder(order);
+
+      apiState = ApiState.completed;
+      return orderResponseModel;
+    } catch (e) {
+      apiState = ApiState.error;
+
+      print(e.toString());
+    }
+    notifyListeners();
   }
 
   Future<void> fetchOrders(String senderPhone) async {
@@ -168,5 +187,31 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
       print(e.toString());
     }
     notifyListeners();
+  }
+
+  Future<double> calculateTax(String country) async {
+    apiState = ApiState.loading;
+
+    try {
+      List<ZoneResponse> zones =
+          await wooCommerceMarketPlaceService.getAllZones();
+      for (ZoneResponse zone in zones) {
+        if (zone.name!.toLowerCase().trim() == country.toLowerCase().trim()) {
+          List<ShippingMethodResponse> shippingMethods =
+              await wooCommerceMarketPlaceService
+                  .getAllShippingMethods(zone.id!);
+          return double.parse(shippingMethods.first.settings!.cost!.value!);
+        }
+      }
+      apiState = ApiState.completed;
+
+      return 0.0;
+    } catch (e) {
+      apiState = ApiState.error;
+
+      print(e.toString());
+    }
+    notifyListeners();
+    return 0.0;
   }
 }

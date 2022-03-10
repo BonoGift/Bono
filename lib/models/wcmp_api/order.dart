@@ -122,6 +122,8 @@ class Shipping {
   String? state;
   String? postcode;
   String? country;
+  String? phone;
+  String? email;
 
   Shipping(
       {this.firstName,
@@ -131,7 +133,9 @@ class Shipping {
       this.city,
       this.state,
       this.postcode,
-      this.country});
+      this.country,
+      this.phone,
+      this.email});
 
   Shipping.fromJson(Map<String, dynamic> json) {
     firstName = json['first_name'];
@@ -142,6 +146,8 @@ class Shipping {
     state = json['state'];
     postcode = json['postcode'];
     country = json['country'];
+    phone = json['phone'];
+    email = json['shipping_email'];
   }
 
   Map<String, dynamic> toJson() {
@@ -154,6 +160,8 @@ class Shipping {
     data['state'] = this.state;
     data['postcode'] = this.postcode;
     data['country'] = this.country;
+    data['shipping_email'] = this.email;
+    data['phone'] = this.phone;
     return data;
   }
 }

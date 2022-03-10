@@ -4,6 +4,7 @@ import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/buy/order_summry.dart';
 import 'package:bono_gifts/views/buy/select_network.dart';
+import 'package:bono_gifts/views/gift/widgets/loading_gifts_widget.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -109,8 +110,12 @@ class _BuyPageState extends State<BuyPage> {
                             ),
                             IconButton(
                                 onPressed: () {
-                                  wcmp.clearShops();
-                                  pro.clearAll();
+                                  if (wcmp.apiState == ApiState.completed ||
+                                      wcmp.apiState == ApiState.error) {
+                                    wcmp.apiState = ApiState.none;
+                                    wcmp.clearShops();
+                                    pro.clearAll();
+                                  }
                                 },
                                 icon: const Icon(
                                   Icons.clear,
@@ -239,19 +244,7 @@ class _BuyPageState extends State<BuyPage> {
       case ApiState.none:
         return Container();
       case ApiState.loading:
-        return Padding(
-          padding: const EdgeInsets.only(top: 40.0),
-          child: Center(
-              child: Column(
-            children: const [
-              CircularProgressIndicator(),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text("Loading gift shops near you."),
-            ],
-          )),
-        );
+        return LoadingGiftsWidget();
 
       case ApiState.completed:
         if (provider.nearbyVendors.isEmpty) {

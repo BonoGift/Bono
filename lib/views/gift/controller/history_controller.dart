@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HistoryProvider extends ChangeNotifier {
   DateFormat format = DateFormat('dd-MMMM-yyyy');
 
+  int index = 0;
+
   List<HistoryModel> allHistory = [];
   List<HistoryModel> receivedHistory = [];
   List<HistoryModel> sendHistory = [];
@@ -49,7 +51,7 @@ class HistoryProvider extends ChangeNotifier {
         senderImage: history.senderImage,
         senderName: history.senderName,
         senderNumber: history.senderNumber,
-        trackingStatus: history.trackingStatus);
+        status: history.status);
 
     historyModel.isReceived = isReceived;
     list.add(historyModel);

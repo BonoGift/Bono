@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HistoryPage extends StatefulWidget {
+  const HistoryPage({Key? key, bool this.fromHomepage = false})
+      : super(key: key);
+  final bool fromHomepage;
+
   @override
   State<HistoryPage> createState() => _HistoryPageState();
 }
@@ -36,6 +40,7 @@ class _HistoryPageState extends State<HistoryPage> {
         Provider.of<HistoryProvider>(context);
     return DefaultTabController(
       length: 3,
+      initialIndex: widget.fromHomepage ? 0 : historyProvider.index,
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.grey[100],

@@ -9,18 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
+  const BottomNavBar({Key? key, this.index = 2}) : super(key: key);
+  final int index;
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  int index = 2;
+  late int index;
   List<Widget> allPages = [
     Chat(),
     // BuyPage(),
-    HistoryPage(),
+    const HistoryPage(fromHomepage: true),
     Feeds(),
     const CameraScreen(),
     const ProfilePage()
@@ -35,6 +36,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
       return Future.value(false);
     }
     return Future.value(true);
+  }
+
+  @override
+  void initState() {
+    index = widget.index;
+    super.initState();
+    // Provider.of<SignUpProvider>(context,listen: false).getUser();
   }
 
   @override

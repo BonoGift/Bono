@@ -1,33 +1,36 @@
 import 'package:intl/intl.dart';
 
 class HistoryModel {
+  int? id;
   dynamic date;
-  String senderName;
-  String senderImage;
-  String senderNumber;
-  String receiverName;
-  String receiverNumber;
-  String receiverImage;
-  double price;
-  String trackingStatus;
-  String giftImage;
+  String? senderName;
+  String? senderImage;
+  String? senderNumber;
+  String? receiverName;
+  String? receiverNumber;
+  String? receiverImage;
+  double? price;
+  String? status;
+  String? giftImage;
   bool isReceived = false;
 
   HistoryModel({
-    this.date = '',
-    this.giftImage = '',
-    this.price = 0.0,
-    this.receiverImage = '',
-    this.receiverName = '',
-    this.receiverNumber = '',
-    this.senderImage = '',
-    this.senderName = '',
-    this.senderNumber = '',
-    this.trackingStatus = 'processing',
+    this.id,
+    this.date,
+    this.giftImage,
+    this.price,
+    this.receiverImage,
+    this.receiverName,
+    this.receiverNumber,
+    this.senderImage,
+    this.senderName,
+    this.senderNumber,
+    this.status,
   });
 
   HistoryModel.fromJson(Map<String, dynamic> json)
-      : date = format.format(json['date'].toDate()),
+      : id = json['id'],
+        date = format.format(json['date'].toDate()),
         giftImage = json['gift-image'],
         price = json['price'].toDouble(),
         receiverImage = json['receiver-image'],
@@ -36,9 +39,10 @@ class HistoryModel {
         senderImage = json['sender-image'],
         senderName = json['sender-name'],
         senderNumber = json['sender-number'],
-        trackingStatus = json['tracking-status'];
+        status = json['status'];
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'date': date,
         'gift-image': giftImage,
         'price': price,
@@ -48,7 +52,7 @@ class HistoryModel {
         'sender-image': senderImage,
         'sender-name': senderName,
         'sender-number': senderNumber,
-        'tracking-status': trackingStatus
+        'status': status
       };
 
   static DateFormat format = DateFormat('dd-MMMM-yyyy');

@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:bono_gifts/models/wcmp_api/order.dart';
 import 'package:bono_gifts/models/wcmp_api/order_response_model.dart';
+import 'package:bono_gifts/models/wcmp_api/shipping_location_response.dart';
+import 'package:bono_gifts/models/wcmp_api/shipping_method_response.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor.dart';
 import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
+import 'package:bono_gifts/models/wcmp_api/zones_response.dart';
 import 'package:dio/dio.dart';
 
 class WooCommerceMarketPlaceService {
@@ -25,7 +28,7 @@ class WooCommerceMarketPlaceService {
   }
 
   Future<List<Vendor>> getAllVendors() async {
-    return _dio.get('/wp-json/wcmp/v1/vendors').then((value) {
+    return _dio.get('/wp-json/wcmp/v1/vendors?per_page=100').then((value) {
       if (value.statusCode == 200) {
         List<Vendor> vendors = [];
         if (value.data != null) {
@@ -44,7 +47,8 @@ class WooCommerceMarketPlaceService {
   }
 
   Future<List<VendorProduct>> getVendorProducts(int id) async {
-    return _dio.get('/wp-json/wc/v2/products/?vendor=$id').then((value) {
+    return _dio.get('/wp-json/wc/v2/products/?vendor=$id&per_page=100').then(
+        (value) {
       if (value.statusCode == 200) {
         List<VendorProduct> vendorProducts = [];
         if (value.data != null) {
@@ -61,12 +65,12 @@ class WooCommerceMarketPlaceService {
     });
   }
 
-  Future<Order?> createOrder(Order order) async {
+  Future<OrderResponseModel?> createOrder(Order order) async {
     return _dio.post('/wp-json/wc/v3/orders', data: order.toJson()).then(
         (value) {
       if (value.statusCode == 200) {
         if (value.data != null) {
-          return Order.fromJson(value as Map<String, dynamic>);
+          return OrderResponseModel.fromJson(value.data);
         }
       } else {
         return null;
@@ -86,6 +90,64 @@ class WooCommerceMarketPlaceService {
           });
         }
         return orders;
+      } else {
+        return [];
+      }
+    }, onError: (error) {
+      print(error.toString());
+      return [];
+    });
+  }
+
+  Future<List<ZoneResponse>> getAllZones() async {
+    return _dio.get('/wp-json/wc/v3/shipping/zones').then((value) {
+      if (value.statusCode == 200) {
+        List<ZoneResponse> zones = [];
+        if (value.data != null) {
+          value.data.forEach((v) {
+            zones.add(ZoneResponse.fromJson(v));
+          });
+        }
+        return zones;
+      } else {
+        return [];
+      }
+    }, onError: (error) {
+      print(error.toString());
+      return [];
+    });
+  }
+
+  Future<List<ShippingLocationResponse>> getShippingLocation(int id) async {
+    return _dio.get('/wp-json/wc/v3/shipping/zones/$id/locations').then(
+        (value) {
+      if (value.statusCode == 200) {
+        List<ShippingLocationResponse> shippingLocations = [];
+        if (value.data != null) {
+          value.data.forEach((v) {
+            shippingLocations.add(ShippingLocationResponse.fromJson(v));
+          });
+        }
+        return shippingLocations;
+      } else {
+        return [];
+      }
+    }, onError: (error) {
+      print(error.toString());
+      return [];
+    });
+  }
+
+  Future<List<ShippingMethodResponse>> getAllShippingMethods(int id) async {
+    return _dio.get('/wp-json/wc/v3/shipping/zones/$id/methods').then((value) {
+      if (value.statusCode == 200) {
+        List<ShippingMethodResponse> shippingMethods = [];
+        if (value.data != null) {
+          value.data.forEach((v) {
+            shippingMethods.add(ShippingMethodResponse.fromJson(v));
+          });
+        }
+        return shippingMethods;
       } else {
         return [];
       }

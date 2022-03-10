@@ -261,7 +261,8 @@ class _OrderSummryState extends State<OrderSummry> {
                                 children: [
                                   const Text('Delivery: '),
                                   PrimaryText(
-                                    text: "3\$",
+                                    text:
+                                        "${wooCommerceMarketPlaceProvider.deliveryPrice}\$",
                                     fontSize: 16,
                                   )
                                 ],

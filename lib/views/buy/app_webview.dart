@@ -1,5 +1,8 @@
+import 'package:bono_gifts/main.dart';
 import 'package:bono_gifts/models/user_model.dart';
 import 'package:bono_gifts/models/wcmp_api/order.dart';
+import 'package:bono_gifts/models/wcmp_api/order_response_model.dart'
+    as response;
 import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
 import 'package:bono_gifts/provider/paypal_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
@@ -72,7 +75,7 @@ class _AppWebViewState extends State<AppWebView> {
                   billing: Billing(
                     email: signUpProvider.email,
                     address1:
-                        '${signUpProvider.room.text} ${signUpProvider.buildingName} ${signUpProvider.street.text} ${signUpProvider.area} ${signUpProvider.city.text} ${signUpProvider.country}',
+                        '${signUpProvider.room.text} ${signUpProvider.buildingName.text} ${signUpProvider.street.text} ${signUpProvider.area.text} ${signUpProvider.city.text} ${signUpProvider.country}',
                     address2: "",
                     postcode: "",
                     state: "",
@@ -107,16 +110,20 @@ class _AppWebViewState extends State<AppWebView> {
                     city: receiver.city,
                     address2: '',
                     postcode: '',
+                    phone: receiver.phoneNumber,
+                    email: receiver.email,
                   ),
                 );
 
-                await wooCommerceMarketPlaceProvider.createOrder(order);
+                response.OrderResponseModel? result =
+                    await wooCommerceMarketPlaceProvider.createOrder(order);
 
                 HistoryModel historyModel = HistoryModel(
+                    id: result?.id,
                     date: Timestamp.now(),
                     price:
                         wooCommerceMarketPlaceProvider.finalPrice().toDouble(),
-                    trackingStatus: 'processing',
+                    status: 'processing',
                     senderNumber: signUpProvider.phoneNumber.text,
                     senderName: signUpProvider.name,
                     receiverNumber: receiver.phoneNumber,
@@ -125,10 +132,13 @@ class _AppWebViewState extends State<AppWebView> {
                     giftImage: product.images!.first.src!,
                     senderImage: signUpProvider.userImage);
                 await historyProvider.addOrderHistory(historyModel);
+                historyProvider.index = 2;
                 Navigator.pushAndRemoveUntil(
-                    context,
+                    navigatorKey.currentContext!,
                     MaterialPageRoute(
-                        builder: (context) => const BottomNavBar()),
+                        builder: (context) => const BottomNavBar(
+                              index: 1,
+                            )),
                     (route) => route.isFirst);
               });
             } else {

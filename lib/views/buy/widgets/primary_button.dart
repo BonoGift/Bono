@@ -54,9 +54,10 @@ class PrimaryButton extends StatelessWidget {
               // ),
               Visibility(
                 visible: isPayPal,
-                child: Image.network(
-                    "https://assets.stickpng.com/images/580b57fcd9996e24bc43c530.png",
-                    height: 22),
+                child: Image.asset(
+                  "assets/images/paypal.png",
+                  height: 35,
+                ),
               ),
               Visibility(
                   visible: !isPayPal,

@@ -21,7 +21,7 @@ class HistoryListItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DecoratedImage(
-              image: history.giftImage,
+              image: history.giftImage!,
               width: 110,
               height: _height * 0.13,
             ),
@@ -29,7 +29,7 @@ class HistoryListItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 8),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     PrimaryText(
@@ -39,7 +39,7 @@ class HistoryListItem extends StatelessWidget {
                       color: Colors.blue,
                     ),
                     PrimaryText(
-                      text: 'Tracking Status: ${history.trackingStatus}',
+                      text: 'Status: ${history.status}',
                       fontSize: 13,
                       maxLines: 2,
                     ),
@@ -59,11 +59,11 @@ class HistoryListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.linear_scale_sharp,
-                  color: Colors.black54,
-                  size: 28,
-                ),
+                // const Icon(
+                //   Icons.linear_scale_sharp,
+                //   color: Colors.black54,
+                //   size: 28,
+                // ),
                 ClipOval(
                   child: FadeInImage.assetNetwork(
                       height: 60,
@@ -71,8 +71,8 @@ class HistoryListItem extends StatelessWidget {
                       placeholder: 'assets/images/placeholder.jpg',
                       fit: BoxFit.cover,
                       image: history.isReceived
-                          ? history.senderImage
-                          : history.receiverImage),
+                          ? history.senderImage!
+                          : history.receiverImage!),
                 ),
                 const SizedBox(
                   height: 8,
@@ -80,8 +80,8 @@ class HistoryListItem extends StatelessWidget {
                 Flexible(
                   child: PrimaryText(
                     text: history.isReceived
-                        ? history.senderName
-                        : history.receiverName,
+                        ? history.senderName!
+                        : history.receiverName!,
                     fontSize: 9,
                     textAlign: TextAlign.center,
                   ),
