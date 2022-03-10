@@ -46,9 +46,9 @@ class UserModel {
 
   factory UserModel.fromDocument(Map<String, dynamic> docs) {
     return UserModel(
-      city: docs['city'],
-      country: docs['country'],
-      email: docs['email'],
+      city: docs['city'] ?? '',
+      country: docs['country'] ?? '',
+      email: docs['email'] ?? '',
       area: docs['area'],
       buildingName: docs['buildingName'],
       dobFormat: docs['dobFormat'].toDate(),

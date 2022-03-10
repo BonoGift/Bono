@@ -6,9 +6,14 @@ import 'package:bono_gifts/views/buy/order_summry.dart';
 import 'package:bono_gifts/views/buy/select_network.dart';
 import 'package:bono_gifts/views/gift/widgets/loading_gifts_widget.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+
+import '../../provider/chat_provider.dart';
+import '../chat/chat.dart';
 
 class BuyPage extends StatefulWidget {
   const BuyPage({Key? key}) : super(key: key);
@@ -29,6 +34,7 @@ class _BuyPageState extends State<BuyPage> {
   Widget build(BuildContext context) {
     var form = DateFormat('dd-MMM');
     final pro = Provider.of<BuyProvider>(context);
+    final proChat = Provider.of<ChatProvider>(context);
     final wcmp = Provider.of<WooCommerceMarketPlaceProvider>(context);
     int index = 1000000;
 
@@ -43,7 +49,7 @@ class _BuyPageState extends State<BuyPage> {
           ),
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -51,10 +57,9 @@ class _BuyPageState extends State<BuyPage> {
         ),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               pro.userName != null
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -84,32 +89,31 @@ class _BuyPageState extends State<BuyPage> {
                                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
+                                  const SizedBox(height: 4),
                                   FittedBox(
                                     child: Text(
                                       "Birthday ${pro.userDob != null ? form.format(pro.userDob!).toString() : ''} (In ${pro.diffDays} Days)",
                                       maxLines: 1,
-                                      style: TextStyle(color: Colors.blue),
+                                      style: const TextStyle(color: Colors.blue),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             IconButton(
-                                onPressed: () {
-                                  if (wcmp.apiState == ApiState.completed || wcmp.apiState == ApiState.error) {
-                                    wcmp.apiState = ApiState.none;
-                                    wcmp.clearShops();
-                                    pro.clearAll();
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.clear,
-                                  size: 30,
-                                  color: Colors.black,
-                                ))
+                              onPressed: () {
+                                if (wcmp.apiState == ApiState.completed || wcmp.apiState == ApiState.error) {
+                                  wcmp.apiState = ApiState.none;
+                                  wcmp.clearShops();
+                                  pro.clearAll();
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.clear,
+                                size: 30,
+                                color: Colors.black,
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -118,7 +122,7 @@ class _BuyPageState extends State<BuyPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SelectNetwork()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SelectNetwork()));
                         },
                         child: Container(
                           decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
@@ -153,9 +157,435 @@ class _BuyPageState extends State<BuyPage> {
                         ),
                       ),
                     ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
+              pro.userName == null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        alPhabat("Friends"),
+                        SizedBox(
+                          height: getHeight(context) * 0.12,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: proChat.friendsList.length,
+                            padding: const EdgeInsets.only(left: 16),
+                            itemBuilder: (contxt, i) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                width: 60,
+                                child: InkWell(
+                                  onTap: () async {
+                                    pro.assignVals(
+                                      wcmp,
+                                      proChat.friendsList[i].name,
+                                      proChat.friendsList[i].photo,
+                                      proChat.friendsList[i].phone,
+                                    );
+                                    Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
+                                    wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: proChat.friendsList[i].photo,
+                                          width: 40,
+                                          height: 40,
+                                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.white,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (BuildContext context, String url, dynamic error) {
+                                            return ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/profile.png',
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        proChat.friendsList[i].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        alPhabat("Family"),
+                        SizedBox(
+                          height: getHeight(context) * 0.12,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: proChat.familyList.length,
+                            padding: const EdgeInsets.only(left: 16),
+                            itemBuilder: (contxt, i) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                width: 60,
+                                child: InkWell(
+                                  onTap: () async {
+                                    pro.assignVals(
+                                      wcmp,
+                                      proChat.familyList[i].name,
+                                      proChat.familyList[i].photo,
+                                      proChat.familyList[i].phone,
+                                    );
+                                    Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
+                                    wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: proChat.familyList[i].photo,
+                                          width: 40,
+                                          height: 40,
+                                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.white,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (BuildContext context, String url, dynamic error) {
+                                            return ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/profile.png',
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        proChat.familyList[i].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        alPhabat("Work"),
+                        SizedBox(
+                          height: getHeight(context) * 0.12,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: proChat.workList.length,
+                            padding: const EdgeInsets.only(left: 16),
+                            itemBuilder: (contxt, i) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                width: 60,
+                                child: InkWell(
+                                  onTap: () async {
+                                    pro.assignVals(
+                                      wcmp,
+                                      proChat.workList[i].name,
+                                      proChat.workList[i].photo,
+                                      proChat.workList[i].phone,
+                                    );
+                                    Map<String, dynamic> user = await wcmp.getUserInfo(proChat.workList[i].phone);
+                                    wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: proChat.workList[i].photo,
+                                          width: 40,
+                                          height: 40,
+                                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.white,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (BuildContext context, String url, dynamic error) {
+                                            return ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/profile.png',
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        proChat.workList[i].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        alPhabat("School"),
+                        SizedBox(
+                          height: getHeight(context) * 0.12,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: proChat.schoolList.length,
+                            padding: const EdgeInsets.only(left: 16),
+                            itemBuilder: (contxt, i) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                width: 60,
+                                child: InkWell(
+                                  onTap: () async {
+                                    pro.assignVals(
+                                      wcmp,
+                                      proChat.schoolList[i].name,
+                                      proChat.schoolList[i].photo,
+                                      proChat.schoolList[i].phone,
+                                    );
+                                    Map<String, dynamic> user = await wcmp.getUserInfo(proChat.schoolList[i].phone);
+                                    wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: proChat.schoolList[i].photo,
+                                          width: 40,
+                                          height: 40,
+                                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.white,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (BuildContext context, String url, dynamic error) {
+                                            return ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/profile.png',
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        proChat.schoolList[i].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        alPhabat("Neigbhour"),
+                        SizedBox(
+                          height: getHeight(context) * 0.12,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: proChat.neighborList.length,
+                            padding: const EdgeInsets.only(left: 16),
+                            itemBuilder: (contxt, i) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                width: 60,
+                                child: InkWell(
+                                  onTap: () async {
+                                    pro.assignVals(
+                                      wcmp,
+                                      proChat.neighborList[i].name,
+                                      proChat.neighborList[i].photo,
+                                      proChat.neighborList[i].phone,
+                                    );
+                                    Map<String, dynamic> user = await wcmp.getUserInfo(proChat.neighborList[i].phone);
+                                    wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: proChat.neighborList[i].photo,
+                                          width: 40,
+                                          height: 40,
+                                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.white,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (BuildContext context, String url, dynamic error) {
+                                            return ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/profile.png',
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        proChat.neighborList[i].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        alPhabat("Others"),
+                        SizedBox(
+                          height: getHeight(context) * 0.12,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: proChat.othersList.length,
+                            padding: const EdgeInsets.only(left: 16),
+                            itemBuilder: (contxt, i) {
+                              return Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                width: 60,
+                                child: InkWell(
+                                  onTap: () async {
+                                    pro.assignVals(
+                                      wcmp,
+                                      proChat.othersList[i].name,
+                                      proChat.othersList[i].photo,
+                                      proChat.othersList[i].phone,
+                                    );
+                                    Map<String, dynamic> user = await wcmp.getUserInfo(proChat.othersList[i].phone);
+                                    wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: proChat.othersList[i].photo,
+                                          width: 40,
+                                          height: 40,
+                                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                            width: 40,
+                                            height: 40,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey[300]!,
+                                              highlightColor: Colors.white,
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          errorWidget: (BuildContext context, String url, dynamic error) {
+                                            return ClipOval(
+                                              child: Image.asset(
+                                                'assets/images/profile.png',
+                                                width: 40,
+                                                height: 40,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        proChat.othersList[i].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+              const SizedBox(height: 20),
               pro.userName != null
                   ?
                   // Column(
@@ -220,7 +650,7 @@ class _BuyPageState extends State<BuyPage> {
       case ApiState.none:
         return Container();
       case ApiState.loading:
-        return LoadingGiftsWidget();
+        return const LoadingGiftsWidget();
 
       case ApiState.completed:
         if (provider.nearbyVendors.isEmpty) {
@@ -235,9 +665,7 @@ class _BuyPageState extends State<BuyPage> {
                 (index) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 16.0,
-                    ),
+                    const SizedBox(height: 16.0),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
@@ -255,9 +683,7 @@ class _BuyPageState extends State<BuyPage> {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 8.0,
-                    ),
+                    const SizedBox(height: 8.0),
                     Container(
                       height: 140,
                       color: Colors.grey[200],
@@ -306,9 +732,7 @@ class _BuyPageState extends State<BuyPage> {
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 4.0,
-                                          ),
+                                          const SizedBox(height: 4.0),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 4.0),
                                             child: Text(
