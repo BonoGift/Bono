@@ -143,7 +143,7 @@ class _BuyPageState extends State<BuyPage> {
                                       child: const Center(
                                         child: Text(
                                           "To",
-                                          style: TextStyle(fontSize: 18),
+                                          style: TextStyle(fontSize: 21, color: Colors.blue),
                                         ),
                                       ),
                                     ),
@@ -175,424 +175,442 @@ class _BuyPageState extends State<BuyPage> {
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              alPhabat("Friends"),
-                              SizedBox(
-                                height: getHeight(context) * 0.12,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: proChat.friendsList.length,
-                                  padding: const EdgeInsets.only(left: 16),
-                                  itemBuilder: (contxt, i) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 8),
-                                      width: 60,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          pro.assignVals(
-                                            wcmp,
-                                            proChat.friendsList[i].name,
-                                            proChat.friendsList[i].photo,
-                                            proChat.friendsList[i].phone,
-                                          );
-                                          Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
-                                          wcmp.fetchVendors(user['city'] ?? 'unknown');
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ClipOval(
-                                              child: CachedNetworkImage(
-                                                imageUrl: proChat.friendsList[i].photo,
-                                                width: 40,
-                                                height: 40,
-                                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                                                  width: 40,
-                                                  height: 40,
-                                                  child: Shimmer.fromColors(
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    child: Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                errorWidget: (BuildContext context, String url, dynamic error) {
-                                                  return ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/profile.png',
-                                                      width: 40,
-                                                      height: 40,
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
+                              Visibility(visible: proChat.friendsList.isNotEmpty, child: alPhabat("Friends")),
+                              Visibility(
+                                visible: proChat.friendsList.isNotEmpty,
+                                child: SizedBox(
+                                  height: getHeight(context) * 0.12,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: proChat.friendsList.length,
+                                    padding: const EdgeInsets.only(left: 16),
+                                    itemBuilder: (contxt, i) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        width: 60,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            pro.assignVals(
+                                              wcmp,
                                               proChat.friendsList[i].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              alPhabat("Family"),
-                              SizedBox(
-                                height: getHeight(context) * 0.12,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: proChat.familyList.length,
-                                  padding: const EdgeInsets.only(left: 16),
-                                  itemBuilder: (contxt, i) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 8),
-                                      width: 60,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          pro.assignVals(
-                                            wcmp,
-                                            proChat.familyList[i].name,
-                                            proChat.familyList[i].photo,
-                                            proChat.familyList[i].phone,
-                                          );
-                                          Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
-                                          wcmp.fetchVendors(user['city'] ?? 'unknown');
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ClipOval(
-                                              child: CachedNetworkImage(
-                                                imageUrl: proChat.familyList[i].photo,
-                                                width: 40,
-                                                height: 40,
-                                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                              proChat.friendsList[i].photo,
+                                              proChat.friendsList[i].phone,
+                                            );
+                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
+                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ClipOval(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: proChat.friendsList[i].photo,
                                                   width: 40,
                                                   height: 40,
-                                                  child: Shimmer.fromColors(
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    child: Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.grey,
+                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                    width: 40,
+                                                    height: 40,
+                                                    child: Shimmer.fromColors(
+                                                      baseColor: Colors.grey[300]!,
+                                                      highlightColor: Colors.white,
+                                                      child: Container(
+                                                        decoration: const BoxDecoration(
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
+                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                    return ClipOval(
+                                                      child: Image.asset(
+                                                        'assets/images/profile.png',
+                                                        width: 40,
+                                                        height: 40,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                                errorWidget: (BuildContext context, String url, dynamic error) {
-                                                  return ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/profile.png',
-                                                      width: 40,
-                                                      height: 40,
-                                                    ),
-                                                  );
-                                                },
                                               ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                proChat.friendsList[i].name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Visibility(visible: proChat.familyList.isNotEmpty, child: alPhabat("Family")),
+                              Visibility(
+                                visible: proChat.familyList.isNotEmpty,
+                                child: SizedBox(
+                                  height: getHeight(context) * 0.12,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: proChat.familyList.length,
+                                    padding: const EdgeInsets.only(left: 16),
+                                    itemBuilder: (contxt, i) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        width: 60,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            pro.assignVals(
+                                              wcmp,
                                               proChat.familyList[i].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              alPhabat("Work"),
-                              SizedBox(
-                                height: getHeight(context) * 0.12,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: proChat.workList.length,
-                                  padding: const EdgeInsets.only(left: 16),
-                                  itemBuilder: (contxt, i) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 8),
-                                      width: 60,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          pro.assignVals(
-                                            wcmp,
-                                            proChat.workList[i].name,
-                                            proChat.workList[i].photo,
-                                            proChat.workList[i].phone,
-                                          );
-                                          Map<String, dynamic> user = await wcmp.getUserInfo(proChat.workList[i].phone);
-                                          wcmp.fetchVendors(user['city'] ?? 'unknown');
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ClipOval(
-                                              child: CachedNetworkImage(
-                                                imageUrl: proChat.workList[i].photo,
-                                                width: 40,
-                                                height: 40,
-                                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                              proChat.familyList[i].photo,
+                                              proChat.familyList[i].phone,
+                                            );
+                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
+                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ClipOval(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: proChat.familyList[i].photo,
                                                   width: 40,
                                                   height: 40,
-                                                  child: Shimmer.fromColors(
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    child: Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.grey,
+                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                    width: 40,
+                                                    height: 40,
+                                                    child: Shimmer.fromColors(
+                                                      baseColor: Colors.grey[300]!,
+                                                      highlightColor: Colors.white,
+                                                      child: Container(
+                                                        decoration: const BoxDecoration(
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
+                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                    return ClipOval(
+                                                      child: Image.asset(
+                                                        'assets/images/profile.png',
+                                                        width: 40,
+                                                        height: 40,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                                errorWidget: (BuildContext context, String url, dynamic error) {
-                                                  return ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/profile.png',
-                                                      width: 40,
-                                                      height: 40,
-                                                    ),
-                                                  );
-                                                },
                                               ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                proChat.familyList[i].name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Visibility(visible: proChat.workList.isNotEmpty, child: alPhabat("Work")),
+                              Visibility(
+                                visible: proChat.workList.isNotEmpty,
+                                child: SizedBox(
+                                  height: getHeight(context) * 0.12,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: proChat.workList.length,
+                                    padding: const EdgeInsets.only(left: 16),
+                                    itemBuilder: (contxt, i) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        width: 60,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            pro.assignVals(
+                                              wcmp,
                                               proChat.workList[i].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              alPhabat("School"),
-                              SizedBox(
-                                height: getHeight(context) * 0.12,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: proChat.schoolList.length,
-                                  padding: const EdgeInsets.only(left: 16),
-                                  itemBuilder: (contxt, i) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 8),
-                                      width: 60,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          pro.assignVals(
-                                            wcmp,
-                                            proChat.schoolList[i].name,
-                                            proChat.schoolList[i].photo,
-                                            proChat.schoolList[i].phone,
-                                          );
-                                          Map<String, dynamic> user = await wcmp.getUserInfo(proChat.schoolList[i].phone);
-                                          wcmp.fetchVendors(user['city'] ?? 'unknown');
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ClipOval(
-                                              child: CachedNetworkImage(
-                                                imageUrl: proChat.schoolList[i].photo,
-                                                width: 40,
-                                                height: 40,
-                                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                              proChat.workList[i].photo,
+                                              proChat.workList[i].phone,
+                                            );
+                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.workList[i].phone);
+                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ClipOval(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: proChat.workList[i].photo,
                                                   width: 40,
                                                   height: 40,
-                                                  child: Shimmer.fromColors(
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    child: Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.grey,
+                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                    width: 40,
+                                                    height: 40,
+                                                    child: Shimmer.fromColors(
+                                                      baseColor: Colors.grey[300]!,
+                                                      highlightColor: Colors.white,
+                                                      child: Container(
+                                                        decoration: const BoxDecoration(
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
+                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                    return ClipOval(
+                                                      child: Image.asset(
+                                                        'assets/images/profile.png',
+                                                        width: 40,
+                                                        height: 40,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                                errorWidget: (BuildContext context, String url, dynamic error) {
-                                                  return ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/profile.png',
-                                                      width: 40,
-                                                      height: 40,
-                                                    ),
-                                                  );
-                                                },
                                               ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                proChat.workList[i].name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Visibility(visible: proChat.schoolList.isNotEmpty, child: alPhabat("School")),
+                              Visibility(
+                                visible: proChat.schoolList.isNotEmpty,
+                                child: SizedBox(
+                                  height: getHeight(context) * 0.12,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: proChat.schoolList.length,
+                                    padding: const EdgeInsets.only(left: 16),
+                                    itemBuilder: (contxt, i) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        width: 60,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            pro.assignVals(
+                                              wcmp,
                                               proChat.schoolList[i].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              alPhabat("Neigbhour"),
-                              SizedBox(
-                                height: getHeight(context) * 0.12,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: proChat.neighborList.length,
-                                  padding: const EdgeInsets.only(left: 16),
-                                  itemBuilder: (contxt, i) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 8),
-                                      width: 60,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          pro.assignVals(
-                                            wcmp,
-                                            proChat.neighborList[i].name,
-                                            proChat.neighborList[i].photo,
-                                            proChat.neighborList[i].phone,
-                                          );
-                                          Map<String, dynamic> user = await wcmp.getUserInfo(proChat.neighborList[i].phone);
-                                          wcmp.fetchVendors(user['city'] ?? 'unknown');
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ClipOval(
-                                              child: CachedNetworkImage(
-                                                imageUrl: proChat.neighborList[i].photo,
-                                                width: 40,
-                                                height: 40,
-                                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                              proChat.schoolList[i].photo,
+                                              proChat.schoolList[i].phone,
+                                            );
+                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.schoolList[i].phone);
+                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ClipOval(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: proChat.schoolList[i].photo,
                                                   width: 40,
                                                   height: 40,
-                                                  child: Shimmer.fromColors(
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    child: Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.grey,
+                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                    width: 40,
+                                                    height: 40,
+                                                    child: Shimmer.fromColors(
+                                                      baseColor: Colors.grey[300]!,
+                                                      highlightColor: Colors.white,
+                                                      child: Container(
+                                                        decoration: const BoxDecoration(
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
+                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                    return ClipOval(
+                                                      child: Image.asset(
+                                                        'assets/images/profile.png',
+                                                        width: 40,
+                                                        height: 40,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                                errorWidget: (BuildContext context, String url, dynamic error) {
-                                                  return ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/profile.png',
-                                                      width: 40,
-                                                      height: 40,
-                                                    ),
-                                                  );
-                                                },
                                               ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                proChat.schoolList[i].name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Visibility(visible: proChat.neighborList.isNotEmpty, child: alPhabat("Neigbhour")),
+                              Visibility(
+                                visible: proChat.neighborList.isNotEmpty,
+                                child: SizedBox(
+                                  height: getHeight(context) * 0.12,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: proChat.neighborList.length,
+                                    padding: const EdgeInsets.only(left: 16),
+                                    itemBuilder: (contxt, i) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        width: 60,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            pro.assignVals(
+                                              wcmp,
                                               proChat.neighborList[i].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(fontSize: 13),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              alPhabat("Others"),
-                              SizedBox(
-                                height: getHeight(context) * 0.12,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: proChat.othersList.length,
-                                  padding: const EdgeInsets.only(left: 16),
-                                  itemBuilder: (contxt, i) {
-                                    return Container(
-                                      margin: const EdgeInsets.only(right: 8),
-                                      width: 60,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          pro.assignVals(
-                                            wcmp,
-                                            proChat.othersList[i].name,
-                                            proChat.othersList[i].photo,
-                                            proChat.othersList[i].phone,
-                                          );
-                                          Map<String, dynamic> user = await wcmp.getUserInfo(proChat.othersList[i].phone);
-                                          wcmp.fetchVendors(user['city'] ?? 'unknown');
-                                        },
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ClipOval(
-                                              child: CachedNetworkImage(
-                                                imageUrl: proChat.othersList[i].photo,
-                                                width: 40,
-                                                height: 40,
-                                                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                              proChat.neighborList[i].photo,
+                                              proChat.neighborList[i].phone,
+                                            );
+                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.neighborList[i].phone);
+                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ClipOval(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: proChat.neighborList[i].photo,
                                                   width: 40,
                                                   height: 40,
-                                                  child: Shimmer.fromColors(
-                                                    baseColor: Colors.grey[300]!,
-                                                    highlightColor: Colors.white,
-                                                    child: Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.grey,
+                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                    width: 40,
+                                                    height: 40,
+                                                    child: Shimmer.fromColors(
+                                                      baseColor: Colors.grey[300]!,
+                                                      highlightColor: Colors.white,
+                                                      child: Container(
+                                                        decoration: const BoxDecoration(
+                                                          color: Colors.grey,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
+                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                    return ClipOval(
+                                                      child: Image.asset(
+                                                        'assets/images/profile.png',
+                                                        width: 40,
+                                                        height: 40,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                                errorWidget: (BuildContext context, String url, dynamic error) {
-                                                  return ClipOval(
-                                                    child: Image.asset(
-                                                      'assets/images/profile.png',
-                                                      width: 40,
-                                                      height: 40,
-                                                    ),
-                                                  );
-                                                },
                                               ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
-                                              proChat.othersList[i].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(fontSize: 13),
-                                            ),
-                                          ],
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                proChat.neighborList[i].name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Visibility(visible: proChat.othersList.isNotEmpty, child: alPhabat("Others")),
+                              Visibility(
+                                visible: proChat.othersList.isNotEmpty,
+                                child: SizedBox(
+                                  height: getHeight(context) * 0.12,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: proChat.othersList.length,
+                                    padding: const EdgeInsets.only(left: 16),
+                                    itemBuilder: (contxt, i) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        width: 60,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            pro.assignVals(
+                                              wcmp,
+                                              proChat.othersList[i].name,
+                                              proChat.othersList[i].photo,
+                                              proChat.othersList[i].phone,
+                                            );
+                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.othersList[i].phone);
+                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ClipOval(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: proChat.othersList[i].photo,
+                                                  width: 40,
+                                                  height: 40,
+                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                    width: 40,
+                                                    height: 40,
+                                                    child: Shimmer.fromColors(
+                                                      baseColor: Colors.grey[300]!,
+                                                      highlightColor: Colors.white,
+                                                      child: Container(
+                                                        decoration: const BoxDecoration(
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                    return ClipOval(
+                                                      child: Image.asset(
+                                                        'assets/images/profile.png',
+                                                        width: 40,
+                                                        height: 40,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                proChat.othersList[i].name,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 13),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
