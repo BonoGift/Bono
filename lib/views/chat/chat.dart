@@ -5,6 +5,7 @@ import 'package:bono_gifts/provider/chat_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/services/chat_service.dart';
 import 'package:bono_gifts/views/chat/chat_screen.dart';
+import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -254,16 +255,10 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                     },
                     tabs: const [
                       // first tab [you can add an icon using the icon property]
-                      Tab(
-                        text: 'Chat',
-                      ),
+                      Tab(text: 'Chat'),
                       // second tab [you can add an icon using the icon property]
-                      Tab(
-                        text: 'Network',
-                      ),
-                      Tab(
-                        text: 'Contacts',
-                      ),
+                      Tab(text: 'Network'),
+                      Tab(text: 'Contacts'),
                     ],
                   ),
                 ),
@@ -280,15 +275,14 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                             );
                           } else if (snapshot.data!.docs.isNotEmpty) {
                             return ListView(
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                                 return InkWell(
                                   onTap: () {
-                                    print(data['recieverName']);
-                                    print(data['recieverID']);
-
+                                    //print(data['recieverName']);
+                                    //print(data['recieverID']);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -371,20 +365,11 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                                         ? Row(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: const [
-                                                              Icon(
-                                                                Icons.check,
-                                                                size: 10,
-                                                              ),
-                                                              Icon(
-                                                                Icons.check,
-                                                                size: 10,
-                                                              ),
+                                                              Icon(Icons.check, size: 10),
+                                                              Icon(Icons.check, size: 10),
                                                             ],
                                                           )
-                                                        : const Icon(
-                                                            Icons.check,
-                                                            size: 10,
-                                                          )
+                                                        : const Icon(Icons.check, size: 10)
                                                     : Text(
                                                         data['count'],
                                                         style: const TextStyle(fontSize: 9),
@@ -409,9 +394,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
-                                    height: getHeight(context) / 5,
-                                  ),
+                                  SizedBox(height: getHeight(context) / 5),
                                   const Text(
                                     "Invite your friends",
                                     style: TextStyle(fontSize: 22),
@@ -430,7 +413,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                     color: Colors.blue,
                                     onPressed: () => proChat.shareBono(),
                                     child: const Text(
-                                      "Inivte a friend",
+                                      "Invite a friend",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
@@ -450,29 +433,32 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                       ? Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
                               child: Container(
-                                height: 45,
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.grey)),
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Center(
-                                  child: TextField(
-                                    onChanged: (val) {
-                                      print('on changed ${_tabController.index}');
-                                      proChat.searchNetwork(val);
-                                      if (val.isEmpty) {
-                                        proChat.getContactsFromFirebase(context);
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Search for networks",
-                                      suffixIcon: IconButton(
-                                        onPressed: () {
-                                          proChat.getContactsFromFirebase(context);
-                                        },
-                                        icon: const Icon(Icons.clear),
-                                      ),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.grey.withOpacity(0.6),
+                                  ),
+                                ),
+                                child: TextField(
+                                  onChanged: (val) {
+                                    print('on changed ${_tabController.index}');
+                                    proChat.searchNetwork(val);
+                                    if (val.isEmpty) {
+                                      proChat.getContactsFromFirebase(context);
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Search",
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(0.6),
+                                    ),
+                                    prefixIcon: const Icon(
+                                      Icons.search,
+                                      color: Colors.grey,
                                     ),
                                   ),
                                 ),
@@ -490,29 +476,38 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                               builder: (context) {
                                                 return StatefulBuilder(builder: (context, setState) {
                                                   return AlertDialog(
-                                                    title: const Text("Where to Move"),
-                                                    content: Container(
+                                                    title: const Text("Save as"),
+                                                    content: SizedBox(
                                                       height: 200,
+                                                      //width: 400,
                                                       child: Column(
                                                         children: [
-                                                          Row(
+                                                          Wrap(
+                                                            alignment: WrapAlignment.start,
+                                                            crossAxisAlignment: WrapCrossAlignment.start,
+                                                            spacing: 8,
+                                                            runSpacing: 8,
+                                                            children: networkCat.map((element) {
+                                                              int index = networkCat.indexOf(element);
+                                                              if (index == 0) return const SizedBox.shrink();
+                                                              return InkWell(
+                                                                onTap: () {
+                                                                  proChat.moveNetWorkInFirebase(context, 0);
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: Container(
+                                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                                                  decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(4),
+                                                                    color: Colors.grey.withOpacity(0.3),
+                                                                  ),
+                                                                  child: Text(element.name),
+                                                                ),
+                                                              );
+                                                            }).toList(),
+                                                          ),
+                                                          /*Row(
                                                             children: [
-                                                              // InkWell(
-                                                              //   onTap:(){
-                                                              //     proChat.moveNetWorkInFirebase(context,0);
-                                                              //   },
-                                                              //   child: Padding(
-                                                              //     padding: const EdgeInsets.all(8.0),
-                                                              //     child: Container(
-                                                              //        child: Text(networkCat[0].name),
-                                                              //       padding: const EdgeInsets.all(8),
-                                                              //       decoration: BoxDecoration(
-                                                              //         borderRadius: BorderRadius.circular(3),
-                                                              //         color: networkCat[0].isSel ? Colors.blue: Colors.grey
-                                                              //       ),
-                                                              //     ),
-                                                              //   ),
-                                                              // ),
                                                               InkWell(
                                                                 onTap: () {
                                                                   proChat.moveNetWorkInFirebase(context, 0);
@@ -606,7 +601,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                                                 ),
                                                               ),
                                                             ],
-                                                          )
+                                                          )*/
                                                         ],
                                                       ),
                                                     ),
@@ -622,13 +617,16 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 )
                               ],
                             ),
-                            alPhabat("Friends"),
+                            Visibility(
+                              visible: proChat.friendsList.isNotEmpty,
+                              child: alPhabat("Friends", fontSize: 14),
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.friendsList.length,
                               itemBuilder: (contxt, i) {
-                                print("---------" + proChat.friendsList.toString());
+                                //print("---------" + proChat.friendsList.toString());
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
@@ -649,9 +647,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         },
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(proChat.friendsList[i].photo),
-                                            ),
+                                            ClipOvalImageWidget(imageUrl: proChat.friendsList[i].photo),
                                             const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -685,10 +681,13 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 );
                               },
                             ),
-                            alPhabat("Family"),
+                            Visibility(
+                              visible: proChat.familyList.isNotEmpty,
+                              child: alPhabat("Family", fontSize: 14),
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.familyList.toSet().toList().length,
                               itemBuilder: (contxt, i) {
                                 return Padding(
@@ -711,16 +710,14 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         },
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(proChat.familyList[i].photo),
-                                            ),
+                                            ClipOvalImageWidget(imageUrl: proChat.familyList[i].photo),
                                             const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   proChat.familyList[i].name,
-                                                  style: TextStyle(fontSize: 18),
+                                                  style: const TextStyle(fontSize: 18),
                                                 ),
                                                 Text(proChat.familyList[i].phone),
                                               ],
@@ -747,7 +744,10 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 );
                               },
                             ),
-                            alPhabat("Work"),
+                            Visibility(
+                              visible: proChat.workList.isNotEmpty,
+                              child: alPhabat("Work", fontSize: 14),
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -773,9 +773,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         },
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(proChat.workList[i].photo),
-                                            ),
+                                            ClipOvalImageWidget(imageUrl: proChat.workList[i].photo),
                                             const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -809,10 +807,13 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 );
                               },
                             ),
-                            alPhabat("School"),
+                            Visibility(
+                              visible: proChat.schoolList.isNotEmpty,
+                              child: alPhabat("School", fontSize: 14),
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.schoolList.length,
                               itemBuilder: (contxt, i) {
                                 return Padding(
@@ -835,16 +836,14 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         },
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(proChat.schoolList[i].photo),
-                                            ),
+                                            ClipOvalImageWidget(imageUrl: proChat.schoolList[i].photo),
                                             const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   proChat.schoolList[i].name,
-                                                  style: TextStyle(fontSize: 18),
+                                                  style: const TextStyle(fontSize: 18),
                                                 ),
                                                 Text(proChat.schoolList[i].phone),
                                               ],
@@ -871,10 +870,13 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 );
                               },
                             ),
-                            alPhabat("Neigbhour"),
+                            Visibility(
+                              visible: proChat.neighborList.isNotEmpty,
+                              child: alPhabat("Neigbhour", fontSize: 14),
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.neighborList.length,
                               itemBuilder: (contxt, i) {
                                 return Padding(
@@ -897,16 +899,14 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         },
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(proChat.neighborList[i].photo),
-                                            ),
+                                            ClipOvalImageWidget(imageUrl: proChat.neighborList[i].photo),
                                             const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   proChat.neighborList[i].name,
-                                                  style: TextStyle(fontSize: 18),
+                                                  style: const TextStyle(fontSize: 18),
                                                 ),
                                                 Text(proChat.neighborList[i].phone),
                                               ],
@@ -933,7 +933,10 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 );
                               },
                             ),
-                            alPhabat("Others"),
+                            Visibility(
+                              visible: proChat.othersList.isNotEmpty,
+                              child: alPhabat("Others", fontSize: 14),
+                            ),
                             ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
@@ -959,16 +962,14 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         },
                                         child: Row(
                                           children: [
-                                            CircleAvatar(
-                                              backgroundImage: NetworkImage(proChat.othersList[i].photo),
-                                            ),
+                                            ClipOvalImageWidget(imageUrl: proChat.othersList[i].photo),
                                             const SizedBox(width: 10),
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   proChat.othersList[i].name,
-                                                  style: TextStyle(fontSize: 18),
+                                                  style: const TextStyle(fontSize: 18),
                                                 ),
                                                 Text(proChat.othersList[i].phone),
                                               ],
