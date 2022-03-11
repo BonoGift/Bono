@@ -175,7 +175,10 @@ class _BuyPageState extends State<BuyPage> {
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Visibility(visible: proChat.friendsList.isNotEmpty, child: alPhabat("Friends")),
+                              Visibility(
+                                visible: proChat.friendsList.isNotEmpty,
+                                child: alPhabat("Friends", fontSize: 14),
+                              ),
                               Visibility(
                                 visible: proChat.friendsList.isNotEmpty,
                                 child: SizedBox(
@@ -249,7 +252,10 @@ class _BuyPageState extends State<BuyPage> {
                                   ),
                                 ),
                               ),
-                              Visibility(visible: proChat.familyList.isNotEmpty, child: alPhabat("Family")),
+                              Visibility(
+                                visible: proChat.familyList.isNotEmpty,
+                                child: alPhabat("Family", fontSize: 14),
+                              ),
                               Visibility(
                                 visible: proChat.familyList.isNotEmpty,
                                 child: SizedBox(
@@ -323,7 +329,10 @@ class _BuyPageState extends State<BuyPage> {
                                   ),
                                 ),
                               ),
-                              Visibility(visible: proChat.workList.isNotEmpty, child: alPhabat("Work")),
+                              Visibility(
+                                visible: proChat.workList.isNotEmpty,
+                                child: alPhabat("Work", fontSize: 14),
+                              ),
                               Visibility(
                                 visible: proChat.workList.isNotEmpty,
                                 child: SizedBox(
@@ -397,7 +406,10 @@ class _BuyPageState extends State<BuyPage> {
                                   ),
                                 ),
                               ),
-                              Visibility(visible: proChat.schoolList.isNotEmpty, child: alPhabat("School")),
+                              Visibility(
+                                visible: proChat.schoolList.isNotEmpty,
+                                child: alPhabat("School", fontSize: 14),
+                              ),
                               Visibility(
                                 visible: proChat.schoolList.isNotEmpty,
                                 child: SizedBox(
@@ -471,7 +483,10 @@ class _BuyPageState extends State<BuyPage> {
                                   ),
                                 ),
                               ),
-                              Visibility(visible: proChat.neighborList.isNotEmpty, child: alPhabat("Neigbhour")),
+                              Visibility(
+                                visible: proChat.neighborList.isNotEmpty,
+                                child: alPhabat("Neigbhour", fontSize: 14),
+                              ),
                               Visibility(
                                 visible: proChat.neighborList.isNotEmpty,
                                 child: SizedBox(
@@ -545,7 +560,10 @@ class _BuyPageState extends State<BuyPage> {
                                   ),
                                 ),
                               ),
-                              Visibility(visible: proChat.othersList.isNotEmpty, child: alPhabat("Others")),
+                              Visibility(
+                                visible: proChat.othersList.isNotEmpty,
+                                child: alPhabat("Others", fontSize: 14),
+                              ),
                               Visibility(
                                 visible: proChat.othersList.isNotEmpty,
                                 child: SizedBox(

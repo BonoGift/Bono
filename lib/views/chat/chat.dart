@@ -1124,7 +1124,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
   }
 }
 
-Widget alPhabat(String name) {
+Widget alPhabat(String name, {double? fontSize}) {
   return Container(
     padding: const EdgeInsets.all(8),
     // height: 20,
@@ -1133,9 +1133,9 @@ Widget alPhabat(String name) {
     child: Center(
         child: Text(
       name,
-      style: const TextStyle(
+      style: TextStyle(
         color: Colors.grey,
-        fontSize: 18,
+        fontSize: fontSize ?? 18,
         fontWeight: FontWeight.w500,
       ),
     )),
