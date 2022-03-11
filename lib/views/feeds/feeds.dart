@@ -107,9 +107,7 @@ class _FeedsState extends State<Feeds> {
                           height: 30,
                         ),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
+                      const SizedBox(width: 10),
                       const Text(
                         "Post a celebration or event",
                         style: TextStyle(fontSize: 20),
@@ -377,56 +375,72 @@ class _FeedsState extends State<Feeds> {
                               left: 0,
                               right: 0,
                               top: 0,
-                              child: Container(
-                                /**/
-                                color: Colors.black.withOpacity(0.6),
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width * 0.75,
-                                      child: Center(
-                                        child: Text(
-                                          pro.feeds[i].title,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                      child: InkWell(
-                                        onTap: () {
-                                          pro.openDescription(i);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.only(right: 8),
+                              child: InkWell(
+                                onTap: () {
+                                  pro.openDescription(i);
+                                },
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.4),
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width * 0.75,
+                                        child: Center(
                                           child: Text(
-                                            pro.feeds[i].isDesOpen ? "Read Less" : "Read More",
-                                            style: const TextStyle(color: Colors.white),
+                                            pro.feeds[i].title,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    pro.feeds[i].isDesOpen
-                                        ? Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                                            child: Text(
-                                              pro.feeds[i].description.toString(),
-                                              style: const TextStyle(color: Colors.white, fontSize: 15),
-                                            ),
-                                          )
-                                        : Container(),
-                                    pro.feeds[i].isDesOpen ? const SizedBox(height: 10) : Container()
-                                  ],
+                                      const SizedBox(height: 12),
+                                      pro.feeds[i].isDesOpen
+                                          ? Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                              child: Text(
+                                                pro.feeds[i].description.toString(),
+                                                style: const TextStyle(color: Colors.white, fontSize: 15),
+                                              ),
+                                            )
+                                          : Container(),
+                                      pro.feeds[i].isDesOpen ? const SizedBox(height: 10) : Container()
+                                    ],
+                                  ),
                                 ),
                               ),
-                            )
+                            ),
+                            Positioned(
+                              top: 4,
+                              right: 0,
+                              child: Align(
+                                alignment: Alignment.topRight,
+                                child: InkWell(
+                                  onTap: () {
+                                    pro.openDescription(i);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          pro.feeds[i].isDesOpen ? "Read" : "Read",
+                                          style: const TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        Image.asset(
+                                          'assets/images/icons/down_arrow.png',
+                                          width: 16,
+                                          height: 16,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         Container(
