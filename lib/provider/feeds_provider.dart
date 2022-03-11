@@ -33,7 +33,7 @@ class FeedsProvider extends ChangeNotifier {
 
   CameraController get cameraController => _cameraController;
 
-  static int index = 0;
+   int index = 0;
 
   setIndex(int ind) {
     index = ind;
@@ -41,13 +41,13 @@ class FeedsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<AllDestinations> allDestinations = [
+  /*List<AllDestinations> allDestinations = [
     AllDestinations(name: 'Chat', icon: index == 0 ? chatIconBlue : chatIconGrey),
     AllDestinations(name: 'Buy', icon: index == 1 ? giftIconBlue : giftIConGrey),
     AllDestinations(name: 'Feeds', icon: index == 2 ? feedIconBlue : feedIConGrey),
     AllDestinations(name: 'Camera', icon: index == 3 ? cameraIconBlue : cameraIconGrey),
     AllDestinations(name: 'Profile', icon: index == 4 ? profileIconBlue : profileIconGrey),
-  ];
+  ];*/
 
   final colRef = FirebaseFirestore.instance.collection('userPosts');
 

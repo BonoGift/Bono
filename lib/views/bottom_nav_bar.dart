@@ -3,7 +3,6 @@ import 'package:bono_gifts/provider/feeds_provider.dart';
 import 'package:bono_gifts/views/camera/camera.dart';
 import 'package:bono_gifts/views/chat/chat.dart';
 import 'package:bono_gifts/views/feeds/feeds.dart';
-import 'package:bono_gifts/views/gift/history.dart';
 import 'package:bono_gifts/views/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -84,54 +83,55 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            unselectedItemColor: Colors.grey,
-            showUnselectedLabels: true,
-            selectedItemColor: Colors.black,
-            currentIndex: index,
-            onTap: (val) {
-              setState(() {
-                index = val;
-                pro.setIndex(val);
-              });
-            },
-            items: [
-              BottomNavigationBarItem(
-                  icon: Image.asset(
-                    index == 0 ? chatIconBlue : chatIconGrey,
-                    height: 20,
-                    width: 20,
-                  ),
-                  label: 'Chat'),
-              BottomNavigationBarItem(
-                  icon: Image.asset(
-                    index == 1 ? giftIconBlue : giftIConGrey,
-                    height: 20,
-                    width: 20,
-                  ),
-                  label: 'Buy'),
-              BottomNavigationBarItem(
-                  icon: Image.asset(
-                    index == 2 ? feedIconBlue : feedIConGrey,
-                    height: 20,
-                    width: 20,
-                  ),
-                  label: 'Feeds'),
-              BottomNavigationBarItem(
-                  icon: Image.asset(
-                    index == 3 ? cameraIconBlue : cameraIconGrey,
-                    height: 20,
-                    width: 20,
-                  ),
-                  label: 'Camera'),
-              BottomNavigationBarItem(
-                  icon: Image.asset(
-                    index == 4 ? profileIconBlue : profileIconGrey,
-                    height: 20,
-                    width: 20,
-                  ),
-                  label: 'Profile'),
-            ]),
+          type: BottomNavigationBarType.fixed,
+          unselectedItemColor: Colors.grey,
+          showUnselectedLabels: true,
+          selectedItemColor: Colors.black,
+          currentIndex: index,
+          onTap: (val) {
+            setState(() {
+              index = val;
+              pro.setIndex(val);
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+                icon: Image.asset(
+                  index == 0 ? chatIconBlue : chatIconGrey,
+                  height: 20,
+                  width: 20,
+                ),
+                label: 'Chat'),
+            BottomNavigationBarItem(
+                icon: Image.asset(
+                  index == 1 ? giftIconBlue : giftIConGrey,
+                  height: 20,
+                  width: 20,
+                ),
+                label: 'Buy'),
+            BottomNavigationBarItem(
+                icon: Image.asset(
+                  index == 2 ? feedIconBlue : feedIConGrey,
+                  height: 20,
+                  width: 20,
+                ),
+                label: 'Feeds'),
+            BottomNavigationBarItem(
+                icon: Image.asset(
+                  index == 3 ? cameraIconBlue : cameraIconGrey,
+                  height: 20,
+                  width: 20,
+                ),
+                label: 'Camera'),
+            BottomNavigationBarItem(
+                icon: Image.asset(
+                  index == 4 ? profileIconBlue : profileIconGrey,
+                  height: 20,
+                  width: 20,
+                ),
+                label: 'Profile'),
+          ],
+        ),
       ),
     );
   }
