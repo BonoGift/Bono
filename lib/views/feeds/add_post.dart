@@ -187,7 +187,7 @@ class _AddPostState extends State<AddPost> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const CameraScreen(),
+                              builder: (context) => const CameraScreen(showCamera: true,),
                             ),
                           );
                         },

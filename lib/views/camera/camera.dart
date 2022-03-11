@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:bono_gifts/provider/feeds_provider.dart';
 import 'package:bono_gifts/views/camera/uint8_image.dart';
 import 'package:camera/camera.dart';
@@ -6,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  final bool? showCamera;
+
+  const CameraScreen({Key? key, this.showCamera}) : super(key: key);
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -31,7 +34,7 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     final pro = Provider.of<FeedsProvider>(context);
-    if (pro.index == 3) {
+    if (widget.showCamera ?? pro.index == 3) {
       return Scaffold(
         body: Stack(
           children: [
