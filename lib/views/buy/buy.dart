@@ -210,6 +210,7 @@ class _BuyPageState extends State<BuyPage> {
                                                   imageUrl: proChat.friendsList[i].photo,
                                                   width: 40,
                                                   height: 40,
+                                                  fit: BoxFit.cover,
                                                   progressIndicatorBuilder: (context, url, progress) => SizedBox(
                                                     width: 40,
                                                     height: 40,
@@ -283,6 +284,7 @@ class _BuyPageState extends State<BuyPage> {
                                                   imageUrl: proChat.familyList[i].photo,
                                                   width: 40,
                                                   height: 40,
+                                                  fit: BoxFit.cover,
                                                   progressIndicatorBuilder: (context, url, progress) => SizedBox(
                                                     width: 40,
                                                     height: 40,
@@ -356,6 +358,7 @@ class _BuyPageState extends State<BuyPage> {
                                                   imageUrl: proChat.workList[i].photo,
                                                   width: 40,
                                                   height: 40,
+                                                  fit: BoxFit.cover,
                                                   progressIndicatorBuilder: (context, url, progress) => SizedBox(
                                                     width: 40,
                                                     height: 40,
@@ -429,6 +432,7 @@ class _BuyPageState extends State<BuyPage> {
                                                   imageUrl: proChat.schoolList[i].photo,
                                                   width: 40,
                                                   height: 40,
+                                                  fit: BoxFit.cover,
                                                   progressIndicatorBuilder: (context, url, progress) => SizedBox(
                                                     width: 40,
                                                     height: 40,
@@ -502,6 +506,7 @@ class _BuyPageState extends State<BuyPage> {
                                                   imageUrl: proChat.neighborList[i].photo,
                                                   width: 40,
                                                   height: 40,
+                                                  fit: BoxFit.cover,
                                                   progressIndicatorBuilder: (context, url, progress) => SizedBox(
                                                     width: 40,
                                                     height: 40,
@@ -575,6 +580,7 @@ class _BuyPageState extends State<BuyPage> {
                                                   imageUrl: proChat.othersList[i].photo,
                                                   width: 40,
                                                   height: 40,
+                                                  fit: BoxFit.cover,
                                                   progressIndicatorBuilder: (context, url, progress) => SizedBox(
                                                     width: 40,
                                                     height: 40,
@@ -625,7 +631,7 @@ class _BuyPageState extends State<BuyPage> {
                         //           // const Text("Delivery Address : Available"),
                         //           Text("Location : ${pro.userAddress}"),
                         //           // Row(
-                        //           //   mainAxisAlignment: MainAxisAlignment.end,
+                        //           //   mainAxisAlignment: MainAxisAlignment.e/**/nd,
                         //           //   children: [
                         //           //     MaterialButton(
                         //           //       onPressed: () =>
