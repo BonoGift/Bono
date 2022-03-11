@@ -158,7 +158,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
   String otp = '';
 
   List<NetCatMo> networkCat = [
-    NetCatMo(name: 'All', isSel: false),
+    //NetCatMo(name: 'All', isSel: false),
     NetCatMo(name: 'Friends', isSel: false),
     NetCatMo(name: 'Family', isSel: false),
     NetCatMo(name: 'Work', isSel: false),
@@ -460,63 +460,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
-                            /*Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  onPressed: proChat.moveListt.isEmpty
-                                      ? null
-                                      : () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return StatefulBuilder(builder: (context, setState) {
-                                                  return AlertDialog(
-                                                    title: const Text("Save as"),
-                                                    content: SizedBox(
-                                                      height: 200,
-                                                      //width: 400,
-                                                      child: Column(
-                                                        children: [
-                                                          Wrap(
-                                                            alignment: WrapAlignment.start,
-                                                            crossAxisAlignment: WrapCrossAlignment.start,
-                                                            spacing: 8,
-                                                            runSpacing: 8,
-                                                            children: networkCat.map((element) {
-                                                              int index = networkCat.indexOf(element);
-                                                              if (index == 0) return const SizedBox.shrink();
-                                                              return InkWell(
-                                                                onTap: () {
-                                                                  proChat.moveNetWorkInFirebase(context, 0);
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Container(
-                                                                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius: BorderRadius.circular(4),
-                                                                    color: Colors.grey.withOpacity(0.3),
-                                                                  ),
-                                                                  child: Text(element.name),
-                                                                ),
-                                                              );
-                                                            }).toList(),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                });
-                                              });
-                                        },
-                                  child: const Text("Move"),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text(moveList.isEmpty ? "Select" : "Deselect"),
-                                )
-                              ],
-                            ),*/
+                            const SizedBox(height: 20),
                             Visibility(
                               visible: proChat.friendsList.isNotEmpty,
                               child: alPhabat("Friends", fontSize: 14),
@@ -527,7 +471,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               itemCount: proChat.friendsList.length,
                               itemBuilder: (contxt, i) {
                                 //print("---------" + proChat.friendsList.toString());
-                                return _getContactsByCategoryWidget(context, proChat.friendsList, proChat, i);
+                                return _getContactsByCategoryWidget(context, proChat.friendsList, proChat, i, 0);
                               },
                             ),
                             Visibility(
@@ -539,7 +483,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.familyList.toSet().toList().length,
                               itemBuilder: (contxt, i) {
-                                return _getContactsByCategoryWidget(context, proChat.familyList, proChat, i);
+                                return _getContactsByCategoryWidget(context, proChat.familyList, proChat, i, 1);
                               },
                             ),
                             Visibility(
@@ -551,7 +495,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.workList.length,
                               itemBuilder: (contxt, i) {
-                                return _getContactsByCategoryWidget(context, proChat.workList, proChat, i);
+                                return _getContactsByCategoryWidget(context, proChat.workList, proChat, i, 2);
                               },
                             ),
                             Visibility(
@@ -563,7 +507,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.schoolList.length,
                               itemBuilder: (contxt, i) {
-                                return _getContactsByCategoryWidget(context, proChat.schoolList, proChat, i);
+                                return _getContactsByCategoryWidget(context, proChat.schoolList, proChat, i, 3);
                               },
                             ),
                             Visibility(
@@ -575,7 +519,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.neighborList.length,
                               itemBuilder: (contxt, i) {
-                                return _getContactsByCategoryWidget(context, proChat.neighborList, proChat, i);
+                                return _getContactsByCategoryWidget(context, proChat.neighborList, proChat, i, 4);
                               },
                             ),
                             Visibility(
@@ -587,7 +531,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.othersList.length,
                               itemBuilder: (contxt, i) {
-                                return _getContactsByCategoryWidget(context, proChat.othersList, proChat, i);
+                                return _getContactsByCategoryWidget(context, proChat.othersList, proChat, i, 5);
                               },
                             ),
                             // -------------------------------------------------
@@ -663,6 +607,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     List<NetWorkModel> categoryList,
     ChatProvider proChat,
     int i,
+    int status,
   ) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -719,8 +664,8 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                     status: 1,
                   ),
                   categoryList[i].isSelect);
-             // proChat.checkBoxSelect(i, categoryList);
-              _showDialog(context, proChat);
+              // proChat.checkBoxSelect(i, categoryList);
+              _showDialog(context, proChat, status);
             },
             child: Image.asset(
               'assets/images/icons/chat_category_move_icon.png',
@@ -729,26 +674,12 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
             ),
           ),
           const SizedBox(width: 12),
-          /*Checkbox(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                        value: proChat.friendsList[i].isSelect,
-                                        onChanged: (val) {
-                                          proChat.addinMoveList(
-                                              MoveListModel(
-                                                name: proChat.friendsList[i].name,
-                                                photo: proChat.friendsList[i].phone,
-                                                phone: proChat.friendsList[i].phone,
-                                                status: 0,
-                                              ),
-                                              proChat.friendsList[i].isSelect);
-                                          proChat.checkBoxSelect(i, proChat.friendsList);
-                                        })*/
         ],
       ),
     );
   }
 
-  Future<dynamic> _showDialog(BuildContext context, ChatProvider proChat) {
+  Future<dynamic> _showDialog(BuildContext context, ChatProvider proChat, int status) {
     return showDialog(
         context: context,
         builder: (context) {
@@ -756,7 +687,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
             return AlertDialog(
               title: const Text("Save as"),
               content: SizedBox(
-                height: 200,
+                height: 150,
                 child: Column(
                   children: [
                     Wrap(
@@ -766,17 +697,16 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                       runSpacing: 8,
                       children: networkCat.map((element) {
                         int index = networkCat.indexOf(element);
-                        if (index == 0) return const SizedBox.shrink();
                         return InkWell(
                           onTap: () {
-                            proChat.moveNetWorkInFirebase(context, index - 1);
+                            proChat.moveNetWorkInFirebase(context, index);
                             Navigator.pop(context);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              color: Colors.grey.withOpacity(0.3),
+                              color: index == status ? Colors.deepPurpleAccent : Colors.grey.withOpacity(0.3),
                             ),
                             child: Text(element.name),
                           ),
