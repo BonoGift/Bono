@@ -284,7 +284,7 @@ class ChatProvider extends ChangeNotifier {
           switch(dd['status']){
             case 0:
               friendsList.add(NetWorkModel(phone: dd['phone'],photo: dd['imageUrl'],isSelect: false,name: dd['name']));
-              print(friendsList.toString() + '--------- friendList');
+              //print(friendsList.toString() + '--------- friendList');
               notifyListeners();
               break;
             case 1:

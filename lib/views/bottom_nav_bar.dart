@@ -3,6 +3,7 @@ import 'package:bono_gifts/provider/feeds_provider.dart';
 import 'package:bono_gifts/views/camera/camera.dart';
 import 'package:bono_gifts/views/chat/chat.dart';
 import 'package:bono_gifts/views/feeds/feeds.dart';
+import 'package:bono_gifts/views/gift/history.dart';
 import 'package:bono_gifts/views/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   late int index;
+
   List<Widget> allPages = [
     Chat(),
     const BuyPage(),
@@ -108,7 +110,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   height: 20,
                   width: 20,
                 ),
-                label: 'Buy'),
+                label: 'Gifts'),
             BottomNavigationBarItem(
                 icon: Image.asset(
                   index == 2 ? feedIconBlue : feedIConGrey,
