@@ -14,6 +14,8 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/network_model.dart';
+
 class Chat extends StatefulWidget {
   @override
   _ChatState createState() => _ChatState();
@@ -188,9 +190,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     final proChat = Provider.of<ChatProvider>(context, listen: false);
     _tabController = TabController(length: 3, vsync: this);
     Future.delayed(const Duration(seconds: 2), () {
-      proChat.getContacts(
-        context,
-      );
+      proChat.getContacts(context);
     });
     Future.delayed(const Duration(seconds: 4), () {
       proChat.getContactsFromFirebase(context);
@@ -229,18 +229,14 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                 child: Container(
                   height: 35,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      10,
-                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: TabBar(
                     controller: _tabController,
                     // give the indicator a decoration (color and border radius)
                     indicator: BoxDecoration(
                       border: Border.all(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(
-                        10.0,
-                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                       // color: Colors.green,
                     ),
                     labelColor: Colors.blue,
@@ -464,7 +460,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
-                            Row(
+                            /*Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 TextButton(
@@ -506,102 +502,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                                               );
                                                             }).toList(),
                                                           ),
-                                                          /*Row(
-                                                            children: [
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  proChat.moveNetWorkInFirebase(context, 0);
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Container(
-                                                                    child: Text(networkCat[1].name),
-                                                                    padding: const EdgeInsets.all(8),
-                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: networkCat[1].isSel ? Colors.blue : Colors.grey),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  proChat.moveNetWorkInFirebase(context, 1);
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Container(
-                                                                    child: Text(networkCat[2].name),
-                                                                    padding: const EdgeInsets.all(8),
-                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: networkCat[2].isSel ? Colors.blue : Colors.grey),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  proChat.moveNetWorkInFirebase(context, 2);
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Container(
-                                                                    child: Text(networkCat[3].name),
-                                                                    padding: const EdgeInsets.all(8),
-                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: networkCat[3].isSel ? Colors.blue : Colors.grey),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  proChat.moveNetWorkInFirebase(context, 3);
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Container(
-                                                                    child: Text(networkCat[4].name),
-                                                                    padding: const EdgeInsets.all(8),
-                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: networkCat[4].isSel ? Colors.blue : Colors.grey),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  proChat.moveNetWorkInFirebase(context, 4);
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Container(
-                                                                    child: Text(networkCat[5].name),
-                                                                    padding: const EdgeInsets.all(8),
-                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: networkCat[5].isSel ? Colors.blue : Colors.grey),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  proChat.moveNetWorkInFirebase(context, 5);
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(8.0),
-                                                                  child: Container(
-                                                                    child: Text(networkCat[6].name),
-                                                                    padding: const EdgeInsets.all(8),
-                                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: networkCat[6].isSel ? Colors.blue : Colors.grey),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          )*/
                                                         ],
                                                       ),
                                                     ),
@@ -616,7 +516,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                   child: Text(moveList.isEmpty ? "Select" : "Deselect"),
                                 )
                               ],
-                            ),
+                            ),*/
                             Visibility(
                               visible: proChat.friendsList.isNotEmpty,
                               child: alPhabat("Friends", fontSize: 14),
@@ -627,58 +527,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               itemCount: proChat.friendsList.length,
                               itemBuilder: (contxt, i) {
                                 //print("---------" + proChat.friendsList.toString());
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                recieverName: proChat.friendsList[i].name,
-                                                profileImage: proChat.friendsList[i].photo,
-                                                recieverPhone: proChat.friendsList[i].phone,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            ClipOvalImageWidget(imageUrl: proChat.friendsList[i].photo),
-                                            const SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  proChat.friendsList[i].name,
-                                                  style: const TextStyle(fontSize: 18),
-                                                ),
-                                                Text(proChat.friendsList[i].phone),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Checkbox(
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                          value: proChat.friendsList[i].isSelect,
-                                          onChanged: (val) {
-                                            proChat.addinMoveList(
-                                                MoveListModel(
-                                                  name: proChat.friendsList[i].name,
-                                                  photo: proChat.friendsList[i].phone,
-                                                  phone: proChat.friendsList[i].phone,
-                                                  status: 0,
-                                                ),
-                                                proChat.friendsList[i].isSelect);
-                                            proChat.checkBoxSelect(i, proChat.friendsList);
-                                          })
-                                    ],
-                                  ),
-                                );
+                                return _getContactsByCategoryWidget(context, proChat.friendsList, proChat, i);
                               },
                             ),
                             Visibility(
@@ -690,58 +539,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.familyList.toSet().toList().length,
                               itemBuilder: (contxt, i) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                recieverName: proChat.familyList[i].name,
-                                                profileImage: proChat.familyList[i].photo,
-                                                recieverPhone: proChat.familyList[i].phone,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            ClipOvalImageWidget(imageUrl: proChat.familyList[i].photo),
-                                            const SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  proChat.familyList[i].name,
-                                                  style: const TextStyle(fontSize: 18),
-                                                ),
-                                                Text(proChat.familyList[i].phone),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Checkbox(
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                          value: proChat.familyList[i].isSelect,
-                                          onChanged: (val) {
-                                            proChat.addinMoveList(
-                                                MoveListModel(
-                                                  name: proChat.familyList[i].name,
-                                                  photo: proChat.familyList[i].phone,
-                                                  phone: proChat.familyList[i].phone,
-                                                  status: 1,
-                                                ),
-                                                proChat.familyList[i].isSelect);
-                                            proChat.checkBoxSelect(i, proChat.familyList);
-                                          })
-                                    ],
-                                  ),
-                                );
+                                return _getContactsByCategoryWidget(context, proChat.familyList, proChat, i);
                               },
                             ),
                             Visibility(
@@ -753,58 +551,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.workList.length,
                               itemBuilder: (contxt, i) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                recieverName: proChat.workList[i].name,
-                                                profileImage: proChat.workList[i].photo,
-                                                recieverPhone: proChat.workList[i].phone,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            ClipOvalImageWidget(imageUrl: proChat.workList[i].photo),
-                                            const SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  proChat.workList[i].name,
-                                                  style: const TextStyle(fontSize: 18),
-                                                ),
-                                                Text(proChat.workList[i].phone),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Checkbox(
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                          value: proChat.workList[i].isSelect,
-                                          onChanged: (val) {
-                                            proChat.addinMoveList(
-                                                MoveListModel(
-                                                  name: proChat.workList[i].name,
-                                                  photo: proChat.workList[i].phone,
-                                                  phone: proChat.workList[i].phone,
-                                                  status: 2,
-                                                ),
-                                                proChat.workList[i].isSelect);
-                                            proChat.checkBoxSelect(i, proChat.workList);
-                                          })
-                                    ],
-                                  ),
-                                );
+                                return _getContactsByCategoryWidget(context, proChat.workList, proChat, i);
                               },
                             ),
                             Visibility(
@@ -816,58 +563,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.schoolList.length,
                               itemBuilder: (contxt, i) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                recieverName: proChat.schoolList[i].name,
-                                                profileImage: proChat.schoolList[i].photo,
-                                                recieverPhone: proChat.schoolList[i].phone,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            ClipOvalImageWidget(imageUrl: proChat.schoolList[i].photo),
-                                            const SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  proChat.schoolList[i].name,
-                                                  style: const TextStyle(fontSize: 18),
-                                                ),
-                                                Text(proChat.schoolList[i].phone),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Checkbox(
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                          value: proChat.schoolList[i].isSelect,
-                                          onChanged: (val) {
-                                            proChat.addinMoveList(
-                                                MoveListModel(
-                                                  name: proChat.schoolList[i].name,
-                                                  photo: proChat.schoolList[i].phone,
-                                                  phone: proChat.schoolList[i].phone,
-                                                  status: 3,
-                                                ),
-                                                proChat.schoolList[i].isSelect);
-                                            proChat.checkBoxSelect(i, proChat.schoolList);
-                                          })
-                                    ],
-                                  ),
-                                );
+                                return _getContactsByCategoryWidget(context, proChat.schoolList, proChat, i);
                               },
                             ),
                             Visibility(
@@ -879,58 +575,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.neighborList.length,
                               itemBuilder: (contxt, i) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                recieverName: proChat.neighborList[i].name,
-                                                profileImage: proChat.neighborList[i].photo,
-                                                recieverPhone: proChat.neighborList[i].phone,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            ClipOvalImageWidget(imageUrl: proChat.neighborList[i].photo),
-                                            const SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  proChat.neighborList[i].name,
-                                                  style: const TextStyle(fontSize: 18),
-                                                ),
-                                                Text(proChat.neighborList[i].phone),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Checkbox(
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                          value: proChat.neighborList[i].isSelect,
-                                          onChanged: (val) {
-                                            proChat.addinMoveList(
-                                                MoveListModel(
-                                                  name: proChat.neighborList[i].name,
-                                                  photo: proChat.neighborList[i].phone,
-                                                  phone: proChat.neighborList[i].phone,
-                                                  status: 4,
-                                                ),
-                                                proChat.neighborList[i].isSelect);
-                                            proChat.checkBoxSelect(i, proChat.neighborList);
-                                          })
-                                    ],
-                                  ),
-                                );
+                                return _getContactsByCategoryWidget(context, proChat.neighborList, proChat, i);
                               },
                             ),
                             Visibility(
@@ -942,59 +587,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: proChat.othersList.length,
                               itemBuilder: (contxt, i) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ChatScreen(
-                                                recieverName: proChat.othersList[i].name,
-                                                profileImage: proChat.othersList[i].photo,
-                                                recieverPhone: proChat.othersList[i].phone,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Row(
-                                          children: [
-                                            ClipOvalImageWidget(imageUrl: proChat.othersList[i].photo),
-                                            const SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  proChat.othersList[i].name,
-                                                  style: const TextStyle(fontSize: 18),
-                                                ),
-                                                Text(proChat.othersList[i].phone),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Checkbox(
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                        value: proChat.othersList[i].isSelect,
-                                        onChanged: (val) {
-                                          proChat.addinMoveList(
-                                              MoveListModel(
-                                                name: proChat.othersList[i].name,
-                                                photo: proChat.othersList[i].phone,
-                                                phone: proChat.othersList[i].phone,
-                                                status: 5,
-                                              ),
-                                              proChat.othersList[i].isSelect);
-                                          proChat.checkBoxSelect(i, proChat.othersList);
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                );
+                                return _getContactsByCategoryWidget(context, proChat.othersList, proChat, i);
                               },
                             ),
                             // -------------------------------------------------
@@ -1063,6 +656,139 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  Widget _getContactsByCategoryWidget(
+    BuildContext context,
+    List<NetWorkModel> categoryList,
+    ChatProvider proChat,
+    int i,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatScreen(
+                    recieverName: categoryList[i].name,
+                    profileImage: categoryList[i].photo,
+                    recieverPhone: categoryList[i].phone,
+                  ),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                ClipOvalImageWidget(imageUrl: categoryList[i].photo),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      categoryList[i].name,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    Text(categoryList[i].phone),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const Expanded(child: SizedBox.shrink()),
+          InkWell(
+            onTap: () {},
+            child: Image.asset(
+              'assets/images/icons/chat_gift_icon.png',
+              width: 24,
+              height: 24,
+            ),
+          ),
+          const SizedBox(width: 12),
+          InkWell(
+            onTap: () {
+              proChat.addinMoveList(
+                  MoveListModel(
+                    name: categoryList[i].name,
+                    photo: categoryList[i].photo,
+                    phone: categoryList[i].phone,
+                    status: 1,
+                  ),
+                  categoryList[i].isSelect);
+             // proChat.checkBoxSelect(i, categoryList);
+              _showDialog(context, proChat);
+            },
+            child: Image.asset(
+              'assets/images/icons/chat_category_move_icon.png',
+              width: 24,
+              height: 24,
+            ),
+          ),
+          const SizedBox(width: 12),
+          /*Checkbox(
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+                                        value: proChat.friendsList[i].isSelect,
+                                        onChanged: (val) {
+                                          proChat.addinMoveList(
+                                              MoveListModel(
+                                                name: proChat.friendsList[i].name,
+                                                photo: proChat.friendsList[i].phone,
+                                                phone: proChat.friendsList[i].phone,
+                                                status: 0,
+                                              ),
+                                              proChat.friendsList[i].isSelect);
+                                          proChat.checkBoxSelect(i, proChat.friendsList);
+                                        })*/
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> _showDialog(BuildContext context, ChatProvider proChat) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Save as"),
+              content: SizedBox(
+                height: 200,
+                child: Column(
+                  children: [
+                    Wrap(
+                      alignment: WrapAlignment.start,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: networkCat.map((element) {
+                        int index = networkCat.indexOf(element);
+                        if (index == 0) return const SizedBox.shrink();
+                        return InkWell(
+                          onTap: () {
+                            proChat.moveNetWorkInFirebase(context, index - 1);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: Colors.grey.withOpacity(0.3),
+                            ),
+                            child: Text(element.name),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          });
+        });
   }
 
   Widget getConList(String alph, ChatProvider chat) {

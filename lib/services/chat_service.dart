@@ -98,7 +98,7 @@ class ChatService {
         .where('status', isEqualTo: format)
         .get();
     print('this is contact data from firebase');
-    print(snap);
+    //print(snap);
     return snap;
   }
 
