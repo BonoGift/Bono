@@ -238,18 +238,20 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 35,
+                  height: 45,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TabBar(
                     controller: _tabController,
+                    labelPadding: const EdgeInsets.all(0),
                     // give the indicator a decoration (color and border radius)
-                    indicator: BoxDecoration(
+                    /*indicator: BoxDecoration(
                       border: Border.all(color: Colors.blue),
                       borderRadius: BorderRadius.circular(10.0),
                       // color: Colors.green,
-                    ),
+                    ),*/
+                    indicatorColor: Colors.transparent,
                     labelColor: Colors.blue,
                     unselectedLabelColor: Colors.black,
                     onTap: (i) {
@@ -260,16 +262,57 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                       if (_tabController.index == 1) {}
                       if (_tabController.index == 2) {}
                     },
-                    tabs: const [
-                      // first tab [you can add an icon using the icon property]
-                      Tab(text: 'Chat'),
-                      // second tab [you can add an icon using the icon property]
-                      Tab(text: 'Network'),
-                      Tab(text: 'Contacts'),
+                    tabs: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: _tabController.index == 0 ? Colors.blue : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Chat',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: _tabController.index == 0 ? Colors.white : Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: _tabController.index == 1 ? Colors.blue : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Network',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: _tabController.index == 1 ? Colors.white : Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: _tabController.index == 2 ? Colors.blue : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Contacts',
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: _tabController.index == 2 ? Colors.white : Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
+              const SizedBox(height: 8),
               _tabController.index == 0
                   ? Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -302,10 +345,11 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                     );
                                   },
                                   child: Container(
-                                    decoration: const BoxDecoration(
+                                    margin: const EdgeInsets.symmetric(horizontal: 12),
+                                    decoration: BoxDecoration(
                                         border: Border(
                                       bottom: BorderSide(
-                                        color: Colors.grey,
+                                        color: Colors.grey.withOpacity(0.2),
                                       ),
                                     )),
                                     child: Slidable(
@@ -313,36 +357,90 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                       endActionPane: ActionPane(
                                         motion: const ScrollMotion(),
                                         children: [
-                                          SlidableAction(
-                                            flex: 2,
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: (){
+
+                                              },
+                                              child: Container(
+                                                color: Colors.grey,
+                                                padding: const EdgeInsets.all(8),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/icons/gift.png',
+                                                      width: 25,
+                                                      height: 25,
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    const Text(
+                                                      'Archive',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: (){
+
+                                              },
+                                              child: Container(
+                                                color: Colors.blue,
+                                                padding: const EdgeInsets.all(8),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/icons/gift.png',
+                                                      width: 25,
+                                                      height: 25,
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    const Text(
+                                                      'Gift',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          /*SlidableAction(
+                                            flex: 1,
                                             onPressed: (c) {
                                               print(data['isSeen']);
                                             },
                                             backgroundColor: Colors.grey,
                                             foregroundColor: Colors.white,
                                             icon: Icons.list,
-                                            label: 'More',
-                                          ),
-                                          SlidableAction(
+                                            label: 'Archive',
+                                          ),*/
+                                          /*SlidableAction(
                                             onPressed: (c) {},
                                             backgroundColor: Colors.blue,
                                             foregroundColor: Colors.white,
                                             icon: Icons.shopping_basket,
-                                            label: 'Send',
-                                          ),
+                                            label: 'Gift',
+                                          ),*/
                                         ],
                                       ),
                                       child: ListTile(
-                                        // leading: HexagonWidget.flat(
-                                        //   width: 20,
-                                        //   height: 20,
-                                        //   color: Colors.limeAccent,
-                                        //   // padding: 4.0,
-                                        //   child: Text("io"),
-                                        // ),
-                                        leading: CircleAvatar(
-                                          radius: 25,
-                                          backgroundImage: NetworkImage(data['profileImage']),
+                                        contentPadding: const EdgeInsets.all(0),
+                                        leading: ClipOvalImageWidget(
+                                          imageUrl: data['profileImage'],
+                                          imageHeight: 50,
+                                          imageWidth: 50,
                                         ),
                                         subtitle: data['messageType'] == 'image'
                                             ? Row(
@@ -765,9 +863,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
               children: [
                 Row(
                   children: [
-                    const CircleAvatar(
-                      backgroundImage: NetworkImage("https://firebasestorage.googleapis.com/v0/b/bonogifts.appspot.com/o/profile.png?alt=media&token=dec6afee-44f3-4876-8f2b-dbb2be0dd4d8"),
-                    ),
+                    const ClipOvalImageWidget(imageUrl: 'https://firebasestorage.googleapis.com/v0/b/bonogifts.appspot.com/o/profile.png?alt=media&token=dec6afee-44f3-4876-8f2b-dbb2be0dd4d8'),
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
