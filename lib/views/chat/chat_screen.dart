@@ -12,7 +12,6 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
@@ -112,18 +111,180 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat format = DateFormat('hh:mm a');
     final pro = Provider.of<SignUpProvider>(context);
     final proChat = Provider.of<ChatProvider>(context);
     final Stream<QuerySnapshot> documentStream = firestore.collection('chats').doc(pro.phone.toString()).collection(widget.recieverPhone).orderBy('timestamp').snapshots();
 
     return SafeArea(
       child: Scaffold(
-        appBar: _getAppBarWidget(),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(
+            color: Colors.black,
+          ),
+          elevation: 0,
+          actions: [
+            const Expanded(flex: 2, child: SizedBox.shrink()),
+            Row(
+              children: [
+                ClipOvalImageWidget(
+                  imageUrl: widget.profileImage,
+                  imageHeight: 45,
+                  imageWidth: 45,
+                ),
+              ],
+            ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.recieverName,
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
+                ),
+                Row(
+                  children: const [
+                    Icon(Icons.circle, color: Colors.green, size: 10),
+                    SizedBox(width: 4),
+                    Text(
+                      "Online",
+                      style: TextStyle(fontSize: 14, color: Colors.black),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const Expanded(flex: 4, child: SizedBox.shrink()),
+            Image.asset(
+              "assets/images/icons/product_icon.png",
+              height: 25,
+              width: 25,
+            ),
+            const SizedBox(width: 8),
+          ],
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              _getMessagesListWidget(context, documentStream, pro, proChat, format),
+              Container(
+                height: getHeight(context) * 0.8,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: AssetImage("assets/images/chat_screen_bg.png"),
+                  ),
+                ),
+                child: StreamBuilder(
+                  stream: documentStream,
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.data == null) {
+                      return Container();
+                    } else {
+                      lastIndex = snapshot.data!.docs.length;
+                      print(snapshot.data!.docs.length);
+                      print(lastIndex);
+                      return ListView(
+                        controller: _controller,
+                        shrinkWrap: true,
+                        children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                          Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                          return Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: data['senderID'] == pro.phone ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                              children: [
+                                if (data['messageType'] == 'text') ...[
+                                  SizedBox(
+                                    width: getWidth(context) / 1.5,
+                                    child: Stack(
+                                      children: [
+                                        InkWell(
+                                          onDoubleTap: () {
+                                            print(data['id']);
+                                            proChat.likeMessage(data['senderID'] == pro.phone ? pro.phone! : widget.recieverPhone, data['senderID'] == pro.phone ? widget.recieverPhone : pro.phone!, data['id'], data['isFavorite'] == true ? false : true);
+                                          },
+                                          child: Align(
+                                            alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
+                                            child: Material(
+                                              borderRadius: data['senderID'] == pro.phone
+                                                  ? const BorderRadius.only(topLeft: Radius.circular(30.0), bottomLeft: Radius.circular(30.0), bottomRight: Radius.circular(30.0))
+                                                  : const BorderRadius.only(
+                                                      bottomLeft: Radius.circular(30.0),
+                                                      bottomRight: Radius.circular(30.0),
+                                                      topRight: Radius.circular(30.0),
+                                                    ),
+                                              elevation: 5.0,
+                                              color: data['senderID'] == pro.phone ? Colors.lightBlueAccent : Colors.grey[200],
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                                                child: Text(
+                                                  data['message'],
+                                                  style: TextStyle(
+                                                    color: data['senderID'] == pro.phone ? Colors.white : Colors.black54,
+                                                    fontSize: 15.0,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        data['isFavorite'] == true
+                                            ? Align(
+                                                alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
+                                                child: const Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.red,
+                                                ),
+                                              )
+                                            : Container()
+                                      ],
+                                    ),
+                                  ),
+                                ] else if (data['messageType'] == 'image') ...[
+                                  InkWell(
+                                    onDoubleTap: () {
+                                      print(data['id']);
+                                      proChat.likeMessage(data['senderID'] == pro.phone ? pro.phone! : widget.recieverPhone, data['senderID'] == pro.phone ? widget.recieverPhone : pro.phone!, data['id'], data['isFavorite'] == true ? false : true);
+                                    },
+                                    child: SizedBox(
+                                      width: getWidth(context) / 1.9,
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                            alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
+                                            child: Container(
+                                                padding: const EdgeInsets.all(5),
+                                                decoration: BoxDecoration(color: Colors.lightBlueAccent, borderRadius: BorderRadius.circular(10)),
+                                                width: getWidth(context) / 2,
+                                                child: Image.network(
+                                                  data['message'],
+                                                  alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
+                                                )),
+                                          ),
+                                          data['isFavorite'] == true
+                                              ? Align(
+                                                  alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
+                                                  child: const Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                  ),
+                                                )
+                                              : Container()
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }
+                  },
+                ),
+              ),
               Container(
                 color: Colors.grey[300],
                 child: Stack(
@@ -287,197 +448,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _getMessagesListWidget(BuildContext context, Stream<QuerySnapshot<Object?>> documentStream, SignUpProvider pro, ChatProvider proChat, DateFormat format) {
-    return Container(
-      height: getHeight(context) * 0.8,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fill,
-          image: AssetImage("assets/images/chat_screen_bg.png"),
-        ),
-      ),
-      child: StreamBuilder(
-        stream: documentStream,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.data == null) {
-            return Container();
-          } else {
-            lastIndex = snapshot.data!.docs.length;
-            print(snapshot.data!.docs.length);
-            print(lastIndex);
-            return ListView(
-              controller: _controller,
-              shrinkWrap: true,
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: data['senderID'] == pro.phone ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                    children: [
-                      if (data['messageType'] == 'text') ...[
-                        SizedBox(
-                          width: getWidth(context) / 1.5,
-                          child: Stack(
-                            children: [
-                              InkWell(
-                                onDoubleTap: () {
-                                  print(data['id']);
-                                  proChat.likeMessage(data['senderID'] == pro.phone ? pro.phone! : widget.recieverPhone, data['senderID'] == pro.phone ? widget.recieverPhone : pro.phone!, data['id'], data['isFavorite'] == true ? false : true);
-                                },
-                                child: Align(
-                                  alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
-                                  child: Column(
-                                    crossAxisAlignment: data['senderID'] == pro.phone ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        borderRadius: data['senderID'] == pro.phone
-                                            ? const BorderRadius.only(
-                                                topLeft: Radius.circular(30.0),
-                                                bottomLeft: Radius.circular(30.0),
-                                                bottomRight: Radius.circular(30.0),
-                                              )
-                                            : const BorderRadius.only(
-                                                bottomLeft: Radius.circular(30.0),
-                                                bottomRight: Radius.circular(30.0),
-                                                topRight: Radius.circular(30.0),
-                                              ),
-                                        elevation: 5.0,
-                                        color: data['senderID'] == pro.phone ? Colors.lightBlueAccent : Colors.grey[200],
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                                          child: Text(
-                                            data['message'],
-                                            style: TextStyle(
-                                              color: data['senderID'] == pro.phone ? Colors.white : Colors.black54,
-                                              fontSize: 18.0,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        format.format(DateTime.parse(data['timestamp'].toDate().toString())).toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.0,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              data['isFavorite'] == true
-                                  ? Align(
-                                      alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
-                                      child: const Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                      ),
-                                    )
-                                  : Container()
-                            ],
-                          ),
-                        ),
-                      ] else if (data['messageType'] == 'image') ...[
-                        InkWell(
-                          onDoubleTap: () {
-                            print(data['id']);
-                            proChat.likeMessage(data['senderID'] == pro.phone ? pro.phone! : widget.recieverPhone, data['senderID'] == pro.phone ? widget.recieverPhone : pro.phone!, data['id'], data['isFavorite'] == true ? false : true);
-                          },
-                          child: SizedBox(
-                            width: getWidth(context) / 1.9,
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
-                                  child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(color: Colors.lightBlueAccent, borderRadius: BorderRadius.circular(10)),
-                                      width: getWidth(context) / 2,
-                                      child: Image.network(
-                                        data['message'],
-                                        alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
-                                      )),
-                                ),
-                                data['isFavorite'] == true
-                                    ? Align(
-                                        alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
-                                        child: const Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
-                                        ),
-                                      )
-                                    : Container()
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ],
-                  ),
-                );
-              }).toList(),
-            );
-          }
-        },
-      ),
-    );
-  }
-
-  AppBar _getAppBarWidget() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      iconTheme: const IconThemeData(
-        color: Colors.black,
-      ),
-      elevation: 0,
-      actions: [
-        const Expanded(flex: 2, child: SizedBox.shrink()),
-        Row(
-          children: [
-            ClipOvalImageWidget(
-              imageUrl: widget.profileImage,
-              imageHeight: 45,
-              imageWidth: 45,
-            ),
-          ],
-        ),
-        const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.recieverName,
-              style: const TextStyle(fontSize: 18, color: Colors.black),
-            ),
-            Row(
-              children: const [
-                Icon(Icons.circle, color: Colors.green, size: 10),
-                SizedBox(width: 4),
-                Text(
-                  "Online",
-                  style: TextStyle(fontSize: 14, color: Colors.black),
-                ),
-              ],
-            )
-          ],
-        ),
-        const Expanded(flex: 4, child: SizedBox.shrink()),
-        InkWell(
-          onTap: () {},
-          child: Image.asset(
-            "assets/images/icons/chat_gift_box.png",
-            height: 40,
-            width: 40,
-          ),
-        ),
-        const SizedBox(width: 16),
-      ],
     );
   }
 }
