@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../provider/sign_up_provider.dart';
+import '../sendGift/sendGift.dart';
 
 class Feeds extends StatefulWidget {
   @override
@@ -351,7 +352,18 @@ class _FeedsState extends State<Feeds> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => SendGiftPage(
+                                                username: pro.feeds[i].profileName,
+                                                phone: pro.feeds[i].phone,
+                                                photo: pro.feeds[i].profileImage,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         child: Column(
                                           children: [
                                             Image.asset(

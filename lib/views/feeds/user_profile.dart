@@ -2,6 +2,7 @@ import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/feeds_provider.dart';
 import 'package:bono_gifts/views/buy/buy.dart';
 import 'package:bono_gifts/views/chat/chat_screen.dart';
+import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -57,27 +58,7 @@ class _UserProfileState extends State<UserProfile> {
                                   },
                                   child: const Text("Chat"),
                                 ),
-                                ClipOval(
-                                  child: CachedNetworkImage(
-                                    imageUrl: pro.photo!,
-                                    progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                                      width: 100,
-                                      height: 100,
-                                      child: Shimmer.fromColors(
-                                        baseColor: Colors.grey[300]!,
-                                        highlightColor: Colors.white,
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    fit: BoxFit.cover,
-                                    width: 100,
-                                    height: 100,
-                                  ),
-                                ),
+                                ClipOvalImageWidget(imageUrl: pro.photo!,imageHeight: 100,imageWidth: 100,),
                                 MaterialButton(
                                   color: Colors.grey[800],
                                   onPressed: () {
