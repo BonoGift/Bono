@@ -45,12 +45,11 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final proChat = Provider.of<ChatProvider>(context,listen: false);
+    final proChat = Provider.of<ChatProvider>(context, listen: false);
     if (proChat.errorMap.isNotEmpty) {
       print('here ${proChat.errorMap}');
       proChat.errorMap.clear();
       proChat.getContactsFromFirebase(context);
-
     }
   }
 
@@ -695,41 +694,58 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     return showDialog(
         context: context,
         builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              title: const Text("Save as"),
-              content: SizedBox(
-                height: 150,
-                child: Column(
-                  children: [
-                    Wrap(
-                      alignment: WrapAlignment.start,
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      spacing: 12,
-                      runSpacing: 16,
-                      children: networkCat.map((element) {
-                        int index = networkCat.indexOf(element);
-                        return InkWell(
-                          onTap: () {
-                            proChat.moveNetWorkInFirebase(context, index);
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: index == status ? Colors.deepPurpleAccent : Colors.grey.withOpacity(0.3),
-                            ),
-                            child: Text(element.name),
-                          ),
-                        );
-                      }).toList(),
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              padding: EdgeInsets.only(left: 24),
+              height: 150,
+              width: double.infinity,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Save As',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    spacing: 12,
+                    runSpacing: 16,
+                    children: networkCat.map((element) {
+                      int index = networkCat.indexOf(element);
+                      return InkWell(
+                        onTap: () {
+                          proChat.moveNetWorkInFirebase(context, index);
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: index == status ? const Color(0xFF0000F9) : Colors.grey.withOpacity(0.3),
+                          ),
+                          child: Text(
+                            element.name,
+                            style: TextStyle(
+                              color: index == status ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-            );
-          });
+            ),
+          );
         });
   }
 
