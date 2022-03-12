@@ -123,7 +123,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final Stream<QuerySnapshot> documentStream = firestore.collection('chats').doc(pro.phone.toString()).collection(widget.recieverPhone).orderBy('timestamp').snapshots();
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        //resizeToAvoidBottomInset: false,
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -364,13 +364,14 @@ class _ChatScreenState extends State<ChatScreen> {
                                         clipBehavior: Clip.none,
                                         children: [
                                           Material(
-                                            borderRadius: data['senderID'] == pro.phone
+                                            borderRadius: BorderRadius.circular(8),
+                                            /*borderRadius: data['senderID'] == pro.phone
                                                 ? const BorderRadius.only(topLeft: Radius.circular(30.0), bottomLeft: Radius.circular(30.0), bottomRight: Radius.circular(30.0))
                                                 : const BorderRadius.only(
-                                                    bottomLeft: Radius.circular(30.0),
-                                                    bottomRight: Radius.circular(30.0),
-                                                    topRight: Radius.circular(30.0),
-                                                  ),
+                                              bottomLeft: Radius.circular(30.0),
+                                              bottomRight: Radius.circular(30.0),
+                                              topRight: Radius.circular(30.0),
+                                            ),*/
                                             elevation: 5.0,
                                             color: data['senderID'] == pro.phone ? Colors.lightBlueAccent : Colors.grey[200],
                                             child: Padding(
@@ -387,7 +388,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           data['isFavorite'] == true
                                               ? Positioned(
                                                   left: -8,
-                                                  top: 0,
+                                                  top: -4,
                                                   child: Align(
                                                     alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
                                                     child: const Icon(
@@ -428,12 +429,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                 Align(
                                   alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
                                   child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(color: Colors.lightBlueAccent, borderRadius: BorderRadius.circular(10)),
-                                      width: getWidth(context) / 2,
-                                      child: Stack(
-                                        clipBehavior: Clip.none,
-                                        children: [
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(color: Colors.lightBlueAccent, borderRadius: BorderRadius.circular(10)),
+                                    width: getWidth(context) / 2,
+                                    child: Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
                                         Image.network(
                                           data['message'],
                                           alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
