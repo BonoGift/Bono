@@ -272,9 +272,20 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+  List<String> allDateTimeList = [];
+
+
+  bool checkDate(String targetDateTime) {
+    bool found = allDateTimeList.contains(targetDateTime);
+    if(found){
+      allDateTimeList.removeWhere((element) => element == targetDateTime);
+    }
+    return found;
+  }
 
   Widget _getMessagesWidget(Stream<QuerySnapshot<Object?>> documentStream, SignUpProvider pro, ChatProvider proChat) {
-    DateFormat format = DateFormat('hh:mm a');
+    DateFormat timeFormat = DateFormat('hh:mm a');
+    DateFormat dateFormat = DateFormat('MMMM dd');
     return Expanded(
       child: StreamBuilder(
         stream: documentStream,
@@ -283,12 +294,18 @@ class _ChatScreenState extends State<ChatScreen> {
             return Container();
           } else {
             lastIndex = snapshot.data!.docs.length;
-            print(snapshot.data!.docs.length);
-            print(lastIndex);
+            //print(snapshot.data!.docs.length);
+            //print(lastIndex);
 
             if (snapshot.data!.docs.isEmpty) {
               return _getEmptyMessageWidget();
             }
+            snapshot.data!.docs.forEach((e) {
+              String dateTime = dateFormat.format(DateTime.parse(e['timestamp'].toDate().toString())).toString();
+              if (allDateTimeList.contains(dateTime)) return;
+              allDateTimeList.add(dateTime);
+            });
+            print('here');
             return ListView(
               controller: _controller,
               // physics: NeverScrollableScrollPhysics(),
@@ -296,13 +313,34 @@ class _ChatScreenState extends State<ChatScreen> {
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                 return Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Column(
                     crossAxisAlignment: data['senderID'] == pro.phone ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                     children: [
+                      Visibility(
+                        visible: checkDate(
+                          dateFormat.format(DateTime.parse(data['timestamp'].toDate().toString())).toString(),
+                        ),
+                        child: Container(
+                          color: Colors.white.withOpacity(0.1),
+                          padding: const EdgeInsets.all(4),
+                          margin: const EdgeInsets.only(bottom: 16),
+                          width: getWidth(context),
+                          child: Center(
+                            child: Text(
+                              dateFormat.format(DateTime.parse(data['timestamp'].toDate().toString())).toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       if (data['messageType'] == 'text') ...[
-                        SizedBox(
+                        Container(
                           width: getWidth(context) / 1.5,
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Stack(
                             children: [
                               InkWell(
@@ -338,7 +376,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        format.format(DateTime.parse(data['timestamp'].toDate().toString())).toString(),
+                                        timeFormat.format(DateTime.parse(data['timestamp'].toDate().toString())).toString(),
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 10.0,
@@ -366,8 +404,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             print(data['id']);
                             proChat.likeMessage(data['senderID'] == pro.phone ? pro.phone! : widget.recieverPhone, data['senderID'] == pro.phone ? widget.recieverPhone : pro.phone!, data['id'], data['isFavorite'] == true ? false : true);
                           },
-                          child: SizedBox(
+                          child: Container(
                             width: getWidth(context) / 1.9,
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
                             child: Stack(
                               children: [
                                 Align(
