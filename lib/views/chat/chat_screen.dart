@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/chat_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
@@ -32,8 +31,6 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  bool isKeyboardOpen = false;
-  int lastIndex = 0;
   final ScrollController _controller = ScrollController();
   late AutoScrollController chatController;
   int messageCount = 0;
@@ -120,136 +117,166 @@ class _ChatScreenState extends State<ChatScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: _getAppBarWidget(),
-        body: SingleChildScrollView(
+        body:
+        SingleChildScrollView(
           child: Column(
             children: [
+              /*SizedBox(
+                height: getHeight(context) * 0.08,
+                child: Row(
+                children: [
+                  const SizedBox(width: 20),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 0),
+                  Row(
+                    children: [
+                      ClipOvalImageWidget(
+                        imageUrl: widget.profileImage,
+                        imageHeight: 45,
+                        imageWidth: 45,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.recieverName,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 18, color: Colors.black),
+                        ),
+                        Row(
+                          children: const [
+                            Icon(Icons.circle, color: Colors.green, size: 10),
+                            SizedBox(width: 4),
+                            Text(
+                              "Online",
+                              style: TextStyle(fontSize: 14, color: Colors.black),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Image.asset(
+                      "assets/images/icons/chat_gift_box.png",
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                ]
+                ),
+              ),*/
               _getMessagesListWidget(context, documentStream, pro, proChat, format),
               Container(
+                height: getHeight(context) * 0.08,
                 color: Colors.grey[300],
-                child: Stack(
-                  children: [
-                    Offstage(
-                      offstage: isRecording,
-                      child: Center(
-                        child: Row(
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                proChat.generateRandomString(13);
-                                XFile? image;
-                                final ImagePicker _picker = ImagePicker();
-                                image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
-                                if (image == null) return;
-                                var bytes = await image.readAsBytes();
-                                if (bytes != null) {
-                                  print(image.path);
-                                  String filename = image.path.split("/").last;
-                                  String imageUrl = await ChatService().uploadImage(bytes, widget.recieverPhone, filename, pro.phone!);
-                                  print(imageUrl);
-                                  proChat.sendImageMessage(context, imageUrl, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
-                                  _scrollDown();
-                                }
-                              },
-                              icon: Image.asset(
-                                "assets/images/icons/camera.png",
-                                height: 25,
-                                width: 25,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  padding: const EdgeInsets.all(4.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white,
-                                  ),
-                                  // height: 50,
-                                  child: Center(
-                                    child: AutoSizeTextField(
-                                      maxLines: null,
-                                      onEditingComplete: () {
-                                        /*setState(() {
-                                                isKeyboardOpen = !isKeyboardOpen;
-                                              });*/
-                                      },
-                                      onTap: () {
-                                        if (message.text.isNotEmpty) {
-                                          setState(() {
-                                            emojiShowing = !emojiShowing;
-                                            //isKeyboardOpen = !isKeyboardOpen;
-                                          });
-                                        }
-                                      },
-                                      controller: message,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: "Type Your Message",
-                                        suffixIcon: IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                emojiShowing = !emojiShowing;
-                                                SystemChannels.textInput.invokeMethod('TextInput.hide');
-                                              });
-                                            },
-                                            icon: const Icon(
-                                              Icons.star,
-                                              color: Colors.lightBlueAccent,
-                                            )),
-                                        // prefix: IconButton(onPressed: (){}, icon: Icon(Icons.star,color: Colors.lightBlueAccent,)),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  proChat.generateRandomString(13);
-                                  setState(() {
-                                    messageCount++;
-                                  });
-                                  proChat.sendTextMessage(context, message, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
-                                  message.clear();
-                                  _scrollDown();
-                                },
-                                child: Image.asset(
-                                  "assets/images/icons/send_arrow.png",
-                                  height: 20,
-                                  width: 20,
-                                ),
-                              ),
-                            )
-                          ],
+                child: Offstage(
+                  offstage: isRecording,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          proChat.generateRandomString(13);
+                          XFile? image;
+                          final ImagePicker _picker = ImagePicker();
+                          image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+                          if (image == null) return;
+                          var bytes = await image.readAsBytes();
+                          if (bytes != null) {
+                            print(image.path);
+                            String filename = image.path.split("/").last;
+                            String imageUrl = await ChatService().uploadImage(bytes, widget.recieverPhone, filename, pro.phone!);
+                            print(imageUrl);
+                            proChat.sendImageMessage(context, imageUrl, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
+                            _scrollDown();
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 16, right: 4),
+                          child: Image.asset(
+                            "assets/images/icons/camera.png",
+                            height: 25,
+                            width: 25,
+                          ),
                         ),
                       ),
-                    ),
-                    // Align(
-                    //   alignment: Alignment(0.8,-0.4),
-                    //   child: Container(
-                    //     height: 60,
-                    //     child: GestureDetector(
-                    //       onLongPress: (){
-                    //         setState(() {
-                    //           isRecording = true;
-                    //         });
-                    //         startTime();
-                    //       },
-                    //       child: Icon(Icons.mic),
-                    //       onLongPressEnd: (va){
-                    //         setState(() {
-                    //           isRecording = false;
-                    //         });
-                    //         stopTime();
-                    //
-                    //       },
-                    //     ),
-                    //   ),
-                    // )
-                  ],
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                            ),
+                            child: TextFormField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              onTap: () {
+                                if (message.text.isNotEmpty) {
+                                  setState(() {
+                                    emojiShowing = !emojiShowing;
+                                  });
+                                }
+                              },
+                              controller: message,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      emojiShowing = !emojiShowing;
+                                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.star,
+                                    color: Colors.lightBlueAccent,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            proChat.generateRandomString(13);
+                            setState(() {
+                              messageCount++;
+                            });
+                            proChat.sendTextMessage(context, message, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
+                            message.clear();
+                            _scrollDown();
+                          },
+                          child: Image.asset(
+                            "assets/images/icons/send_arrow.png",
+                            height: 20,
+                            width: 20,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Offstage(
@@ -290,9 +317,74 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  SizedBox _testingappbar(BuildContext context) {
+    return SizedBox(
+                  height: getHeight(context) * 0.08,
+                  child: Row(
+                      children: [
+                        const SizedBox(width: 20),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.black,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 0),
+                        Row(
+                          children: [
+                            ClipOvalImageWidget(
+                              imageUrl: widget.profileImage,
+                              imageHeight: 45,
+                              imageWidth: 45,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                widget.recieverName,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 18, color: Colors.black),
+                              ),
+                              Row(
+                                children: const [
+                                  Icon(Icons.circle, color: Colors.green, size: 10),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    "Online",
+                                    style: TextStyle(fontSize: 14, color: Colors.black),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Image.asset(
+                            "assets/images/icons/chat_gift_box.png",
+                            height: 40,
+                            width: 40,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                      ]
+                  ),
+                );
+  }
+
   Widget _getMessagesListWidget(BuildContext context, Stream<QuerySnapshot<Object?>> documentStream, SignUpProvider pro, ChatProvider proChat, DateFormat format) {
     return Container(
-      height: getHeight(context) * 0.8,
+      height: getHeight(context) * 0.8 ,
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fill,
@@ -305,44 +397,14 @@ class _ChatScreenState extends State<ChatScreen> {
           if (snapshot.data == null) {
             return Container();
           } else {
-            lastIndex = snapshot.data!.docs.length;
             print(snapshot.data!.docs.length);
-            print(lastIndex);
             if (snapshot.data!.docs.isEmpty) {
-              return Container(
-                padding: const EdgeInsets.only(top: 100),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/cat.png',
-                      width: 150,
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Say hello...',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Or surprise them with a gift!',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              );
+              return _getMessageEmptyWidget();
             }
             return ListView(
-              controller: _controller,
               shrinkWrap: true,
+              controller: _controller,
+              primary: false,
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                 return Padding(
@@ -378,7 +440,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 topRight: Radius.circular(30.0),
                                               ),
                                         elevation: 5.0,
-                                        color: data['senderID'] == pro.phone ? Colors.lightBlueAccent : Colors.grey[200],
+                                        color: data['senderID'] == pro.phone ? const Color(0xFF00A8Ae) : Colors.grey[200],
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                                           child: Text(
@@ -460,13 +522,53 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Widget _getMessageEmptyWidget() {
+    return Container(
+      padding: const EdgeInsets.only(top: 100),
+      width: double.infinity,
+      child: Column(
+        children: [
+          Image.asset(
+            'assets/images/cat.png',
+            width: 150,
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'Say hello...',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Or surprise them with a gift!',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   AppBar _getAppBarWidget() {
     return AppBar(
       backgroundColor: Colors.white,
-      iconTheme: const IconThemeData(
-        color: Colors.black,
-      ),
       elevation: 0,
+      leading: InkWell(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.black,
+          size: 24,
+        ),
+      ),
       actions: [
         const Expanded(flex: 1, child: SizedBox.shrink()),
         Row(
@@ -480,7 +582,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         const SizedBox(width: 8),
         Expanded(
-          flex: 4,
+          flex: 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -503,7 +605,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ),
-        //const Expanded(flex: 4, child: SizedBox.shrink()),
         InkWell(
           onTap: () {},
           child: Image.asset(
