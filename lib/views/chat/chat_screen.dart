@@ -5,6 +5,7 @@ import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/chat_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
+import 'package:bono_gifts/routes/routes_names.dart';
 import 'package:bono_gifts/services/chat_service.dart';
 import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,6 +19,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../../provider/feeds_provider.dart';
 import '../../routes/routes_names.dart';
+import '../sendGift/sendGift.dart';
 
 class ChatScreen extends StatefulWidget {
   final String recieverName;
@@ -536,15 +538,29 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
             ),
-            Row(
-              children: [
-                Image.asset(
-                  "assets/images/icons/chat_gift_box.png",
-                  height: 40,
-                  width: 40,
-                ),
-                const SizedBox(width: 8),
-              ],
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SendGiftPage(
+                      username: widget.recieverName,
+                      phone: widget.recieverPhone,
+                      photo: widget.profileImage,
+                    ),
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/images/icons/chat_gift_box.png",
+                    height: 40,
+                    width: 40,
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
             ),
           ],
         ),

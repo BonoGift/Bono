@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../sendGift/sendGift.dart';
+
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
 
@@ -76,16 +78,17 @@ class _UserProfileState extends State<UserProfile> {
                                     height: 100,
                                   ),
                                 ),
-                                /*CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage: NetworkImage(pro.photo!),
-                                ),*/
                                 MaterialButton(
                                   color: Colors.grey[800],
                                   onPressed: () {
-                                    Navigator.of(context).push(
+                                    Navigator.push(
+                                      context,
                                       MaterialPageRoute(
-                                        builder: (context) => const BuyPage(),
+                                        builder: (context) => SendGiftPage(
+                                          username: pro.name!,
+                                          phone: pro.phonee!,
+                                          photo: pro.photo!,
+                                        ),
                                       ),
                                     );
                                   },

@@ -15,6 +15,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/network_model.dart';
+import '../sendGift/sendGift.dart';
 
 class Chat extends StatefulWidget {
   @override
@@ -359,9 +360,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                         children: [
                                           Expanded(
                                             child: InkWell(
-                                              onTap: (){
-
-                                              },
+                                              onTap: () {},
                                               child: Container(
                                                 color: Colors.grey,
                                                 padding: const EdgeInsets.all(8),
@@ -388,8 +387,17 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                           ),
                                           Expanded(
                                             child: InkWell(
-                                              onTap: (){
-
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => SendGiftPage(
+                                                      photo: data['profileImage'],
+                                                      username: data['recieverName'],
+                                                      phone: data['recieverID'] == pro.phone ? data['senderID'] : data['recieverID'],
+                                                    ),
+                                                  ),
+                                                );
                                               },
                                               child: Container(
                                                 color: Colors.blue,
@@ -755,7 +763,18 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
           ),
           const Expanded(child: SizedBox.shrink()),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SendGiftPage(
+                    photo: categoryList[i].photo,
+                    username: categoryList[i].name,
+                    phone: categoryList[i].phone,
+                  ),
+                ),
+              );
+            },
             child: Image.asset(
               'assets/images/icons/chat_gift_icon.png',
               width: 24,

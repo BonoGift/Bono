@@ -14,8 +14,7 @@ class BuyProvider extends ChangeNotifier {
   String? userAddress;
   String? diffDays;
 
-  assignVals(WooCommerceMarketPlaceProvider provider, String name, String image,
-      String phone) async {
+  assignVals(WooCommerceMarketPlaceProvider provider, String name, String image, String phone) async {
     provider.selectReceiver(await signUpProvider.getUserById(phone));
     userName = name;
     userImage = image;
