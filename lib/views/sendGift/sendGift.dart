@@ -864,7 +864,12 @@ class _SendGiftPageState extends State<SendGiftPage> {
       case ApiState.none:
         return Container();
       case ApiState.loading:
-        return const LoadingGiftsWidget();
+        return Center(
+          child: Container(
+            padding: const EdgeInsets.only(top: 40),
+            child: const LoadingGiftsWidget(),
+          ),
+        );
       case ApiState.completed:
         if (provider.nearbyVendors.isEmpty) {
           return const Center(
