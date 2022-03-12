@@ -1,3 +1,4 @@
+import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/helper/decorated_container.dart';
 import 'package:bono_gifts/helper/decorated_image.dart';
 import 'package:bono_gifts/views/gift/model/history_model.dart';
@@ -23,8 +24,8 @@ class HistoryListItem extends StatelessWidget {
             Expanded(
               child: DecoratedImage(
                 image: history.giftImage!,
-                width: 110,
-                height: _height * 0.13,
+                width: getWidth(context) * 0.25,
+                height: getWidth(context) * 0.25,
               ),
             ),
             Expanded(
@@ -39,7 +40,7 @@ class HistoryListItem extends StatelessWidget {
                       text: giftStatus(history.isReceived),
                       maxLines: 2,
                       fontSize: 13,
-                      color: Colors.purple,
+                      color: history.isReceived ? Colors.deepPurple : Colors.blue,
                     ),
                     PrimaryText(
                       text: 'Status: ${history.status}',
