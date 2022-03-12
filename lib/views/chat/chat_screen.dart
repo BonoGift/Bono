@@ -218,6 +218,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: InkWell(
                                 onTap: () {
+                                  if (message.text.isEmpty) return;
                                   proChat.generateRandomString(13);
                                   setState(() {
                                     messageCount++;
