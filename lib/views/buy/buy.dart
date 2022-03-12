@@ -759,6 +759,7 @@ class _BuyPageState extends State<BuyPage> {
         const Expanded(flex: 3, child: SizedBox.shrink()),
         InkWell(
           onTap: () {
+            if (isSendGiftTabSelected) return;
             isSendGiftTabSelected = !isSendGiftTabSelected;
             isHistoryTabSelected = !isHistoryTabSelected;
             setState(() {});
@@ -793,6 +794,8 @@ class _BuyPageState extends State<BuyPage> {
         const Expanded(child: SizedBox.shrink()),
         InkWell(
           onTap: () {
+            if (isHistoryTabSelected) return;
+
             isSendGiftTabSelected = !isSendGiftTabSelected;
             isHistoryTabSelected = !isHistoryTabSelected;
             setState(() {});
