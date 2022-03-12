@@ -245,7 +245,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                   ),
                   child: TabBar(
                     controller: _tabController,
-                    labelPadding: const EdgeInsets.all(0),
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 4,vertical: 2),
                     // give the indicator a decoration (color and border radius)
                     /*indicator: BoxDecoration(
                       border: Border.all(color: Colors.blue),

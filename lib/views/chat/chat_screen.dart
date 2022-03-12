@@ -359,26 +359,44 @@ class _ChatScreenState extends State<ChatScreen> {
                                   child: Column(
                                     crossAxisAlignment: data['senderID'] == pro.phone ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                                     children: [
-                                      Material(
-                                        borderRadius: data['senderID'] == pro.phone
-                                            ? const BorderRadius.only(topLeft: Radius.circular(30.0), bottomLeft: Radius.circular(30.0), bottomRight: Radius.circular(30.0))
-                                            : const BorderRadius.only(
-                                                bottomLeft: Radius.circular(30.0),
-                                                bottomRight: Radius.circular(30.0),
-                                                topRight: Radius.circular(30.0),
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Material(
+                                            borderRadius: data['senderID'] == pro.phone
+                                                ? const BorderRadius.only(topLeft: Radius.circular(30.0), bottomLeft: Radius.circular(30.0), bottomRight: Radius.circular(30.0))
+                                                : const BorderRadius.only(
+                                                    bottomLeft: Radius.circular(30.0),
+                                                    bottomRight: Radius.circular(30.0),
+                                                    topRight: Radius.circular(30.0),
+                                                  ),
+                                            elevation: 5.0,
+                                            color: data['senderID'] == pro.phone ? Colors.lightBlueAccent : Colors.grey[200],
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                                              child: Text(
+                                                data['message'],
+                                                style: TextStyle(
+                                                  color: data['senderID'] == pro.phone ? Colors.white : Colors.black54,
+                                                  fontSize: 18.0,
+                                                ),
                                               ),
-                                        elevation: 5.0,
-                                        color: data['senderID'] == pro.phone ? Colors.lightBlueAccent : Colors.grey[200],
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                                          child: Text(
-                                            data['message'],
-                                            style: TextStyle(
-                                              color: data['senderID'] == pro.phone ? Colors.white : Colors.black54,
-                                              fontSize: 18.0,
                                             ),
                                           ),
-                                        ),
+                                          data['isFavorite'] == true
+                                              ? Positioned(
+                                                  left: -8,
+                                                  top: 0,
+                                                  child: Align(
+                                                    alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
+                                                    child: const Icon(
+                                                      Icons.favorite,
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox.shrink()
+                                        ],
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
@@ -392,15 +410,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ),
                               ),
-                              data['isFavorite'] == true
-                                  ? Align(
-                                      alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
-                                      child: const Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                      ),
-                                    )
-                                  : Container()
                             ],
                           ),
                         ),
@@ -421,20 +430,30 @@ class _ChatScreenState extends State<ChatScreen> {
                                       padding: const EdgeInsets.all(5),
                                       decoration: BoxDecoration(color: Colors.lightBlueAccent, borderRadius: BorderRadius.circular(10)),
                                       width: getWidth(context) / 2,
-                                      child: Image.network(
-                                        data['message'],
-                                        alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
-                                      )),
-                                ),
-                                data['isFavorite'] == true
-                                    ? Align(
-                                        alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
-                                        child: const Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                        Image.network(
+                                          data['message'],
+                                          alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
                                         ),
-                                      )
-                                    : Container()
+                                        data['isFavorite'] == true
+                                            ? Positioned(
+                                                left: 0,
+                                                top: 0,
+                                                child: Align(
+                                                  alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
+                                                  child: const Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              )
+                                            : const SizedBox.shrink()
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
