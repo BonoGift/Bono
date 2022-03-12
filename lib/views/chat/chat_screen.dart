@@ -6,7 +6,6 @@ import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/chat_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/services/chat_service.dart';
-import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
@@ -114,67 +113,69 @@ class _ChatScreenState extends State<ChatScreen> {
     final pro = Provider.of<SignUpProvider>(context);
     final proChat = Provider.of<ChatProvider>(context);
     final Stream<QuerySnapshot> documentStream = firestore.collection('chats').doc(pro.phone.toString()).collection(widget.recieverPhone).orderBy('timestamp').snapshots();
-
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          elevation: 0,
-          actions: [
-            const Expanded(flex: 2, child: SizedBox.shrink()),
-            Row(
-              children: [
-                ClipOvalImageWidget(
-                  imageUrl: widget.profileImage,
-                  imageHeight: 45,
-                  imageWidth: 45,
-                ),
-              ],
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.recieverName,
-                  style: const TextStyle(fontSize: 18, color: Colors.black),
-                ),
-                Row(
-                  children: const [
-                    Icon(Icons.circle, color: Colors.green, size: 10),
-                    SizedBox(width: 4),
-                    Text(
-                      "Online",
-                      style: TextStyle(fontSize: 14, color: Colors.black),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const Expanded(flex: 4, child: SizedBox.shrink()),
-            Image.asset(
-              "assets/images/icons/product_icon.png",
-              height: 25,
-              width: 25,
-            ),
-            const SizedBox(width: 8),
-          ],
-        ),
-        body: SingleChildScrollView(
+        body: Container(
+          decoration: const BoxDecoration(image: DecorationImage(fit: BoxFit.fill, image: AssetImage("assets/images/chatbg.jpg"))),
           child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: getHeight(context) * 0.8,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage("assets/images/chat_screen_bg.png"),
+                decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(0.0, 0.2), blurRadius: 3, spreadRadius: 2)]),
+                padding: const EdgeInsets.all(8),
+                child: SafeArea(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: const Icon(Icons.arrow_back),
+                          ),
+                          Column(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(widget.profileImage),
+                              )
+                            ],
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.recieverName,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              Row(
+                                children: const [
+                                  Icon(
+                                    Icons.circle,
+                                    color: Colors.green,
+                                    size: 10,
+                                  ),
+                                  Text("Online"),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Image.asset(
+                            "assets/images/icons/product_icon.png",
+                            height: 25,
+                            width: 25,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+              ),
+              Expanded(
                 child: StreamBuilder(
                   stream: documentStream,
                   builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -186,14 +187,15 @@ class _ChatScreenState extends State<ChatScreen> {
                       print(lastIndex);
                       return ListView(
                         controller: _controller,
+                        // physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         children: snapshot.data!.docs.map((DocumentSnapshot document) {
                           Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                           return Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(10.0),
                             child: Column(
                               crossAxisAlignment: data['senderID'] == pro.phone ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 if (data['messageType'] == 'text') ...[
                                   SizedBox(
                                     width: getWidth(context) / 1.5,
@@ -285,6 +287,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   },
                 ),
               ),
+              // isKeyboardOpen ? SizedBox(height: 50,):Container(),
               Container(
                 color: Colors.grey[300],
                 child: Stack(
@@ -311,11 +314,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   _scrollDown();
                                 }
                               },
-                              icon: Image.asset(
-                                "assets/images/icons/camera.png",
-                                height: 25,
-                                width: 25,
-                              ),
+                              icon: const Icon(Icons.camera_alt),
                             ),
                             Expanded(
                               child: Padding(
@@ -331,15 +330,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                     child: AutoSizeTextField(
                                       maxLines: null,
                                       onEditingComplete: () {
-                                        /*setState(() {
-                                                isKeyboardOpen = !isKeyboardOpen;
-                                              });*/
+                                        setState(() {
+                                          isKeyboardOpen = !isKeyboardOpen;
+                                        });
                                       },
                                       onTap: () {
                                         if (message.text.isNotEmpty) {
                                           setState(() {
                                             emojiShowing = !emojiShowing;
-                                            //isKeyboardOpen = !isKeyboardOpen;
+                                            isKeyboardOpen = !isKeyboardOpen;
                                           });
                                         }
                                       },
@@ -365,9 +364,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                               ),
                             ),
+                            // const SizedBox(width: 30,),
+                            // SizedBox(width: 10,),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: InkWell(
+                                // minWidth: 10,
                                 onTap: () {
                                   proChat.generateRandomString(13);
                                   setState(() {
@@ -378,7 +380,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   _scrollDown();
                                 },
                                 child: Image.asset(
-                                  "assets/images/icons/send_arrow.png",
+                                  "assets/images/icons/arrow_icon.png",
                                   height: 20,
                                   width: 20,
                                 ),
