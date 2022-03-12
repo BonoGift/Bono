@@ -16,6 +16,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+import '../../provider/feeds_provider.dart';
+import '../../routes/routes_names.dart';
+
 class ChatScreen extends StatefulWidget {
   final String recieverName;
   final String profileImage;
@@ -272,12 +275,12 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-  List<String> allDateTimeList = [];
 
+  List<String> allDateTimeList = [];
 
   bool checkDate(String targetDateTime) {
     bool found = allDateTimeList.contains(targetDateTime);
-    if(found){
+    if (found) {
       allDateTimeList.removeWhere((element) => element == targetDateTime);
     }
     return found;
@@ -479,6 +482,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _getAppBarWidget(BuildContext context) {
+    final pro = Provider.of<FeedsProvider>(context);
+
     return Container(
       decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(0.0, 0.2), blurRadius: 3, spreadRadius: 2)]),
       padding: const EdgeInsets.all(8),
@@ -486,44 +491,50 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back_ios),
-                ),
-                Column(
-                  children: [
-                    ClipOvalImageWidget(
-                      imageUrl: widget.profileImage,
-                      imageWidth: 45,
-                      imageHeight: 45,
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.recieverName,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.circle,
-                          color: Colors.green,
-                          size: 10,
-                        ),
-                        SizedBox(width: 4),
-                        Text("Online"),
-                      ],
-                    )
-                  ],
-                ),
-              ],
+            InkWell(
+              onTap: () async {
+                await pro.getNetworkUserData(widget.recieverPhone);
+                Navigator.pushNamed(context, userProfile);
+              },
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back_ios),
+                  ),
+                  Column(
+                    children: [
+                      ClipOvalImageWidget(
+                        imageUrl: widget.profileImage,
+                        imageWidth: 45,
+                        imageHeight: 45,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.recieverName,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: const [
+                          Icon(
+                            Icons.circle,
+                            color: Colors.green,
+                            size: 10,
+                          ),
+                          SizedBox(width: 4),
+                          Text("Online"),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             Row(
               children: [
