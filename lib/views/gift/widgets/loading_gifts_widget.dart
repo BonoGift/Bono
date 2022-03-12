@@ -45,7 +45,7 @@ class _LoadingGiftsWidgetState extends State<LoadingGiftsWidget> with SingleTick
           children: [
             const Text(
               "Searching for Gifts...",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF2081dc)),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF2081dc)),
             ),
             const SizedBox(height: 16.0),
             Image.asset(
