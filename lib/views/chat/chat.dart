@@ -415,7 +415,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                               ),
                                             ),
                                           ),
-
                                           /*SlidableAction(
                                             flex: 1,
                                             onPressed: (c) {
