@@ -308,6 +308,38 @@ class _ChatScreenState extends State<ChatScreen> {
             lastIndex = snapshot.data!.docs.length;
             print(snapshot.data!.docs.length);
             print(lastIndex);
+            if (snapshot.data!.docs.isEmpty) {
+              return Container(
+                padding: const EdgeInsets.only(top: 100),
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/cat.png',
+                      width: 150,
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'Say hello...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Or surprise them with a gift!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
             return ListView(
               controller: _controller,
               shrinkWrap: true,
@@ -436,7 +468,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       elevation: 0,
       actions: [
-        const Expanded(flex: 2, child: SizedBox.shrink()),
+        const Expanded(flex: 1, child: SizedBox.shrink()),
         Row(
           children: [
             ClipOvalImageWidget(
@@ -447,27 +479,31 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.recieverName,
-              style: const TextStyle(fontSize: 18, color: Colors.black),
-            ),
-            Row(
-              children: const [
-                Icon(Icons.circle, color: Colors.green, size: 10),
-                SizedBox(width: 4),
-                Text(
-                  "Online",
-                  style: TextStyle(fontSize: 14, color: Colors.black),
-                ),
-              ],
-            )
-          ],
+        Expanded(
+          flex: 4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.recieverName,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 18, color: Colors.black),
+              ),
+              Row(
+                children: const [
+                  Icon(Icons.circle, color: Colors.green, size: 10),
+                  SizedBox(width: 4),
+                  Text(
+                    "Online",
+                    style: TextStyle(fontSize: 14, color: Colors.black),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
-        const Expanded(flex: 4, child: SizedBox.shrink()),
+        //const Expanded(flex: 4, child: SizedBox.shrink()),
         InkWell(
           onTap: () {},
           child: Image.asset(
