@@ -271,40 +271,52 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Map<String, String> errorMap = {};
+
   getContactsFromFirebase(BuildContext context) {
     print('_____ this is get contact from firebase in char provider');
     emptyNetworks();
     final pro = Provider.of<SignUpProvider>(context, listen: false);
     for (var d = 0; d < networkCatList.length; d++) {
       service.getContactsFromFirebase(pro.phone!, d).then((value) {
-        for (var dd in value.docs) {
-          switch (dd['status']) {
-            case 0:
-              friendsList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-              //print(friendsList.toString() + '--------- friendList');
-              notifyListeners();
-              break;
-            case 1:
-              familyList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-              break;
-            case 2:
-              workList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-              break;
-            case 3:
-              schoolList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-              break;
-            case 4:
-              neighborList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-              break;
-            case 5:
-              othersList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-              break;
+        try {
+          for (var dd in value.docs) {
+            switch (dd['status']) {
+              case 0:
+                friendsList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
+                //print(friendsList.toString() + '--------- friendList');
+                //notifyListeners();
+                break;
+              case 1:
+                familyList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
+                //notifyListeners();
+                break;
+              case 2:
+                workList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
+                //notifyListeners();
+                break;
+              case 3:
+                schoolList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
+                //notifyListeners();
+                break;
+              case 4:
+                neighborList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
+                //notifyListeners();
+                break;
+              case 5:
+                othersList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
+                //notifyListeners();
+                break;
+            }
+            notifyListeners();
           }
-          notifyListeners();
+        } catch (e) {
+          errorMap.addAll({'error': e.toString()});
         }
       });
       notifyListeners();
     }
+    //notifyListeners();
   }
 
   DateTime date = DateTime.now();

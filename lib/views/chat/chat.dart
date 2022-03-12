@@ -42,6 +42,18 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
   List<String> newContList = [];
   List<ContModel> nameCont = [];
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final proChat = Provider.of<ChatProvider>(context,listen: false);
+    if (proChat.errorMap.isNotEmpty) {
+      print('here ${proChat.errorMap}');
+      proChat.errorMap.clear();
+      proChat.getContactsFromFirebase(context);
+
+    }
+  }
+
   void getContacts() async {
     newList.clear();
     contactList.clear();
@@ -693,8 +705,8 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                     Wrap(
                       alignment: WrapAlignment.start,
                       crossAxisAlignment: WrapCrossAlignment.start,
-                      spacing: 8,
-                      runSpacing: 8,
+                      spacing: 12,
+                      runSpacing: 16,
                       children: networkCat.map((element) {
                         int index = networkCat.indexOf(element);
                         return InkWell(
