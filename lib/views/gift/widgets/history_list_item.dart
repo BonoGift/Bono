@@ -20,12 +20,15 @@ class HistoryListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            DecoratedImage(
-              image: history.giftImage!,
-              width: 110,
-              height: _height * 0.13,
+            Expanded(
+              child: DecoratedImage(
+                image: history.giftImage!,
+                width: 110,
+                height: _height * 0.13,
+              ),
             ),
             Expanded(
+              flex: 2,
               child: Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 8),
                 child: Column(
@@ -36,7 +39,7 @@ class HistoryListItem extends StatelessWidget {
                       text: giftStatus(history.isReceived),
                       maxLines: 2,
                       fontSize: 13,
-                      color: Colors.blue,
+                      color: Colors.purple,
                     ),
                     PrimaryText(
                       text: 'Status: ${history.status}',
@@ -55,41 +58,26 @@ class HistoryListItem extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // const Icon(
-                //   Icons.linear_scale_sharp,
-                //   color: Colors.black54,
-                //   size: 28,
-                // ),
-                ClipOval(
-                  child: FadeInImage.assetNetwork(
-                      height: 60,
-                      width: 60,
-                      placeholder: 'assets/images/placeholder.jpg',
-                      fit: BoxFit.cover,
-                      image: history.isReceived
-                          ? history.senderImage!
-                          : history.receiverImage!),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Flexible(
-                  child: PrimaryText(
-                    text: history.isReceived
-                        ? history.senderName!
-                        : history.receiverName!,
-                    fontSize: 9,
-                    textAlign: TextAlign.center,
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipOval(
+                    child: FadeInImage.assetNetwork(height: 60, width: 60, placeholder: 'assets/images/placeholder.jpg', fit: BoxFit.cover, image: history.isReceived ? history.senderImage! : history.receiverImage!),
                   ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Flexible(
+                    child: PrimaryText(
+                      text: history.isReceived ? history.senderName! : history.receiverName!,
+                      fontSize: 9,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
             )
           ],
         ),
