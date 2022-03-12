@@ -642,11 +642,12 @@ class _BuyPageState extends State<BuyPage> {
                             ],
                           )
                         : const SizedBox.shrink(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 4),
                     pro.userName != null
                         ? Container(
                             width: double.infinity,
-                            color: Colors.grey[300],
+                            //color: Colors.grey[300],
+                            color: Colors.grey.withOpacity(0.2),
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),

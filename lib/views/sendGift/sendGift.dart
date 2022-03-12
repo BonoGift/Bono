@@ -197,7 +197,7 @@ class _SendGiftPageState extends State<SendGiftPage> {
                               ),
                             ),
                           ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 4),
                     pro.userName == null
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,7 +693,8 @@ class _SendGiftPageState extends State<SendGiftPage> {
                         //       ),
                         Container(
                             width: double.infinity,
-                            color: Colors.grey[300],
+                            //color: Colors.grey[300],
+                            color: Colors.grey.withOpacity(0.2),
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
