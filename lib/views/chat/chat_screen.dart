@@ -365,13 +365,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                         children: [
                                           Material(
                                             borderRadius: BorderRadius.circular(8),
-                                            /*borderRadius: data['senderID'] == pro.phone
-                                                ? const BorderRadius.only(topLeft: Radius.circular(30.0), bottomLeft: Radius.circular(30.0), bottomRight: Radius.circular(30.0))
-                                                : const BorderRadius.only(
-                                              bottomLeft: Radius.circular(30.0),
-                                              bottomRight: Radius.circular(30.0),
-                                              topRight: Radius.circular(30.0),
-                                            ),*/
                                             elevation: 5.0,
                                             color: data['senderID'] == pro.phone ? Colors.lightBlueAccent : Colors.grey[200],
                                             child: Padding(
@@ -387,7 +380,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                           ),
                                           data['isFavorite'] == true
                                               ? Positioned(
-                                                  left: -8,
+                                                  right: data['senderID'] == pro.phone ? 0 : -8,
+                                                  left: data['senderID'] == pro.phone ? -8 : 0,
                                                   top: -4,
                                                   child: Align(
                                                     alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
@@ -440,17 +434,29 @@ class _ChatScreenState extends State<ChatScreen> {
                                           alignment: data['senderID'] == pro.phone ? Alignment.centerRight : Alignment.centerLeft,
                                         ),
                                         data['isFavorite'] == true
-                                            ? Positioned(
-                                                left: 0,
-                                                top: 0,
-                                                child: Align(
-                                                  alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
-                                                  child: const Icon(
-                                                    Icons.favorite,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                              )
+                                            ? data['senderID'] == pro.phone
+                                                ? Positioned(
+                                                    left: 0,
+                                                    top: 0,
+                                                    child: Align(
+                                                      alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
+                                                      child: const Icon(
+                                                        Icons.favorite,
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Positioned(
+                                                    right: 0,
+                                                    top: 0,
+                                                    child: Align(
+                                                      alignment: data['senderID'] == pro.phone ? Alignment.centerLeft : Alignment.centerRight,
+                                                      child: const Icon(
+                                                        Icons.favorite,
+                                                        color: Colors.red,
+                                                      ),
+                                                    ),
+                                                  )
                                             : const SizedBox.shrink()
                                       ],
                                     ),
