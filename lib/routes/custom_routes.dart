@@ -15,7 +15,7 @@ import 'package:bono_gifts/views/signup/welcome_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomRoutes {
-  static Route<dynamic> allRoutes(RouteSettings setting) {
+  static Route<dynamic>? allRoutes(RouteSettings setting) {
     switch (setting.name) {
       case welcomePage:
         return MaterialPageRoute(builder: (_) => const WelcomePage());
@@ -42,6 +42,7 @@ class CustomRoutes {
       case orderSummry:
         return MaterialPageRoute(builder: (_) =>  const OrderSummry());
     }
-    return MaterialPageRoute(builder: (_) => NotFoundPage());
+    return null;
+    //return MaterialPageRoute(builder: (_) => NoFoundPage());
   }
 }

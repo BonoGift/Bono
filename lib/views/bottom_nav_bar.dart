@@ -32,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   Future<bool> onWillPop() {
     if (index != 2) {
-      final pro = Provider.of<FeedsProvider>(context);
+      final pro = Provider.of<FeedsProvider>(context,listen: false);
       index = 2;
       pro.setIndex(index);
       setState(() {});
