@@ -123,7 +123,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final Stream<QuerySnapshot> documentStream = firestore.collection('chats').doc(pro.phone.toString()).collection(widget.recieverPhone).orderBy('timestamp').snapshots();
     return SafeArea(
       child: Scaffold(
-        //resizeToAvoidBottomInset: false,
         body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -135,111 +134,108 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               _getAppBarWidget(context),
               _getMessagesWidget(documentStream, pro, proChat),
-              // isKeyboardOpen ? SizedBox(height: 50,):Container(),
               Container(
                 color: Colors.grey[300],
-                child: Stack(
-                  children: [
-                    Offstage(
-                      offstage: isRecording,
-                      child: Center(
-                        child: Row(
-                          children: [
-                            IconButton(
-                              onPressed: () async {
-                                proChat.generateRandomString(13);
-                                XFile? image;
-                                final ImagePicker _picker = ImagePicker();
-                                image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
-                                if (image == null) return;
-                                var bytes = await image.readAsBytes();
-                                if (bytes != null) {
-                                  print(image.path);
-                                  String filename = image.path.split("/").last;
-                                  String imageUrl = await ChatService().uploadImage(bytes, widget.recieverPhone, filename, pro.phone!);
-                                  print(imageUrl);
-                                  proChat.sendImageMessage(context, imageUrl, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
-                                  _scrollDown();
-                                }
-                              },
-                              icon: Image.asset(
-                                "assets/images/icons/camera.png",
-                                height: 40,
-                                width: 40,
-                              ),
+                child: Offstage(
+                  offstage: isRecording,
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: InkWell(
+                            onTap: () async {
+                              proChat.generateRandomString(13);
+                              XFile? image;
+                              final ImagePicker _picker = ImagePicker();
+                              image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+                              if (image == null) return;
+                              var bytes = await image.readAsBytes();
+                              if (bytes != null) {
+                                print(image.path);
+                                String filename = image.path.split("/").last;
+                                String imageUrl = await ChatService().uploadImage(bytes, widget.recieverPhone, filename, pro.phone!);
+                                print(imageUrl);
+                                proChat.sendImageMessage(context, imageUrl, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
+                                _scrollDown();
+                              }
+                            },
+                            child: Image.asset(
+                              "assets/images/icons/camera.png",
+                              height: 32,
+                              width: 32,
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Container(
-                                  padding: const EdgeInsets.all(4.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white,
-                                  ),
-                                  // height: 50,
-                                  child: AutoSizeTextField(
-                                    minFontSize: 16,
-                                    maxLines: null,
-                                    onEditingComplete: () {
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                              ),
+                              // height: 50,
+                              child: AutoSizeTextField(
+                                minFontSize: 16,
+                                maxLines: null,
+                                onEditingComplete: () {
+                                  setState(() {
+                                    isKeyboardOpen = !isKeyboardOpen;
+                                  });
+                                },
+                                onTap: () {
+                                  if (message.text.isNotEmpty) {
+                                    setState(() {
+                                      emojiShowing = !emojiShowing;
+                                      isKeyboardOpen = !isKeyboardOpen;
+                                    });
+                                  }
+                                },
+                                controller: message,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  suffixIcon: InkWell(
+                                    onTap: () {
                                       setState(() {
-                                        isKeyboardOpen = !isKeyboardOpen;
+                                        emojiShowing = !emojiShowing;
+                                        SystemChannels.textInput.invokeMethod('TextInput.hide');
                                       });
                                     },
-                                    onTap: () {
-                                      if (message.text.isNotEmpty) {
-                                        setState(() {
-                                          emojiShowing = !emojiShowing;
-                                          isKeyboardOpen = !isKeyboardOpen;
-                                        });
-                                      }
-                                    },
-                                    controller: message,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      suffixIcon: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            emojiShowing = !emojiShowing;
-                                            SystemChannels.textInput.invokeMethod('TextInput.hide');
-                                          });
-                                        },
-                                        child: const Icon(
-                                          Icons.star,
-                                          color: Colors.lightBlueAccent,
-                                        ),
-                                      ),
-                                      // prefix: IconButton(onPressed: (){}, icon: Icon(Icons.star,color: Colors.lightBlueAccent,)),
+                                    child: const Icon(
+                                      Icons.star,
+                                      color: Colors.lightBlueAccent,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () {
-                                  if (message.text.isEmpty) return;
-                                  proChat.generateRandomString(13);
-                                  setState(() {
-                                    messageCount++;
-                                  });
-                                  proChat.sendTextMessage(context, message, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
-                                  message.clear();
-                                  _scrollDown();
-                                },
-                                child: Image.asset(
-                                  "assets/images/icons/send_arrow.png",
-                                  height: 20,
-                                  width: 20,
-                                ),
-                              ),
-                            )
-                          ],
+                          ),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            onTap: () {
+                              if (message.text.isEmpty) return;
+                              proChat.generateRandomString(13);
+                              setState(() {
+                                messageCount++;
+                              });
+                              proChat.sendTextMessage(context, message, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
+                              message.clear();
+                              _scrollDown();
+                            },
+                            child: Image.asset(
+                              "assets/images/icons/send_arrow.png",
+                              height: 20,
+                              width: 20,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
               Offstage(
