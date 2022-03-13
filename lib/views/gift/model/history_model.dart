@@ -55,5 +55,7 @@ class HistoryModel {
         'status': status
       };
 
+  void setStatus(String? newStatus) => status = newStatus;
+
   static DateFormat format = DateFormat('dd-MMMM-yyyy');
 }

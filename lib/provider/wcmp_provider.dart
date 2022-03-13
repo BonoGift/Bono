@@ -99,7 +99,7 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     } catch (e) {
       apiState = ApiState.error;
 
-      print(e.toString());
+      print('fetchVendors' + e.toString());
     }
     notifyListeners();
   }
@@ -184,7 +184,7 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     } catch (e) {
       apiState = ApiState.error;
 
-      print(e.toString());
+      print('fetchOrders' + e.toString());
     }
     notifyListeners();
   }

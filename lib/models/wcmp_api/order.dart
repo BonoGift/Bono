@@ -6,6 +6,7 @@ class Order {
   Shipping? shipping;
   List<LineItems>? lineItems;
   List<ShippingLines>? shippingLines;
+  String? customerNote;
 
   Order(
       {this.paymentMethod,
@@ -14,7 +15,8 @@ class Order {
       this.billing,
       this.shipping,
       this.lineItems,
-      this.shippingLines});
+      this.shippingLines,
+      this.customerNote});
 
   Order.fromJson(Map<String, dynamic> json) {
     paymentMethod = json['payment_method'];
@@ -22,6 +24,7 @@ class Order {
     setPaid = json['set_paid'];
     billing =
         json['billing'] != null ? Billing.fromJson(json['billing']) : null;
+    customerNote = json['customer_note'];
     shipping =
         json['shipping'] != null ? Shipping.fromJson(json['shipping']) : null;
     if (json['line_items'] != null) {
@@ -43,6 +46,7 @@ class Order {
     data['payment_method'] = paymentMethod;
     data['payment_method_title'] = this.paymentMethodTitle;
     data['set_paid'] = setPaid;
+    data['customer_note'] = customerNote;
     if (billing != null) {
       data['billing'] = billing!.toJson();
     }

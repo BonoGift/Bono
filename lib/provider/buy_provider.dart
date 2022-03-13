@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 class BuyProvider extends ChangeNotifier {
   FirebaseFirestore fire = FirebaseFirestore.instance;
   final SignUpProvider signUpProvider = SignUpProvider();
+  late TextEditingController noteController;
 
   String? userName;
   String? userImage;
@@ -14,7 +15,12 @@ class BuyProvider extends ChangeNotifier {
   String? userAddress;
   String? diffDays;
 
-  assignVals(WooCommerceMarketPlaceProvider provider, String name, String image, String phone) async {
+  init() {
+    noteController = TextEditingController(text: '');
+  }
+
+  assignVals(WooCommerceMarketPlaceProvider provider, String name, String image,
+      String phone) async {
     provider.selectReceiver(await signUpProvider.getUserById(phone));
     userName = name;
     userImage = image;

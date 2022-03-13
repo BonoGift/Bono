@@ -18,6 +18,13 @@ class OrderSummry extends StatefulWidget {
 
 class _OrderSummryState extends State<OrderSummry> {
   var formtr = DateFormat('MMM');
+
+  @override
+  void initState() {
+    context.read<BuyProvider>().init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var form = DateFormat('dd-MMM');
@@ -307,6 +314,7 @@ class _OrderSummryState extends State<OrderSummry> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 3.0),
                         child: TextField(
+                          controller: pro.noteController,
                           maxLines: 6,
                           onSubmitted: (val) {
                             goToPaymentScreen();

@@ -26,11 +26,14 @@ class _HistoryPageState extends State<HistoryPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("Init");
     Provider.of<HistoryProvider>(context, listen: false)
         .getHistoryFromFirebase();
     Future.delayed(const Duration(milliseconds: 1000), () {
       setState(() {});
     });
+    Provider.of<HistoryProvider>(context, listen: false)
+        .getStatusFromWordpress();
   }
 
   @override

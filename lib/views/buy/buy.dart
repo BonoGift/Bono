@@ -33,7 +33,8 @@ class _BuyPageState extends State<BuyPage> {
   void initState() {
     super.initState();
     final pro = Provider.of<BuyProvider>(context, listen: false);
-    Provider.of<HistoryProvider>(context, listen: false).getHistoryFromFirebase();
+    Provider.of<HistoryProvider>(context, listen: false)
+        .getHistoryFromFirebase();
   }
 
   @override
@@ -42,7 +43,8 @@ class _BuyPageState extends State<BuyPage> {
     final pro = Provider.of<BuyProvider>(context);
     final proChat = Provider.of<ChatProvider>(context);
     final wcmp = Provider.of<WooCommerceMarketPlaceProvider>(context);
-    final HistoryProvider historyProvider = Provider.of<HistoryProvider>(context);
+    final HistoryProvider historyProvider =
+        Provider.of<HistoryProvider>(context);
     int index = 1000000;
 
     return DefaultTabController(
@@ -59,18 +61,28 @@ class _BuyPageState extends State<BuyPage> {
                     const SizedBox(height: 10),
                     pro.userName != null
                         ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Container(
-                              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-                              decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.only(
+                                  top: 10, bottom: 10, left: 15, right: 15),
+                              decoration: BoxDecoration(
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   PrimaryText(text: "To"),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
                                     child: Container(
-                                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: Colors.black26, width: 4)),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: Colors.black26,
+                                                width: 4)),
                                         child: ClipOvalImageWidget(
                                           imageUrl: pro.userImage!,
                                           imageWidth: 50,
@@ -79,12 +91,15 @@ class _BuyPageState extends State<BuyPage> {
                                   ),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         FittedBox(
                                           child: Text(
                                             pro.userName!,
-                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400),
                                           ),
                                         ),
                                         const SizedBox(height: 4),
@@ -92,7 +107,8 @@ class _BuyPageState extends State<BuyPage> {
                                           child: Text(
                                             "Birthday ${pro.userDob != null ? form.format(pro.userDob!).toString() : ''} (In ${pro.diffDays} Days)",
                                             maxLines: 1,
-                                            style: const TextStyle(color: Colors.blue),
+                                            style: const TextStyle(
+                                                color: Colors.blue),
                                           ),
                                         ),
                                       ],
@@ -100,7 +116,8 @@ class _BuyPageState extends State<BuyPage> {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      if (wcmp.apiState == ApiState.completed || wcmp.apiState == ApiState.error) {
+                                      if (wcmp.apiState == ApiState.completed ||
+                                          wcmp.apiState == ApiState.error) {
                                         wcmp.apiState = ApiState.none;
                                         wcmp.clearShops();
                                         pro.clearAll();
@@ -129,11 +146,13 @@ class _BuyPageState extends State<BuyPage> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black.withOpacity(0.5)),
+                                  border: Border.all(
+                                      color: Colors.black.withOpacity(0.5)),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
                                       padding: const EdgeInsets.only(
@@ -145,12 +164,14 @@ class _BuyPageState extends State<BuyPage> {
                                       child: const Center(
                                         child: Text(
                                           "To",
-                                          style: TextStyle(fontSize: 21, color: Colors.blue),
+                                          style: TextStyle(
+                                              fontSize: 21, color: Colors.blue),
                                         ),
                                       ),
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         const Text(
                                           "Select Someone",
@@ -202,34 +223,49 @@ class _BuyPageState extends State<BuyPage> {
                                               proChat.friendsList[i].photo,
                                               proChat.friendsList[i].phone,
                                             );
-                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
-                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                            Map<String, dynamic> user =
+                                                await wcmp.getUserInfo(proChat
+                                                    .friendsList[i].phone);
+                                            wcmp.fetchVendors(
+                                                user['city'] ?? 'unknown');
                                           },
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ClipOval(
                                                 child: CachedNetworkImage(
-                                                  imageUrl: proChat.friendsList[i].photo,
+                                                  imageUrl: proChat
+                                                      .friendsList[i].photo,
                                                   width: 40,
                                                   height: 40,
                                                   fit: BoxFit.cover,
-                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              progress) =>
+                                                          SizedBox(
                                                     width: 40,
                                                     height: 40,
                                                     child: Shimmer.fromColors(
-                                                      baseColor: Colors.grey[300]!,
-                                                      highlightColor: Colors.white,
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.white,
                                                       child: Container(
-                                                        decoration: const BoxDecoration(
+                                                        decoration:
+                                                            const BoxDecoration(
                                                           color: Colors.grey,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                  errorWidget:
+                                                      (BuildContext context,
+                                                          String url,
+                                                          dynamic error) {
                                                     return ClipOval(
                                                       child: Image.asset(
                                                         'assets/images/profile.png',
@@ -244,7 +280,8 @@ class _BuyPageState extends State<BuyPage> {
                                               Text(
                                                 proChat.friendsList[i].name,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 13),
+                                                style: const TextStyle(
+                                                    fontSize: 13),
                                               ),
                                             ],
                                           ),
@@ -279,34 +316,49 @@ class _BuyPageState extends State<BuyPage> {
                                               proChat.familyList[i].photo,
                                               proChat.familyList[i].phone,
                                             );
-                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.friendsList[i].phone);
-                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                            Map<String, dynamic> user =
+                                                await wcmp.getUserInfo(proChat
+                                                    .friendsList[i].phone);
+                                            wcmp.fetchVendors(
+                                                user['city'] ?? 'unknown');
                                           },
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ClipOval(
                                                 child: CachedNetworkImage(
-                                                  imageUrl: proChat.familyList[i].photo,
+                                                  imageUrl: proChat
+                                                      .familyList[i].photo,
                                                   width: 40,
                                                   height: 40,
                                                   fit: BoxFit.cover,
-                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              progress) =>
+                                                          SizedBox(
                                                     width: 40,
                                                     height: 40,
                                                     child: Shimmer.fromColors(
-                                                      baseColor: Colors.grey[300]!,
-                                                      highlightColor: Colors.white,
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.white,
                                                       child: Container(
-                                                        decoration: const BoxDecoration(
+                                                        decoration:
+                                                            const BoxDecoration(
                                                           color: Colors.grey,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                  errorWidget:
+                                                      (BuildContext context,
+                                                          String url,
+                                                          dynamic error) {
                                                     return ClipOval(
                                                       child: Image.asset(
                                                         'assets/images/profile.png',
@@ -321,7 +373,8 @@ class _BuyPageState extends State<BuyPage> {
                                               Text(
                                                 proChat.familyList[i].name,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 13),
+                                                style: const TextStyle(
+                                                    fontSize: 13),
                                               ),
                                             ],
                                           ),
@@ -356,34 +409,49 @@ class _BuyPageState extends State<BuyPage> {
                                               proChat.workList[i].photo,
                                               proChat.workList[i].phone,
                                             );
-                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.workList[i].phone);
-                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                            Map<String, dynamic> user =
+                                                await wcmp.getUserInfo(
+                                                    proChat.workList[i].phone);
+                                            wcmp.fetchVendors(
+                                                user['city'] ?? 'unknown');
                                           },
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ClipOval(
                                                 child: CachedNetworkImage(
-                                                  imageUrl: proChat.workList[i].photo,
+                                                  imageUrl:
+                                                      proChat.workList[i].photo,
                                                   width: 40,
                                                   height: 40,
                                                   fit: BoxFit.cover,
-                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              progress) =>
+                                                          SizedBox(
                                                     width: 40,
                                                     height: 40,
                                                     child: Shimmer.fromColors(
-                                                      baseColor: Colors.grey[300]!,
-                                                      highlightColor: Colors.white,
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.white,
                                                       child: Container(
-                                                        decoration: const BoxDecoration(
+                                                        decoration:
+                                                            const BoxDecoration(
                                                           color: Colors.grey,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                  errorWidget:
+                                                      (BuildContext context,
+                                                          String url,
+                                                          dynamic error) {
                                                     return ClipOval(
                                                       child: Image.asset(
                                                         'assets/images/profile.png',
@@ -398,7 +466,8 @@ class _BuyPageState extends State<BuyPage> {
                                               Text(
                                                 proChat.workList[i].name,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 13),
+                                                style: const TextStyle(
+                                                    fontSize: 13),
                                               ),
                                             ],
                                           ),
@@ -433,34 +502,49 @@ class _BuyPageState extends State<BuyPage> {
                                               proChat.schoolList[i].photo,
                                               proChat.schoolList[i].phone,
                                             );
-                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.schoolList[i].phone);
-                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                            Map<String, dynamic> user =
+                                                await wcmp.getUserInfo(proChat
+                                                    .schoolList[i].phone);
+                                            wcmp.fetchVendors(
+                                                user['city'] ?? 'unknown');
                                           },
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ClipOval(
                                                 child: CachedNetworkImage(
-                                                  imageUrl: proChat.schoolList[i].photo,
+                                                  imageUrl: proChat
+                                                      .schoolList[i].photo,
                                                   width: 40,
                                                   height: 40,
                                                   fit: BoxFit.cover,
-                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              progress) =>
+                                                          SizedBox(
                                                     width: 40,
                                                     height: 40,
                                                     child: Shimmer.fromColors(
-                                                      baseColor: Colors.grey[300]!,
-                                                      highlightColor: Colors.white,
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.white,
                                                       child: Container(
-                                                        decoration: const BoxDecoration(
+                                                        decoration:
+                                                            const BoxDecoration(
                                                           color: Colors.grey,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                  errorWidget:
+                                                      (BuildContext context,
+                                                          String url,
+                                                          dynamic error) {
                                                     return ClipOval(
                                                       child: Image.asset(
                                                         'assets/images/profile.png',
@@ -475,7 +559,8 @@ class _BuyPageState extends State<BuyPage> {
                                               Text(
                                                 proChat.schoolList[i].name,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 13),
+                                                style: const TextStyle(
+                                                    fontSize: 13),
                                               ),
                                             ],
                                           ),
@@ -510,34 +595,49 @@ class _BuyPageState extends State<BuyPage> {
                                               proChat.neighborList[i].photo,
                                               proChat.neighborList[i].phone,
                                             );
-                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.neighborList[i].phone);
-                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                            Map<String, dynamic> user =
+                                                await wcmp.getUserInfo(proChat
+                                                    .neighborList[i].phone);
+                                            wcmp.fetchVendors(
+                                                user['city'] ?? 'unknown');
                                           },
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ClipOval(
                                                 child: CachedNetworkImage(
-                                                  imageUrl: proChat.neighborList[i].photo,
+                                                  imageUrl: proChat
+                                                      .neighborList[i].photo,
                                                   width: 40,
                                                   height: 40,
                                                   fit: BoxFit.cover,
-                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              progress) =>
+                                                          SizedBox(
                                                     width: 40,
                                                     height: 40,
                                                     child: Shimmer.fromColors(
-                                                      baseColor: Colors.grey[300]!,
-                                                      highlightColor: Colors.white,
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.white,
                                                       child: Container(
-                                                        decoration: const BoxDecoration(
+                                                        decoration:
+                                                            const BoxDecoration(
                                                           color: Colors.grey,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                  errorWidget:
+                                                      (BuildContext context,
+                                                          String url,
+                                                          dynamic error) {
                                                     return ClipOval(
                                                       child: Image.asset(
                                                         'assets/images/profile.png',
@@ -552,7 +652,8 @@ class _BuyPageState extends State<BuyPage> {
                                               Text(
                                                 proChat.neighborList[i].name,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 13),
+                                                style: const TextStyle(
+                                                    fontSize: 13),
                                               ),
                                             ],
                                           ),
@@ -587,34 +688,49 @@ class _BuyPageState extends State<BuyPage> {
                                               proChat.othersList[i].photo,
                                               proChat.othersList[i].phone,
                                             );
-                                            Map<String, dynamic> user = await wcmp.getUserInfo(proChat.othersList[i].phone);
-                                            wcmp.fetchVendors(user['city'] ?? 'unknown');
+                                            Map<String, dynamic> user =
+                                                await wcmp.getUserInfo(proChat
+                                                    .othersList[i].phone);
+                                            wcmp.fetchVendors(
+                                                user['city'] ?? 'unknown');
                                           },
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               ClipOval(
                                                 child: CachedNetworkImage(
-                                                  imageUrl: proChat.othersList[i].photo,
+                                                  imageUrl: proChat
+                                                      .othersList[i].photo,
                                                   width: 40,
                                                   height: 40,
                                                   fit: BoxFit.cover,
-                                                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              progress) =>
+                                                          SizedBox(
                                                     width: 40,
                                                     height: 40,
                                                     child: Shimmer.fromColors(
-                                                      baseColor: Colors.grey[300]!,
-                                                      highlightColor: Colors.white,
+                                                      baseColor:
+                                                          Colors.grey[300]!,
+                                                      highlightColor:
+                                                          Colors.white,
                                                       child: Container(
-                                                        decoration: const BoxDecoration(
+                                                        decoration:
+                                                            const BoxDecoration(
                                                           color: Colors.grey,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  errorWidget: (BuildContext context, String url, dynamic error) {
+                                                  errorWidget:
+                                                      (BuildContext context,
+                                                          String url,
+                                                          dynamic error) {
                                                     return ClipOval(
                                                       child: Image.asset(
                                                         'assets/images/profile.png',
@@ -629,7 +745,8 @@ class _BuyPageState extends State<BuyPage> {
                                               Text(
                                                 proChat.othersList[i].name,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 13),
+                                                style: const TextStyle(
+                                                    fontSize: 13),
                                               ),
                                             ],
                                           ),
@@ -650,7 +767,8 @@ class _BuyPageState extends State<BuyPage> {
                             color: Colors.grey.withOpacity(0.2),
                             child: Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 12),
                                 child: FittedBox(
                                   child: Row(
                                     children: [
@@ -663,7 +781,8 @@ class _BuyPageState extends State<BuyPage> {
                                         fontSize: 17,
                                       ),
                                       PrimaryText(
-                                        text: "Available (xxxxxx, ${pro.userAddress})",
+                                        text:
+                                            "Available (xxxxxx, ${pro.userAddress})",
                                         fontSize: 14,
                                         color: Colors.black54,
                                       ),
@@ -683,7 +802,8 @@ class _BuyPageState extends State<BuyPage> {
     );
   }
 
-  Widget _getHistoryWidget(BuildContext context, HistoryProvider historyProvider) {
+  Widget _getHistoryWidget(
+      BuildContext context, HistoryProvider historyProvider) {
     return TabBarView(
       children: [
         HistoryList(
@@ -730,7 +850,8 @@ class _BuyPageState extends State<BuyPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
-                    child: Divider(height: 1, thickness: 2, color: Colors.black12),
+                    child:
+                        Divider(height: 1, thickness: 2, color: Colors.black12),
                   ),
                 ],
               ),
@@ -764,7 +885,9 @@ class _BuyPageState extends State<BuyPage> {
                 ),
                 const SizedBox(width: 8),
                 Image.asset(
-                  isSendGiftTabSelected ? 'assets/images/icons/gift.png' : 'assets/images/icons/grey_gift.png',
+                  isSendGiftTabSelected
+                      ? 'assets/images/icons/gift.png'
+                      : 'assets/images/icons/grey_gift.png',
                   width: 24,
                   height: 24,
                 ),
@@ -800,7 +923,9 @@ class _BuyPageState extends State<BuyPage> {
                 ),
                 const SizedBox(width: 8),
                 Image.asset(
-                  isHistoryTabSelected ? 'assets/images/icons/history.png' : 'assets/images/icons/grey_history.png',
+                  isHistoryTabSelected
+                      ? 'assets/images/icons/history.png'
+                      : 'assets/images/icons/grey_history.png',
                   width: 24,
                   height: 24,
                 ),
@@ -868,37 +993,68 @@ class _BuyPageState extends State<BuyPage> {
                             padding: const EdgeInsets.symmetric(vertical: 6.0),
                             child: InkWell(
                               onTap: () {
-                                VendorProduct vendorProduct = provider.filterByCategory(provider.categories[index])[prodIndex];
+                                VendorProduct vendorProduct =
+                                    provider.filterByCategory(
+                                        provider.categories[index])[prodIndex];
                                 provider.selectVendor(vendorProduct);
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderSummry()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const OrderSummry()));
                               },
                               child: Container(
                                 width: 90,
-                                decoration: BoxDecoration(color: Colors.white, border: Border.all(width: 3, color: index == prodIndex ? Colors.white : Colors.white)),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        width: 3,
+                                        color: index == prodIndex
+                                            ? Colors.white
+                                            : Colors.white)),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     SizedBox(
                                       height: 80,
                                       child: Hero(
-                                        tag: provider.filterByCategory(provider.categories[index])[prodIndex].images!.first.src.toString(),
+                                        tag: provider
+                                            .filterByCategory(provider
+                                                .categories[index])[prodIndex]
+                                            .images!
+                                            .first
+                                            .src
+                                            .toString(),
                                         child: Image.network(
-                                          provider.filterByCategory(provider.categories[index])[prodIndex].images!.first.src.toString(),
+                                          provider
+                                              .filterByCategory(provider
+                                                  .categories[index])[prodIndex]
+                                              .images!
+                                              .first
+                                              .src
+                                              .toString(),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           const SizedBox(
                                             height: 4.0,
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 2.0),
                                             child: Text(
-                                              provider.filterByCategory(provider.categories[index])[prodIndex].name.toString(),
+                                              provider
+                                                  .filterByCategory(
+                                                      provider.categories[
+                                                          index])[prodIndex]
+                                                  .name
+                                                  .toString(),
                                               textAlign: TextAlign.center,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -906,7 +1062,8 @@ class _BuyPageState extends State<BuyPage> {
                                           ),
                                           const SizedBox(height: 4.0),
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
                                             child: Text(
                                               "Price ${provider.filterByCategory(provider.categories[index])[prodIndex].price.toString()}\$",
                                               textAlign: TextAlign.center,
@@ -925,7 +1082,9 @@ class _BuyPageState extends State<BuyPage> {
                           separatorBuilder: (context, index) => const SizedBox(
                             width: 8.0,
                           ),
-                          itemCount: provider.filterByCategory(provider.categories[index]).length,
+                          itemCount: provider
+                              .filterByCategory(provider.categories[index])
+                              .length,
                         ),
                       ),
                     )

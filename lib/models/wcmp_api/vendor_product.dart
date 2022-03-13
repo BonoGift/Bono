@@ -56,7 +56,7 @@ class VendorProduct {
   int? parentId;
   String? purchaseNote;
   List<Categories>? categories;
-  List<String>? tags;
+  List<Tag>? tags;
   List<Images>? images;
   List<String>? attributes;
   List<String>? defaultAttributes;
@@ -222,9 +222,9 @@ class VendorProduct {
       });
     }
     if (json['tags'] != null) {
-      tags = <String>[];
+      tags = <Tag>[];
       json['tags'].forEach((v) {
-        tags!.add(v);
+        tags!.add(Tag.fromJson(v));
       });
     }
     if (json['images'] != null) {
@@ -569,6 +569,28 @@ class Self {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['href'] = this.href;
+    return data;
+  }
+}
+
+class Tag {
+  int? id;
+  String? name;
+  String? slug;
+
+  Tag({this.id, this.name, this.slug});
+
+  Tag.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    slug = json['slug'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['slug'] = this.slug;
     return data;
   }
 }

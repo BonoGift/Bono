@@ -4,6 +4,7 @@ import 'package:bono_gifts/models/wcmp_api/order.dart';
 import 'package:bono_gifts/models/wcmp_api/order_response_model.dart'
     as response;
 import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
+import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/paypal_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
@@ -42,6 +43,7 @@ class _AppWebViewState extends State<AppWebView> {
         Provider.of<WooCommerceMarketPlaceProvider>(context);
     final HistoryProvider historyProvider =
         Provider.of<HistoryProvider>(context);
+    final BuyProvider buyProvider = Provider.of<BuyProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -72,6 +74,7 @@ class _AppWebViewState extends State<AppWebView> {
                   setPaid: true,
                   paymentMethod: 'Paypal',
                   paymentMethodTitle: 'Paypal',
+                  customerNote: buyProvider.noteController.text,
                   billing: Billing(
                     email: signUpProvider.email,
                     address1:
@@ -117,6 +120,8 @@ class _AppWebViewState extends State<AppWebView> {
 
                 response.OrderResponseModel? result =
                     await wooCommerceMarketPlaceProvider.createOrder(order);
+
+                print('Result ${result?.toJson().toString()}');
 
                 HistoryModel historyModel = HistoryModel(
                     id: result?.id,

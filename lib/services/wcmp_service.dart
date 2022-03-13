@@ -68,7 +68,7 @@ class WooCommerceMarketPlaceService {
   Future<OrderResponseModel?> createOrder(Order order) async {
     return _dio.post('/wp-json/wc/v3/orders', data: order.toJson()).then(
         (value) {
-      if (value.statusCode == 200) {
+      if (value.statusCode == 201) {
         if (value.data != null) {
           return OrderResponseModel.fromJson(value.data);
         }
