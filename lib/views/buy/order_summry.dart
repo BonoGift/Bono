@@ -1,8 +1,10 @@
+import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/buy/payment_screen.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
+import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -29,8 +31,7 @@ class _OrderSummryState extends State<OrderSummry> {
   Widget build(BuildContext context) {
     var form = DateFormat('dd-MMM');
     final pro = Provider.of<BuyProvider>(context);
-    final WooCommerceMarketPlaceProvider wooCommerceMarketPlaceProvider =
-        Provider.of<WooCommerceMarketPlaceProvider>(context);
+    final WooCommerceMarketPlaceProvider wooCommerceMarketPlaceProvider = Provider.of<WooCommerceMarketPlaceProvider>(context);
     final SignUpProvider signUpProvider = Provider.of<SignUpProvider>(context);
     return SafeArea(
       child: Scaffold(
@@ -44,7 +45,7 @@ class _OrderSummryState extends State<OrderSummry> {
           ),
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -57,8 +58,7 @@ class _OrderSummryState extends State<OrderSummry> {
               // const SizedBox(height: 10,),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.only(
-                    top: 5, bottom: 5, left: 10, right: 10),
+                padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
                 color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -68,12 +68,13 @@ class _OrderSummryState extends State<OrderSummry> {
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Container(
                           decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border:
-                                  Border.all(color: Colors.black26, width: 4)),
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundImage: NetworkImage(pro.userImage!),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black26, width: 4),
+                          ),
+                          child: ClipOvalImageWidget(
+                            imageUrl: pro.userImage!,
+                            imageHeight: 50,
+                            imageWidth: 50,
                           )),
                     ),
                     Expanded(
@@ -83,32 +84,20 @@ class _OrderSummryState extends State<OrderSummry> {
                           FittedBox(
                             child: Text(
                               pro.userName.toString(),
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ),
-                          const SizedBox(
-                            height: 4,
-                          ),
+                          const SizedBox(height: 4),
                           FittedBox(
                             child: Text(
                               "Birthday ${pro.userDob != null ? form.format(pro.userDob!).toString() : ''} (In ${pro.diffDays} Days)",
                               maxLines: 1,
-                              style: TextStyle(color: Colors.blue),
+                              style: const TextStyle(color: Colors.blue),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    // IconButton(
-                    //     onPressed: () {
-                    //       Navigator.of(context).pop();
-                    //     },
-                    //     icon: const Icon(
-                    //       Icons.clear,
-                    //       size: 30,
-                    //       color: Colors.black,
-                    //     ))
                   ],
                 ),
               ),
@@ -129,58 +118,38 @@ class _OrderSummryState extends State<OrderSummry> {
                         child: Container(
                           height: 230,
                           width: double.infinity,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.white70),
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white70),
                           child: Center(
                             child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border:
-                                      Border.all(color: Colors.white, width: 2),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 6,
-                                        spreadRadius: 0,
-                                        offset: Offset(0, 3))
-                                  ]),
+                              decoration: BoxDecoration(color: Colors.white, border: Border.all(color: Colors.white, width: 2), boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, spreadRadius: 0, offset: Offset(0, 3))]),
                               child: Stack(
                                 clipBehavior: Clip.none,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(1.0),
                                     child: Hero(
-                                      tag: wooCommerceMarketPlaceProvider
-                                              .selectedProduct
-                                              ?.images
-                                              ?.first
-                                              .src
-                                              .toString() ??
-                                          '',
+                                      tag: wooCommerceMarketPlaceProvider.selectedProduct?.images?.first.src.toString() ?? '',
                                       child: Image.network(
-                                        wooCommerceMarketPlaceProvider
-                                                .selectedProduct
-                                                ?.images
-                                                ?.first
-                                                .src
-                                                .toString() ??
-                                            '',
+                                        wooCommerceMarketPlaceProvider.selectedProduct?.images?.first.src.toString() ?? '',
                                         height: 148,
                                         fit: BoxFit.contain,
                                       ),
                                     ),
                                   ),
                                   Positioned(
-                                      bottom: -25,
-                                      left: 33,
-                                      right: 33,
-                                      child: SizedBox(
-                                          width: 150,
-                                          child: FittedBox(
-                                              child: PrimaryText(
-                                            text: 'Quantity: 1',
-                                            fontSize: 15,
-                                          )))),
+                                    bottom: -25,
+                                    left: 33,
+                                    right: 33,
+                                    child: SizedBox(
+                                      width: 150,
+                                      child: FittedBox(
+                                        child: PrimaryText(
+                                          text: 'Quantity: 1',
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -204,9 +173,7 @@ class _OrderSummryState extends State<OrderSummry> {
               Container(
                 height: MediaQuery.of(context).size.height * 0.5,
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      topLeft: Radius.circular(30)),
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(30), topLeft: Radius.circular(30)),
                   color: Colors.white,
                 ),
                 child: Padding(
@@ -217,32 +184,58 @@ class _OrderSummryState extends State<OrderSummry> {
                         backgroundColor: Colors.transparent,
                         elevation: 0,
                         leading: Container(),
-                        title: FittedBox(
-                          child: Text(
-                            wooCommerceMarketPlaceProvider
-                                    .selectedProduct?.name ??
-                                '',
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500),
+                        title: Container(
+                          width: getWidth(context) * 0.45,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[800],
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        ),
+                          child: InkWell(
+                            onTap: (){
+                              
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: const [
+                                SizedBox(width: 20),
+                                Center(
+                                  child: Text(
+                                    'View Details',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ) /*FittedBox(
+                          child: Text(
+                            wooCommerceMarketPlaceProvider.selectedProduct?.name ?? '',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )*/
+                        ,
                         centerTitle: true,
                         actions: [
                           IconButton(
-                              onPressed: () {
-                                goToPaymentScreen();
-                              },
-                              icon: const Icon(
-                                Icons.send,
-                                color: Colors.blue,
-                              )),
+                            onPressed: () {
+                              goToPaymentScreen();
+                            },
+                            icon: const Icon(Icons.send, color: Colors.blue),
+                          ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 12,
-                      ),
+                      const SizedBox(height: 12),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Row(
@@ -250,14 +243,12 @@ class _OrderSummryState extends State<OrderSummry> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             // Text("Size : ${wooCommerceMarketPlaceProvider.selectedProduct?.size}"),
-
                             FittedBox(
                               child: Row(
                                 children: [
                                   const Text('Price: '),
                                   PrimaryText(
-                                    text:
-                                        "${wooCommerceMarketPlaceProvider.selectedProduct?.price}\$",
+                                    text: "${wooCommerceMarketPlaceProvider.selectedProduct?.price}\$",
                                     fontSize: 16,
                                   )
                                 ],
@@ -268,8 +259,7 @@ class _OrderSummryState extends State<OrderSummry> {
                                 children: [
                                   const Text('Delivery: '),
                                   PrimaryText(
-                                    text:
-                                        "${wooCommerceMarketPlaceProvider.deliveryPrice}\$",
+                                    text: "${wooCommerceMarketPlaceProvider.deliveryPrice}\$",
                                     fontSize: 16,
                                   )
                                 ],
@@ -278,10 +268,9 @@ class _OrderSummryState extends State<OrderSummry> {
                             FittedBox(
                               child: Row(
                                 children: [
-                                  Text('Total: '),
+                                  const Text('Total: '),
                                   PrimaryText(
-                                    text:
-                                        "${wooCommerceMarketPlaceProvider.finalPrice()}\$",
+                                    text: "${wooCommerceMarketPlaceProvider.finalPrice()}\$",
                                     fontSize: 16,
                                   )
                                 ],
@@ -290,9 +279,7 @@ class _OrderSummryState extends State<OrderSummry> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 35,
-                      ),
+                      const SizedBox(height: 35),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Row(
@@ -320,34 +307,27 @@ class _OrderSummryState extends State<OrderSummry> {
                             goToPaymentScreen();
                           },
                           textInputAction: TextInputAction.next,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 18),
+                          style: const TextStyle(color: Colors.black, fontSize: 18),
                           decoration: InputDecoration(
-                            hintText:
-                                'Eg. Write "Happy Birthday David" on the cake. Thank you',
-                            hintStyle: const TextStyle(
-                                color: Colors.black45, fontSize: 16),
+                            hintText: 'Eg. Write "Happy Birthday David" on the cake. Thank you',
+                            hintStyle: const TextStyle(color: Colors.black45, fontSize: 16),
                             fillColor: Colors.grey[100],
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
+                              borderSide: const BorderSide(color: Colors.transparent),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
+                              borderSide: const BorderSide(color: Colors.transparent),
                             ),
                             disabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
+                              borderSide: const BorderSide(color: Colors.transparent),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  const BorderSide(color: Colors.transparent),
+                              borderSide: const BorderSide(color: Colors.transparent),
                             ),
                           ),
                         ),
@@ -522,7 +502,6 @@ class _OrderSummryState extends State<OrderSummry> {
   }
 
   goToPaymentScreen() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (contxt) => PaymentScreen()));
+    Navigator.push(context, MaterialPageRoute(builder: (contxt) => const PaymentScreen()));
   }
 }
