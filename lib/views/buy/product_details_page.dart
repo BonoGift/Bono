@@ -22,7 +22,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: const EdgeInsets.only(left: 16, top: 16),
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.black,
+                  size: 28,
+                ),
+              ),
+            ),
             _getTitleWidget(title: 'Chocolate Cake'),
             Container(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
