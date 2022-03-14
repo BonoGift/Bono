@@ -62,9 +62,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 children: allPages,
               ),
               Visibility(
-                visible: index == 4,
+                visible: index == 4 || index == 1,
                 child: Positioned(
-                  left: 8,
+                  top: index == 1 ? 16 : 0,
+                  left: index == 1 ? 16 : 8,
                   child: InkWell(
                     onTap: () {
                       if (index != 2) {
@@ -73,9 +74,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         setState(() {});
                       }
                     },
-                    child: const Icon(
+                    child:  Icon(
                       Icons.arrow_back_ios,
-                      color: Colors.black,
+                      color: index == 1 ? Colors.white : Colors.black,
                       size: 24,
                     ),
                   ),

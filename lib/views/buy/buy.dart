@@ -824,12 +824,6 @@ class _BuyPageState extends State<BuyPage> {
       elevation: 0,
       backgroundColor: Colors.grey.withOpacity(0.3),
       centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      ),
       bottom: isHistoryTabSelected
           ? PreferredSize(
               preferredSize: const Size.fromHeight(50),
