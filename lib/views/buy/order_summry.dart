@@ -70,7 +70,7 @@ class _OrderSummryState extends State<OrderSummry> {
                       child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black26, width: 4),
+                            border: Border.all(color: Colors.black.withOpacity(0.6), width: 2),
                           ),
                           child: ClipOvalImageWidget(
                             imageUrl: pro.userImage!,
@@ -307,7 +307,7 @@ class _OrderSummryState extends State<OrderSummry> {
                         padding: const EdgeInsets.symmetric(vertical: 3.0),
                         child: TextField(
                           controller: pro.noteController,
-                          maxLines: 6,
+                          maxLines: 3,
                           onSubmitted: (val) {
                             goToPaymentScreen();
                           },
