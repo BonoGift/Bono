@@ -3,6 +3,7 @@ import 'package:bono_gifts/provider/buy_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/provider/wcmp_provider.dart';
 import 'package:bono_gifts/views/buy/payment_screen.dart';
+import 'package:bono_gifts/views/buy/product_details_page.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
 import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:flutter/material.dart';
@@ -186,13 +187,17 @@ class _OrderSummryState extends State<OrderSummry> {
                         leading: Container(),
                         title: Container(
                           width: getWidth(context) * 0.45,
+                          padding: const EdgeInsets.symmetric(vertical: 4),
                           decoration: BoxDecoration(
                             color: Colors.grey[800],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: InkWell(
                             onTap: (){
-                              
+                              Navigator.push(context,  MaterialPageRoute(
+                                builder: (c) => ProductDetailsPage(
+                                ),
+                              ),);
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
