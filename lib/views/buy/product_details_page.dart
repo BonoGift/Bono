@@ -1,4 +1,5 @@
 import 'package:bono_gifts/config/constants.dart';
+import 'package:bono_gifts/widgets/carousel_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -76,18 +77,38 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         children: [
           Expanded(
             flex: 8,
-            child: CachedNetworkImage(
-              imageUrl: dummyImageList[_selectedIndex],
-              height: getHeight(context) * 0.35,
-              fit: BoxFit.fill,
-              progressIndicatorBuilder: (context, url, progress) => SizedBox(
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return StatefulBuilder(
+                      builder: (
+                        BuildContext context,
+                        void Function(void Function()) setState,
+                      ) {
+                        return CarouselWidget(
+                          images: dummyImageList,
+                          initialPage: _selectedIndex,
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: dummyImageList[_selectedIndex],
                 height: getHeight(context) * 0.35,
-                child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.white,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
+                fit: BoxFit.fill,
+                progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                  height: getHeight(context) * 0.35,
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.white,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),
