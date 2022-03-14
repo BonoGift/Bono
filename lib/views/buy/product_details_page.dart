@@ -1,6 +1,7 @@
 import 'package:bono_gifts/config/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 enum ProductDetailsTab { detailsTab, descTab, aboutSellerTab }
 
@@ -79,6 +80,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               imageUrl: dummyImageList[_selectedIndex],
               height: getHeight(context) * 0.35,
               fit: BoxFit.fill,
+              progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                height: getHeight(context) * 0.35,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.white,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -105,6 +118,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           height: ((getHeight(context) * 0.35) / 5) - 8,
                           width: double.infinity,
                           fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                            height: getHeight(context) * 0.35 - 8,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.white,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                         if (_selectedIndex != index)
                           Positioned(
