@@ -43,7 +43,7 @@ class _SplashPageState extends State<SplashPage> {
         children: [
           Center(
             child: Image.asset(
-              'assets/images/icons/app_icon.png',
+              'assets/images/icons/ic_launcher.png',
               width: getWidth(context) * 0.45,
             ),
           ),
