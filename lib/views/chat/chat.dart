@@ -48,6 +48,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     super.didChangeDependencies();
     final proChat = Provider.of<ChatProvider>(context, listen: false);
     if (proChat.errorMap.isNotEmpty) {
+      print('here ${proChat.errorMap}');
       proChat.errorMap.clear();
       proChat.getContactsFromFirebase(context);
     }
@@ -94,7 +95,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                   name: value.docs[d]['name'],
                   phone: value.docs[d]['phone'],
                   photo: value.docs[d]['profile_url'],
-                  country: value.docs[d]['country'],
                   isSelect: false,
                 ),
               );
@@ -112,7 +112,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                   name: value.docs[d]['name'],
                   phone: value.docs[d]['phone'],
                   photo: value.docs[d]['profile_url'],
-                  country: value.docs[d]['country'],
                   isSelect: false,
                 ),
               );
@@ -130,7 +129,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                   name: value.docs[d]['name'],
                   phone: value.docs[d]['phone'],
                   photo: value.docs[d]['profile_url'],
-                  country: value.docs[d]['country'],
                   isSelect: false,
                 ),
               );
@@ -148,6 +146,11 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     setState(() {
       netWorkLsit.toSet().toList();
     });
+  }
+
+  void pro() {
+    print(newContList);
+    print(newDbList);
   }
 
   Future<void> readJson() async {
@@ -243,6 +246,12 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                   child: TabBar(
                     controller: _tabController,
                     labelPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    // give the indicator a decoration (color and border radius)
+                    /*indicator: BoxDecoration(
+                      border: Border.all(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(10.0),
+                      // color: Colors.green,
+                    ),*/
                     indicatorColor: Colors.transparent,
                     labelColor: Colors.blue,
                     unselectedLabelColor: Colors.black,
@@ -306,429 +315,406 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
               ),
               const SizedBox(height: 8),
               _tabController.index == 0
-                  ? _getChatTabContentsWidget(documentStream, pro, proChat)
-                  : _tabController.index == 1
-                      ? _getNetworkTabContentsWidget(proChat, context)
-                      : _getContactsTabContentsWidget(proChat)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _getContactsTabContentsWidget(ChatProvider proChat) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          proChat.matchList.contains('a') ? alPhabat('A') : Container(),
-          getConList('a', proChat),
-          proChat.matchList.contains('b') ? alPhabat('B') : Container(),
-          getConList('b', proChat),
-          proChat.matchList.contains('c') ? alPhabat('C') : Container(),
-          getConList('c', proChat),
-          proChat.matchList.contains('d') ? alPhabat('D') : Container(),
-          getConList('d', proChat),
-          proChat.matchList.contains('e') ? alPhabat('E') : Container(),
-          getConList('e', proChat),
-          proChat.matchList.contains('f') ? alPhabat('F') : Container(),
-          getConList('f', proChat),
-          proChat.matchList.contains('g') ? alPhabat('G') : Container(),
-          getConList('g', proChat),
-          proChat.matchList.contains('h') ? alPhabat('H') : Container(),
-          getConList('h', proChat),
-          proChat.matchList.contains('i') ? alPhabat('I') : Container(),
-          getConList('i', proChat),
-          proChat.matchList.contains('j') ? alPhabat('J') : Container(),
-          getConList('j', proChat),
-          proChat.matchList.contains('k') ? alPhabat('K') : Container(),
-          getConList('k', proChat),
-          proChat.matchList.contains('l') ? alPhabat('L') : Container(),
-          getConList('l', proChat),
-          proChat.matchList.contains('m') ? alPhabat('M') : Container(),
-          getConList('m', proChat),
-          proChat.matchList.contains('n') ? alPhabat('N') : Container(),
-          getConList('n', proChat),
-          proChat.matchList.contains('o') ? alPhabat('O') : Container(),
-          getConList('o', proChat),
-          proChat.matchList.contains('p') ? alPhabat('P') : Container(),
-          getConList('p', proChat),
-          proChat.matchList.contains('q') ? alPhabat('Q') : Container(),
-          getConList('q', proChat),
-          proChat.matchList.contains('r') ? alPhabat('R') : Container(),
-          getConList('r', proChat),
-          proChat.matchList.contains('s') ? alPhabat('S') : Container(),
-          getConList('s', proChat),
-          proChat.matchList.contains('t') ? alPhabat('T') : Container(),
-          getConList('t', proChat),
-          proChat.matchList.contains('u') ? alPhabat('U') : Container(),
-          getConList('u', proChat),
-          proChat.matchList.contains('v') ? alPhabat('V') : Container(),
-          getConList('v', proChat),
-          proChat.matchList.contains('w') ? alPhabat('W') : Container(),
-          getConList('w', proChat),
-          proChat.matchList.contains('x') ? alPhabat('X') : Container(),
-          getConList('x', proChat),
-          proChat.matchList.contains('y') ? alPhabat('Y') : Container(),
-          getConList('y', proChat),
-          proChat.matchList.contains('z') ? alPhabat('Z') : Container(),
-          getConList('z', proChat),
-        ],
-      ),
-    );
-  }
-
-  Widget _getNetworkTabContentsWidget(ChatProvider proChat, BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: Colors.grey.withOpacity(0.6),
-              ),
-            ),
-            child: TextField(
-              onChanged: (val) {
-                print('on changed ${_tabController.index}');
-                proChat.searchNetwork(val);
-                if (val.isEmpty) {
-                  proChat.getContactsFromFirebase(context);
-                }
-              },
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Search",
-                hintStyle: TextStyle(
-                  color: Colors.grey.withOpacity(0.6),
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Visibility(
-          visible: proChat.familyList.isEmpty && proChat.friendsList.isEmpty && proChat.neighborList.isEmpty && proChat.othersList.isEmpty && proChat.schoolList.isEmpty && proChat.workList.isEmpty,
-          child: const Text(
-            'No record(s)',
-            style: TextStyle(fontSize: 16,),
-          ),
-        ),
-        Visibility(
-          visible: proChat.friendsList.isNotEmpty,
-          child: alPhabat("Friends", fontSize: 14),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: proChat.friendsList.length,
-          itemBuilder: (contxt, i) {
-            //print("---------" + proChat.friendsList.toString());
-            return _getContactsByCategoryWidget(context, proChat.friendsList, proChat, i, 0);
-          },
-        ),
-        Visibility(
-          visible: proChat.familyList.isNotEmpty,
-          child: alPhabat("Family", fontSize: 17),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: proChat.familyList.toSet().toList().length,
-          itemBuilder: (contxt, i) {
-            return _getContactsByCategoryWidget(context, proChat.familyList, proChat, i, 1);
-          },
-        ),
-        Visibility(
-          visible: proChat.workList.isNotEmpty,
-          child: alPhabat("Work", fontSize: 17),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: proChat.workList.length,
-          itemBuilder: (contxt, i) {
-            return _getContactsByCategoryWidget(context, proChat.workList, proChat, i, 2);
-          },
-        ),
-        Visibility(
-          visible: proChat.schoolList.isNotEmpty,
-          child: alPhabat("School", fontSize: 17),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: proChat.schoolList.length,
-          itemBuilder: (contxt, i) {
-            return _getContactsByCategoryWidget(context, proChat.schoolList, proChat, i, 3);
-          },
-        ),
-        Visibility(
-          visible: proChat.neighborList.isNotEmpty,
-          child: alPhabat("Neigbhour", fontSize: 17),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: proChat.neighborList.length,
-          itemBuilder: (contxt, i) {
-            return _getContactsByCategoryWidget(context, proChat.neighborList, proChat, i, 4);
-          },
-        ),
-        Visibility(
-          visible: proChat.othersList.isNotEmpty,
-          child: alPhabat("Others", fontSize: 17),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: proChat.othersList.length,
-          itemBuilder: (contxt, i) {
-            return _getContactsByCategoryWidget(context, proChat.othersList, proChat, i, 5);
-          },
-        ),
-        // -------------------------------------------------
-      ],
-    );
-  }
-
-  Widget _getChatTabContentsWidget(
-    Stream<QuerySnapshot<Object?>> documentStream,
-    SignUpProvider pro,
-    ChatProvider proChat,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: StreamBuilder(
-        stream: documentStream,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.data == null) {
-            return const Center(
-              child: Text("No Message"),
-            );
-          } else if (snapshot.data!.docs.isNotEmpty) {
-            return ListView(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                return InkWell(
-                  onTap: () {
-                    //print(data['recieverName']);
-                    //print(data['recieverID']);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatScreen(
-                          profileImage: data['profileImage'],
-                          recieverName: data['recieverName'],
-                          recieverPhone: data['recieverID'] == pro.phone ? data['senderID'] : data['recieverID'],
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                        border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey.withOpacity(0.2),
-                      ),
-                    )),
-                    child: Slidable(
-                      key: const ValueKey(0),
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                color: Colors.grey,
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/icons/gift.png',
-                                      width: 25,
-                                      height: 25,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    const Text(
-                                      'Archive',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: StreamBuilder(
+                        stream: documentStream,
+                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.data == null) {
+                            return const Center(
+                              child: Text("No Message"),
+                            );
+                          } else if (snapshot.data!.docs.isNotEmpty) {
+                            return ListView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                                Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                                return InkWell(
+                                  onTap: () {
+                                    //print(data['recieverName']);
+                                    //print(data['recieverID']);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ChatScreen(
+                                          profileImage: data['profileImage'],
+                                          recieverName: data['recieverName'],
+                                          recieverPhone: data['recieverID'] == pro.phone ? data['senderID'] : data['recieverID'],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SendGiftPage(
-                                      photo: data['profileImage'],
-                                      username: data['recieverName'],
-                                      phone: data['recieverID'] == pro.phone ? data['senderID'] : data['recieverID'],
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 12),
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                      bottom: BorderSide(
+                                        color: Colors.grey.withOpacity(0.2),
+                                      ),
+                                    )),
+                                    child: Slidable(
+                                      key: const ValueKey(0),
+                                      endActionPane: ActionPane(
+                                        motion: const ScrollMotion(),
+                                        children: [
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                color: Colors.grey,
+                                                padding: const EdgeInsets.all(8),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/icons/gift.png',
+                                                      width: 25,
+                                                      height: 25,
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    const Text(
+                                                      'Archive',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => SendGiftPage(
+                                                      photo: data['profileImage'],
+                                                      username: data['recieverName'],
+                                                      phone: data['recieverID'] == pro.phone ? data['senderID'] : data['recieverID'],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                color: Colors.blue,
+                                                padding: const EdgeInsets.all(8),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/icons/gift.png',
+                                                      width: 25,
+                                                      height: 25,
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    const Text(
+                                                      'Gift',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          /*SlidableAction(
+                                            flex: 1,
+                                            onPressed: (c) {
+                                              print(data['isSeen']);
+                                            },
+                                            backgroundColor: Colors.grey,
+                                            foregroundColor: Colors.white,
+                                            icon: Icons.list,
+                                            label: 'Archive',
+                                          ),*/
+                                          /*SlidableAction(
+                                            onPressed: (c) {},
+                                            backgroundColor: Colors.blue,
+                                            foregroundColor: Colors.white,
+                                            icon: Icons.shopping_basket,
+                                            label: 'Gift',
+                                          ),*/
+                                        ],
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: const EdgeInsets.all(0),
+                                        leading: ClipOvalImageWidget(
+                                          imageUrl: data['profileImage'],
+                                          imageHeight: 50,
+                                          imageWidth: 50,
+                                        ),
+                                        subtitle: data['messageType'] == 'image'
+                                            ? Row(
+                                                children: const [
+                                                  Icon(
+                                                    Icons.insert_photo_rounded,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  Text("Image"),
+                                                ],
+                                              )
+                                            : Text(data['lastMessage'].toString().length > 25 ? "${data['lastMessage'].toString().substring(0, 25)}..." : data['lastMessage']),
+                                        trailing: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              data['date'],
+                                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              radius: 10,
+                                              child: Center(
+                                                child: data['isSendMe'] == true
+                                                    ? data['isSeen'] == true
+                                                        ? Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: const [
+                                                              Icon(Icons.check, size: 10),
+                                                              Icon(Icons.check, size: 10),
+                                                            ],
+                                                          )
+                                                        : const Icon(Icons.check, size: 10)
+                                                    : Text(
+                                                        data['count'],
+                                                        style: const TextStyle(fontSize: 9),
+                                                      ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        title: Text(
+                                          data['recieverName'],
+                                          style: const TextStyle(fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );
-                              },
-                              child: Container(
-                                color: Colors.blue,
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/icons/gift.png',
-                                      width: 25,
-                                      height: 25,
+                              }).toList(),
+                            );
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: getHeight(context) / 5),
+                                  const Text(
+                                    "Invite your friends",
+                                    style: TextStyle(fontSize: 22),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                                    child: Text(
+                                      "Seems your contacts don't have Bono yet Use the button below to invite your friends to Bono",
+                                      textAlign: TextAlign.center,
                                     ),
-                                    const SizedBox(height: 4),
-                                    const Text(
-                                      'Gift',
+                                  ),
+                                  const SizedBox(height: 20),
+                                  MaterialButton(
+                                    minWidth: getWidth(context),
+                                    color: Colors.blue,
+                                    onPressed: () => proChat.shareBono(),
+                                    child: const Text(
+                                      "Invite a friend",
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18,
                                       ),
                                     ),
-                                  ],
+                                  ),
+                                  // SizedBox(height: getHeight(context) / 3,),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  : _tabController.index == 1
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.grey.withOpacity(0.6),
+                                  ),
+                                ),
+                                child: TextField(
+                                  onChanged: (val) {
+                                    print('on changed ${_tabController.index}');
+                                    proChat.searchNetwork(val);
+                                    if (val.isEmpty) {
+                                      proChat.getContactsFromFirebase(context);
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Search",
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey.withOpacity(0.6),
+                                    ),
+                                    prefixIcon: const Icon(
+                                      Icons.search,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-
-                          /*SlidableAction(
-                                          flex: 1,
-                                          onPressed: (c) {
-                                            print(data['isSeen']);
-                                          },
-                                          backgroundColor: Colors.grey,
-                                          foregroundColor: Colors.white,
-                                          icon: Icons.list,
-                                          label: 'Archive',
-                                        ),*/
-                          /*SlidableAction(
-                                          onPressed: (c) {},
-                                          backgroundColor: Colors.blue,
-                                          foregroundColor: Colors.white,
-                                          icon: Icons.shopping_basket,
-                                          label: 'Gift',
-                                        ),*/
-                        ],
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.all(0),
-                        leading: ClipOvalImageWidget(
-                          imageUrl: data['profileImage'],
-                          imageHeight: 50,
-                          imageWidth: 50,
-                        ),
-                        subtitle: data['messageType'] == 'image'
-                            ? Row(
-                                children: const [
-                                  Icon(
-                                    Icons.insert_photo_rounded,
-                                    color: Colors.grey,
-                                  ),
-                                  Text("Image"),
-                                ],
-                              )
-                            : Text(data['lastMessage'].toString().length > 25 ? "${data['lastMessage'].toString().substring(0, 25)}..." : data['lastMessage']),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              data['date'],
-                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            const SizedBox(height: 20),
+                            Visibility(
+                              visible: proChat.friendsList.isNotEmpty,
+                              child: alPhabat("Friends", fontSize: 14),
                             ),
-                            const SizedBox(height: 4),
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 10,
-                              child: Center(
-                                child: data['isSendMe'] == true
-                                    ? data['isSeen'] == true
-                                        ? Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: const [
-                                              Icon(Icons.check, size: 10),
-                                              Icon(Icons.check, size: 10),
-                                            ],
-                                          )
-                                        : const Icon(Icons.check, size: 10)
-                                    : Text(
-                                        data['count'],
-                                        style: const TextStyle(fontSize: 9),
-                                      ),
-                              ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: proChat.friendsList.length,
+                              itemBuilder: (contxt, i) {
+                                //print("---------" + proChat.friendsList.toString());
+                                return _getContactsByCategoryWidget(context, proChat.friendsList, proChat, i, 0);
+                              },
                             ),
+                            Visibility(
+                              visible: proChat.familyList.isNotEmpty,
+                              child: alPhabat("Family", fontSize: 17),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: proChat.familyList.toSet().toList().length,
+                              itemBuilder: (contxt, i) {
+                                return _getContactsByCategoryWidget(context, proChat.familyList, proChat, i, 1);
+                              },
+                            ),
+                            Visibility(
+                              visible: proChat.workList.isNotEmpty,
+                              child: alPhabat("Work", fontSize: 17),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: proChat.workList.length,
+                              itemBuilder: (contxt, i) {
+                                return _getContactsByCategoryWidget(context, proChat.workList, proChat, i, 2);
+                              },
+                            ),
+                            Visibility(
+                              visible: proChat.schoolList.isNotEmpty,
+                              child: alPhabat("School", fontSize: 17),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: proChat.schoolList.length,
+                              itemBuilder: (contxt, i) {
+                                return _getContactsByCategoryWidget(context, proChat.schoolList, proChat, i, 3);
+                              },
+                            ),
+                            Visibility(
+                              visible: proChat.neighborList.isNotEmpty,
+                              child: alPhabat("Neigbhour", fontSize: 17),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: proChat.neighborList.length,
+                              itemBuilder: (contxt, i) {
+                                return _getContactsByCategoryWidget(context, proChat.neighborList, proChat, i, 4);
+                              },
+                            ),
+                            Visibility(
+                              visible: proChat.othersList.isNotEmpty,
+                              child: alPhabat("Others", fontSize: 17),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: proChat.othersList.length,
+                              itemBuilder: (contxt, i) {
+                                return _getContactsByCategoryWidget(context, proChat.othersList, proChat, i, 5);
+                              },
+                            ),
+                            // -------------------------------------------------
                           ],
-                        ),
-                        title: Text(
-                          data['recieverName'],
-                          style: const TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            );
-          } else {
-            return Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: getHeight(context) / 5),
-                  const Text(
-                    "Invite your friends",
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  const SizedBox(height: 20),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Text(
-                      "Seems your contacts don't have Bono yet Use the button below to invite your friends to Bono",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  MaterialButton(
-                    minWidth: getWidth(context),
-                    color: Colors.blue,
-                    onPressed: () => proChat.shareBono(),
-                    child: const Text(
-                      "Invite a friend",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  // SizedBox(height: getHeight(context) / 3,),
-                ],
-              ),
-            );
-          }
-        },
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              proChat.matchList.contains('a') ? alPhabat('A') : Container(),
+                              getConList('a', proChat),
+                              proChat.matchList.contains('b') ? alPhabat('B') : Container(),
+                              getConList('b', proChat),
+                              proChat.matchList.contains('c') ? alPhabat('C') : Container(),
+                              getConList('c', proChat),
+                              proChat.matchList.contains('d') ? alPhabat('D') : Container(),
+                              getConList('d', proChat),
+                              proChat.matchList.contains('e') ? alPhabat('E') : Container(),
+                              getConList('e', proChat),
+                              proChat.matchList.contains('f') ? alPhabat('F') : Container(),
+                              getConList('f', proChat),
+                              proChat.matchList.contains('g') ? alPhabat('G') : Container(),
+                              getConList('g', proChat),
+                              proChat.matchList.contains('h') ? alPhabat('H') : Container(),
+                              getConList('h', proChat),
+                              proChat.matchList.contains('i') ? alPhabat('I') : Container(),
+                              getConList('i', proChat),
+                              proChat.matchList.contains('j') ? alPhabat('J') : Container(),
+                              getConList('j', proChat),
+                              proChat.matchList.contains('k') ? alPhabat('K') : Container(),
+                              getConList('k', proChat),
+                              proChat.matchList.contains('l') ? alPhabat('L') : Container(),
+                              getConList('l', proChat),
+                              proChat.matchList.contains('m') ? alPhabat('M') : Container(),
+                              getConList('m', proChat),
+                              proChat.matchList.contains('n') ? alPhabat('N') : Container(),
+                              getConList('n', proChat),
+                              proChat.matchList.contains('o') ? alPhabat('O') : Container(),
+                              getConList('o', proChat),
+                              proChat.matchList.contains('p') ? alPhabat('P') : Container(),
+                              getConList('p', proChat),
+                              proChat.matchList.contains('q') ? alPhabat('Q') : Container(),
+                              getConList('q', proChat),
+                              proChat.matchList.contains('r') ? alPhabat('R') : Container(),
+                              getConList('r', proChat),
+                              proChat.matchList.contains('s') ? alPhabat('S') : Container(),
+                              getConList('s', proChat),
+                              proChat.matchList.contains('t') ? alPhabat('T') : Container(),
+                              getConList('t', proChat),
+                              proChat.matchList.contains('u') ? alPhabat('U') : Container(),
+                              getConList('u', proChat),
+                              proChat.matchList.contains('v') ? alPhabat('V') : Container(),
+                              getConList('v', proChat),
+                              proChat.matchList.contains('w') ? alPhabat('W') : Container(),
+                              getConList('w', proChat),
+                              proChat.matchList.contains('x') ? alPhabat('X') : Container(),
+                              getConList('x', proChat),
+                              proChat.matchList.contains('y') ? alPhabat('Y') : Container(),
+                              getConList('y', proChat),
+                              proChat.matchList.contains('z') ? alPhabat('Z') : Container(),
+                              getConList('z', proChat),
+                            ],
+                          ),
+                        )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -771,7 +757,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      categoryList[i].country ?? 'empty',
+                      categoryList[i].phone,
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
@@ -810,7 +796,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                     name: categoryList[i].name,
                     photo: categoryList[i].photo,
                     phone: categoryList[i].phone,
-                    country: categoryList[i].country ?? '',
                     status: 1,
                   ),
                   categoryList[i].isSelect);
@@ -975,14 +960,12 @@ class NewtWorkModel {
   String photo;
   String name;
   String phone;
-  String country;
   bool isSelect;
 
   NewtWorkModel({
     required this.name,
     required this.phone,
     required this.photo,
-    required this.country,
     required this.isSelect,
   });
 }
