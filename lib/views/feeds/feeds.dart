@@ -19,21 +19,12 @@ class Feeds extends StatefulWidget {
 
 class _FeedsState extends State<Feeds> {
   TextEditingController commnetController = TextEditingController();
-  GlobalKey testKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     final pro = Provider.of<FeedsProvider>(context, listen: false);
     pro.getFeedsPosts(context);
-  }
-
-  void getSize() {
-    print('here');
-    final RenderBox renderBox = testKey.currentContext?.findRenderObject() as RenderBox;
-
-    final Size size = renderBox.size; // or _widgetKey.currentContext?.size
-    print('Size: ${size.width}, ${size.height}');
   }
 
   @override
@@ -642,12 +633,41 @@ class _FeedsState extends State<Feeds> {
                   String postId = pro.feeds[i].docid;
                   return Column(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          'Comments ${snapshot.data!.docs.length.toString()}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Expanded(child: SizedBox.shrink()),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 24),
+                              child: Center(
+                                child: Text(
+                                  'Comments ${snapshot.data!.docs.length.toString()}',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.grey),
+                                ),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       ListView.builder(
                         primary: false,
