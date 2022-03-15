@@ -308,7 +308,7 @@ class ChatProvider extends ChangeNotifier {
                     photo: dd['imageUrl'],
                     isSelect: false,
                     name: dd['name'],
-                    country: dd['country'] ?? '',
+                    country: value.docs[d]['country'] ?? '',
                   ),
                 );
                 //print(friendsList.toString() + '--------- friendList');
@@ -320,7 +320,7 @@ class ChatProvider extends ChangeNotifier {
                     photo: dd['imageUrl'],
                     isSelect: false,
                     name: dd['name'],
-                    country: dd['country'] ?? '',
+                    country: value.docs[d]['country'] ?? '',
                   ),
                 );
                 break;
@@ -331,7 +331,7 @@ class ChatProvider extends ChangeNotifier {
                     photo: dd['imageUrl'],
                     isSelect: false,
                     name: dd['name'],
-                    country: dd['country'] ?? '',
+                    country: value.docs[d]['country'] ?? '',
                   ),
                 );
                 break;
@@ -342,7 +342,7 @@ class ChatProvider extends ChangeNotifier {
                     photo: dd['imageUrl'],
                     isSelect: false,
                     name: dd['name'],
-                    country: dd['country'] ?? '',
+                    country: value.docs[d]['country'] ?? '',
                   ),
                 );
                 break;
@@ -353,7 +353,7 @@ class ChatProvider extends ChangeNotifier {
                     photo: dd['imageUrl'],
                     isSelect: false,
                     name: dd['name'],
-                    country: dd['country'] ?? '',
+                    country: value.docs[d]['country'] ?? '',
                   ),
                 );
                 break;
@@ -364,7 +364,7 @@ class ChatProvider extends ChangeNotifier {
                     photo: dd['imageUrl'],
                     isSelect: false,
                     name: dd['name'],
-                    country: dd['country'] ?? '',
+                    country: value.docs[d]['country'] ?? '',
                   ),
                 );
                 break;

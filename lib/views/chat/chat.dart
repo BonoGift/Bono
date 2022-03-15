@@ -771,7 +771,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      categoryList[i].country ?? '',
+                      categoryList[i].country ?? 'empty',
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
