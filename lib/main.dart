@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           CountryLocalizations.delegate,
         ],
         onGenerateRoute: CustomRoutes.allRoutes,
-        initialRoute: laoding,
+        initialRoute: splashPage,
         // home: HistoryPage(),
       ),
     );

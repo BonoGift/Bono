@@ -14,6 +14,8 @@ import 'package:bono_gifts/views/signup/verify_otp.dart';
 import 'package:bono_gifts/views/signup/welcome_page.dart';
 import 'package:flutter/material.dart';
 
+import '../views/splash/splash_page.dart';
+
 class CustomRoutes {
   static Route<dynamic>? allRoutes(RouteSettings setting) {
     switch (setting.name) {
@@ -41,6 +43,8 @@ class CustomRoutes {
         return MaterialPageRoute(builder: (_) =>  const UserProfile());
       case orderSummry:
         return MaterialPageRoute(builder: (_) =>  const OrderSummry());
+      case splashPage:
+        return MaterialPageRoute(builder: (_) =>  const SplashPage());
     }
     return null;
     //return MaterialPageRoute(builder: (_) => NoFoundPage());

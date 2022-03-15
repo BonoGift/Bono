@@ -8,6 +8,7 @@ const String profilePage = '/profilePage';
 const String bottomNav = '/bottomNav';
 const String laoding = '/loading';
 const String addPOst = '/addPost';
+const String splashPage = '/splashScreen';
 const String editProfile = '/editProfile';
 const String userProfile = '/userProfile';
 const String orderSummry = '/orderSummery';

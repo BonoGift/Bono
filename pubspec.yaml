@@ -132,6 +132,10 @@ flutter:
       - family: EdwardianScriptITC
         fonts:
           - asset: assets/fonts/ITCEDSCR.TTF
+      - family: CommercialScriptBT
+        fonts:
+          - asset: assets/fonts/ComScrpt.ttf
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
