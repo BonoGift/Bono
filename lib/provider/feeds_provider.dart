@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/config/destination.dart';
 import 'package:bono_gifts/models/feeds_models.dart';
@@ -39,6 +40,11 @@ class FeedsProvider extends ChangeNotifier {
     index = ind;
     print(index);
     notifyListeners();
+  }
+  AudioCache audio = AudioCache(fixedPlayer: AudioPlayer());
+
+  playLikeAudio() {
+    audio.play("like.wav");
   }
 
   /*List<AllDestinations> allDestinations = [

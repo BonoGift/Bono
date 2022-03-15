@@ -41,6 +41,10 @@ class ChatProvider extends ChangeNotifier {
     audio.play("receive.wav");
   }
 
+  playBackgroundRecieveMessage() {
+    audio.play("receive_bg.wav");
+  }
+
   addinMoveList(MoveListModel item, bool isChecked) {
     moveListt = [];
     moveListt.add(item);

@@ -311,10 +311,13 @@ class _FeedsState extends State<Feeds> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: InkWell(
                                         onTap: () {
+                                          if (!pro.feeds[i].isLiked) {
+                                            pro.playLikeAudio();
+                                          }
                                           pro.incrementLike(i);
                                           pro.addLike(pro.feeds[i].docid, pro.feeds[i].like, context, i);
                                           pro.callGetLike(context, pro.feeds[i].docid);
-                                          // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(recieverName: pro.feeds[i].profileName,profileImage: pro.feeds[i].profileImage,recieverPhone:pro.feeds[i].phone)));
+
                                         },
                                         child: Column(
                                           children: [

@@ -125,7 +125,9 @@ flutter:
     - assets/feeds_icons/
     - assets/receive.wav
     - assets/send.wav
-    -
+    - assets/like.wav
+    - assets/receive_bg.wav
+
   fonts:
       - family: EdwardianScriptITC
         fonts:
