@@ -210,6 +210,7 @@ class ChatProvider extends ChangeNotifier {
             name: value.docs[d]['name'],
             phone: value.docs[d]['phone'],
             photo: value.docs[d]['profile_url'],
+            country: value.docs[d]['country'],
             isSelect: false,
           ));
         }
@@ -217,7 +218,13 @@ class ChatProvider extends ChangeNotifier {
       service.fetchSearch1(contactList, i, 'phone').then((value) {
         for (var d = 0; d < value.docs.length; d++) {
           print(value.docs[d]['name']);
-          netWorkLsit.add(NetWorkModel(name: value.docs[d]['name'], phone: value.docs[d]['phone'], photo: value.docs[d]['profile_url'], isSelect: false));
+          netWorkLsit.add(NetWorkModel(
+            name: value.docs[d]['name'],
+            phone: value.docs[d]['phone'],
+            photo: value.docs[d]['profile_url'],
+            country: value.docs[d]['country'],
+            isSelect: false,
+          ));
         }
       });
       service.fetchSearch1(contactList, i, 'searchPhone').then((value) {
@@ -227,6 +234,7 @@ class ChatProvider extends ChangeNotifier {
             name: value.docs[d]['name'],
             phone: value.docs[d]['phone'],
             photo: value.docs[d]['profile_url'],
+            country: value.docs[d]['country'],
             isSelect: false,
           ));
         }
@@ -283,29 +291,71 @@ class ChatProvider extends ChangeNotifier {
           for (var dd in value.docs) {
             switch (dd['status']) {
               case 0:
-                friendsList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
+                friendsList.add(
+                  NetWorkModel(
+                    phone: dd['phone'],
+                    photo: dd['imageUrl'],
+                    isSelect: false,
+                    name: dd['name'],
+                    country: value.docs[d]['country'] ?? '',
+                  ),
+                );
                 //print(friendsList.toString() + '--------- friendList');
-                //notifyListeners();
                 break;
               case 1:
-                familyList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
+                familyList.add(
+                  NetWorkModel(
+                    phone: dd['phone'],
+                    photo: dd['imageUrl'],
+                    isSelect: false,
+                    name: dd['name'],
+                    country: value.docs[d]['country'] ?? '',
+                  ),
+                );
                 break;
               case 2:
-                workList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
+                workList.add(
+                  NetWorkModel(
+                    phone: dd['phone'],
+                    photo: dd['imageUrl'],
+                    isSelect: false,
+                    name: dd['name'],
+                    country: value.docs[d]['country'] ?? '',
+                  ),
+                );
                 break;
               case 3:
-                schoolList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
+                schoolList.add(
+                  NetWorkModel(
+                    phone: dd['phone'],
+                    photo: dd['imageUrl'],
+                    isSelect: false,
+                    name: dd['name'],
+                    country: value.docs[d]['country'] ?? '',
+                  ),
+                );
                 break;
               case 4:
-                neighborList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
+                neighborList.add(
+                  NetWorkModel(
+                    phone: dd['phone'],
+                    photo: dd['imageUrl'],
+                    isSelect: false,
+                    name: dd['name'],
+                    country: value.docs[d]['country'] ?? '',
+                  ),
+                );
                 break;
               case 5:
-                othersList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
+                othersList.add(
+                  NetWorkModel(
+                    phone: dd['phone'],
+                    photo: dd['imageUrl'],
+                    isSelect: false,
+                    name: dd['name'],
+                    country: value.docs[d]['country'] ?? '',
+                  ),
+                );
                 break;
             }
             notifyListeners();
