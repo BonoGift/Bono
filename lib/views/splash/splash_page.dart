@@ -43,8 +43,8 @@ class _SplashPageState extends State<SplashPage> {
         children: [
           Center(
             child: Image.asset(
-              'assets/images/icons/ic_launcher.png',
-              width: getWidth(context) * 0.45,
+              'assets/images/icons/splash_screen_icon.png',
+              width: getWidth(context) * 0.40,
             ),
           ),
           const Center(
@@ -57,6 +57,7 @@ class _SplashPageState extends State<SplashPage> {
               ),
             ),
           ),
+          SizedBox(height: getHeight(context) * 0.15),
         ],
       ),
     );
