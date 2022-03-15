@@ -3,7 +3,13 @@ import 'package:bono_gifts/helper/decorated_container.dart';
 import 'package:bono_gifts/helper/decorated_image.dart';
 import 'package:bono_gifts/views/gift/model/history_model.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
+import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../provider/feeds_provider.dart';
+import '../../../routes/routes_names.dart';
+import '../../buy/product_details_page.dart';
 
 class HistoryListItem extends StatelessWidget {
   final HistoryModel history;
@@ -13,6 +19,8 @@ class HistoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double _height = MediaQuery.of(context).size.height;
+    final pro = Provider.of<FeedsProvider>(context);
+
     return DecoratedContainer(
       height: _height * 0.18,
       child: Padding(
@@ -21,11 +29,21 @@ class HistoryListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: DecoratedImage(
-                image: history.giftImage!,
-                width: getWidth(context) * 0.25,
-                height: getWidth(context) * 0.25,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (c) => ProductDetailsPage(),
+                  ),
+                );
+              },
+              child: Expanded(
+                child: DecoratedImage(
+                  image: history.giftImage!,
+                  width: getWidth(context) * 0.25,
+                  height: getWidth(context) * 0.25,
+                ),
               ),
             ),
             Expanded(
@@ -65,8 +83,17 @@ class HistoryListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ClipOval(
-                    child: FadeInImage.assetNetwork(height: 60, width: 60, placeholder: 'assets/images/placeholder.jpg', fit: BoxFit.cover, image: history.isReceived ? history.senderImage! : history.receiverImage!),
+                  InkWell(
+                    onTap: () async {
+                      pro.getNetworkUserData(history.senderNumber!).then((value) {
+                        Navigator.pushNamed(context, userProfile);
+                      });
+                    },
+                    child: ClipOvalImageWidget(
+                      imageUrl: history.isReceived ? history.senderImage! : history.receiverImage!,
+                      imageWidth: 60,
+                      imageHeight: 60,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Flexible(

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class HistoryList extends StatelessWidget {
   final List<HistoryModel> historyList;
+
   HistoryList({required this.historyList});
 
   @override
@@ -30,9 +31,7 @@ class HistoryList extends StatelessWidget {
             );
           },
           separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 10,
-            );
+            return const SizedBox(height: 10);
           },
           itemCount: historyList.length),
     );

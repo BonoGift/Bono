@@ -329,7 +329,7 @@ class FeedsProvider extends ChangeNotifier {
   List<String> postsUsers = [];
   String? networkDiffDays;
 
-  getNetworkUserData(String phone) async {
+  Future<void> getNetworkUserData(String phone) async {
     await service.getNetworkProfile(phone).then((data) {
       dob = data['dobFormat'].toDate();
       name = data['name'];
