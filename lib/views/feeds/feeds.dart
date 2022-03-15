@@ -232,15 +232,20 @@ class _FeedsState extends State<Feeds> {
                                                 Positioned(
                                                   top: 16,
                                                   right: 24,
-                                                  child: Container(
-                                                    padding: const EdgeInsets.all(2),
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(color: Colors.grey),
-                                                    ),
-                                                    child: const Icon(
-                                                      Icons.close,
-                                                      color: Colors.grey,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      padding: const EdgeInsets.all(2),
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(color: Colors.grey),
+                                                      ),
+                                                      child: const Icon(
+                                                        Icons.close,
+                                                        color: Colors.grey,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
