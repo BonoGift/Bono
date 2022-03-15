@@ -193,32 +193,66 @@ class _FeedsState extends State<Feeds> {
                                       print('clicked');
                                       showModalBottomSheet(
                                           isScrollControlled: true,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(36),
+                                              topRight: Radius.circular(36),
+                                            ),
+                                          ),
                                           context: context,
                                           builder: (cntext) {
-                                            return Column(
-                                              mainAxisSize: MainAxisSize.min,
+                                            return Stack(
                                               children: [
-                                                const SizedBox(height: 12),
-                                                const Text(
-                                                  'Report Abuse',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20,
+                                                Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    const SizedBox(height: 16),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[600],
+                                                        borderRadius: BorderRadius.circular(4),
+                                                      ),
+                                                      height: 8,
+                                                      width: getWidth(context) * 0.45,
+                                                    ),
+                                                    const SizedBox(height: 16),
+                                                    const Text(
+                                                      'Report Abuse',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 20,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    _getReportBottomSheetTextWidget(context, title: 'Spam or fake'),
+                                                    _getReportBottomSheetDividerWidget(),
+                                                    _getReportBottomSheetTextWidget(context, title: 'Harasment or hateful'),
+                                                    _getReportBottomSheetDividerWidget(),
+                                                    _getReportBottomSheetTextWidget(context, title: 'Violence'),
+                                                    _getReportBottomSheetDividerWidget(),
+                                                    _getReportBottomSheetTextWidget(context, title: 'Adult content or nuddity'),
+                                                    _getReportBottomSheetDividerWidget(),
+                                                    _getReportBottomSheetTextWidget(context, title: 'Copy right violation'),
+                                                    _getReportBottomSheetDividerWidget(),
+                                                    _getReportBottomSheetTextWidget(context, title: 'Other'),
+                                                    const SizedBox(height: 40),
+                                                  ],
+                                                ),
+                                                Positioned(
+                                                  top: 16,
+                                                  right: 24,
+                                                  child: Container(
+                                                    padding: const EdgeInsets.all(2),
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      border: Border.all(color: Colors.grey),
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.grey,
+                                                    ),
                                                   ),
                                                 ),
-                                                const SizedBox(height: 20),
-                                                _getReportBottomSheetTextWidget(context, title: 'Spam or fake'),
-                                                _getReportBottomSheetDividerWidget(),
-                                                _getReportBottomSheetTextWidget(context, title: 'Harasment or hateful'),
-                                                _getReportBottomSheetDividerWidget(),
-                                                _getReportBottomSheetTextWidget(context, title: 'Violence'),
-                                                _getReportBottomSheetDividerWidget(),
-                                                _getReportBottomSheetTextWidget(context, title: 'Adult content or nuddity'),
-                                                _getReportBottomSheetDividerWidget(),
-                                                _getReportBottomSheetTextWidget(context, title: 'Copy right violation'),
-                                                _getReportBottomSheetDividerWidget(),
-                                                _getReportBottomSheetTextWidget(context, title: 'Other'),
-                                                const SizedBox(height: 40),
                                               ],
                                             );
                                           });
@@ -544,7 +578,7 @@ class _FeedsState extends State<Feeds> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: const Divider(
-        thickness: 1.0,
+        thickness: 0.5,
         color: Colors.grey,
       ),
     );
