@@ -74,11 +74,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _scrollDown() {
     _controller.animateTo(_controller.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-    /*_controller.animateTo(
-      _controller.position.maxScrollExtent,
-      duration: const Duration(seconds: 2),
-      curve: Curves.fastOutSlowIn,
-    );*/
   }
 
   _onBackspacePressed() {
@@ -102,7 +97,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     chatController = AutoScrollController(viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom), axis: Axis.horizontal);
     final proc = Provider.of<ChatProvider>(context, listen: false);
-    proc.isScreenOn = true;
     proc.isFirstLoad = true;
     Future.delayed(const Duration(milliseconds: 500), () {
       _scrollDown();
@@ -116,9 +110,9 @@ class _ChatScreenState extends State<ChatScreen> {
     final proc = Provider.of<ChatProvider>(context, listen: false);
     firestore.collection('recentChats').doc(pro.phone).collection('myChats').doc(widget.recieverPhone).snapshots().listen((event) {
       if (event.data()?['isSendMe'] == false) {
-        //print('listening: ${proc.isFirstLoad}');
+        print('listening: ${proc.isFirstLoad}');
         if (!proc.isFirstLoad) {
-          proc.isScreenOn ? proc.playRecieveMessage() : proc.playBackgroundRecieveMessage();
+          proc.playRecieveMessage();
         }
         proc.changeIsFirstLoad();
       }
