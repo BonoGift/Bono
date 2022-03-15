@@ -463,7 +463,7 @@ class _FeedsState extends State<Feeds> {
                                   pro.openDescription(i);
                                 },
                                 child: Container(
-                                  color: Colors.black.withOpacity(0.4),
+                                  color: Colors.black.withOpacity(pro.feeds[i].isDesOpen ? 0.8 : 0.4),
                                   padding: const EdgeInsets.only(top: 8),
                                   child: Column(
                                     children: [
@@ -472,10 +472,10 @@ class _FeedsState extends State<Feeds> {
                                         child: Center(
                                           child: Text(
                                             pro.feeds[i].title,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 20,
-                                              overflow: TextOverflow.ellipsis,
+                                              overflow: pro.feeds[i].isDesOpen ? null : TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ),
@@ -510,7 +510,7 @@ class _FeedsState extends State<Feeds> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          pro.feeds[i].isDesOpen ? "Read" : "Read",
+                                          pro.feeds[i].isDesOpen ? "Less" : "Read",
                                           style: const TextStyle(color: Colors.white, fontSize: 12),
                                         ),
                                         Image.asset(
