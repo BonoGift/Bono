@@ -100,19 +100,28 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    final pro = Provider.of<SignUpProvider>(context, listen: false);
-    final proc = Provider.of<ChatProvider>(context, listen: false);
     chatController = AutoScrollController(viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom), axis: Axis.horizontal);
-    firestore.collection('recentChats').doc(pro.phone).collection('myChats').doc(widget.recieverPhone).snapshots().listen((event) {
-      // messageCount = int.parse(event.data()?['count']);
-      if (event.data()?['isSendMe'] == false) {
-        proc.playRecieveMessage();
-      }
-      print("${event.data()?['isSendMe']}");
-      print(messageCount);
-    });
+    final proc = Provider.of<ChatProvider>(context, listen: false);
+    proc.isScreenOn = true;
+    proc.isFirstLoad = true;
     Future.delayed(const Duration(milliseconds: 500), () {
       _scrollDown();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final pro = Provider.of<SignUpProvider>(context, listen: false);
+    final proc = Provider.of<ChatProvider>(context, listen: false);
+    firestore.collection('recentChats').doc(pro.phone).collection('myChats').doc(widget.recieverPhone).snapshots().listen((event) {
+      if (event.data()?['isSendMe'] == false) {
+        //print('listening: ${proc.isFirstLoad}');
+        if (!proc.isFirstLoad) {
+          proc.isScreenOn ? proc.playRecieveMessage() : proc.playBackgroundRecieveMessage();
+        }
+        proc.changeIsFirstLoad();
+      }
     });
   }
 
@@ -121,155 +130,161 @@ class _ChatScreenState extends State<ChatScreen> {
     final pro = Provider.of<SignUpProvider>(context);
     final proChat = Provider.of<ChatProvider>(context);
     final Stream<QuerySnapshot> documentStream = firestore.collection('chats').doc(pro.phone.toString()).collection(widget.recieverPhone).orderBy('timestamp').snapshots();
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: AssetImage("assets/images/chat_screen_bg.png"),
+    return WillPopScope(
+      onWillPop: () {
+        proChat.changeIsScreenOnValue();
+        return Future.value(true);
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage("assets/images/chat_screen_bg.png"),
+              ),
             ),
-          ),
-          child: Column(
-            children: [
-              _getAppBarWidget(context),
-              _getMessagesWidget(documentStream, pro, proChat),
-              Container(
-                color: Colors.grey[300],
-                child: Offstage(
-                  offstage: isRecording,
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(left: 12),
-                          child: InkWell(
-                            onTap: () async {
-                              proChat.generateRandomString(13);
-                              XFile? image;
-                              final ImagePicker _picker = ImagePicker();
-                              image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
-                              if (image == null) return;
-                              var bytes = await image.readAsBytes();
-                              if (bytes != null) {
-                                print(image.path);
-                                String filename = image.path.split("/").last;
-                                String imageUrl = await ChatService().uploadImage(bytes, widget.recieverPhone, filename, pro.phone!);
-                                print(imageUrl);
-                                proChat.sendImageMessage(context, imageUrl, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
-                                _scrollDown();
-                              }
-                            },
-                            child: Image.asset(
-                              "assets/images/icons/camera.png",
-                              height: 32,
-                              width: 32,
+            child: Column(
+              children: [
+                _getAppBarWidget(context),
+                _getMessagesWidget(documentStream, pro, proChat),
+                Container(
+                  color: Colors.grey[300],
+                  child: Offstage(
+                    offstage: isRecording,
+                    child: Center(
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(left: 12),
+                            child: InkWell(
+                              onTap: () async {
+                                proChat.generateRandomString(13);
+                                XFile? image;
+                                final ImagePicker _picker = ImagePicker();
+                                image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+                                if (image == null) return;
+                                var bytes = await image.readAsBytes();
+                                if (bytes != null) {
+                                  print(image.path);
+                                  String filename = image.path.split("/").last;
+                                  String imageUrl = await ChatService().uploadImage(bytes, widget.recieverPhone, filename, pro.phone!);
+                                  print(imageUrl);
+                                  proChat.sendImageMessage(context, imageUrl, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
+                                  _scrollDown();
+                                }
+                              },
+                              child: Image.asset(
+                                "assets/images/icons/camera.png",
+                                height: 32,
+                                width: 32,
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              // height: 50,
-                              child: AutoSizeTextField(
-                                minFontSize: 16,
-                                maxLines: null,
-                                onEditingComplete: () {
-                                  setState(() {
-                                    isKeyboardOpen = !isKeyboardOpen;
-                                  });
-                                },
-                                onTap: () {
-                                  if (message.text.isNotEmpty) {
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white,
+                                ),
+                                // height: 50,
+                                child: AutoSizeTextField(
+                                  minFontSize: 16,
+                                  maxLines: null,
+                                  onEditingComplete: () {
                                     setState(() {
-                                      emojiShowing = !emojiShowing;
                                       isKeyboardOpen = !isKeyboardOpen;
                                     });
-                                  }
-                                },
-                                controller: message,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  suffixIcon: InkWell(
-                                    onTap: () {
+                                  },
+                                  onTap: () {
+                                    if (message.text.isNotEmpty) {
                                       setState(() {
                                         emojiShowing = !emojiShowing;
-                                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                        isKeyboardOpen = !isKeyboardOpen;
                                       });
-                                    },
-                                    child: const Icon(
-                                      Icons.star,
-                                      color: Colors.lightBlueAccent,
+                                    }
+                                  },
+                                  controller: message,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    suffixIcon: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          emojiShowing = !emojiShowing;
+                                          SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                        });
+                                      },
+                                      child: const Icon(
+                                        Icons.star,
+                                        color: Colors.lightBlueAccent,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            onTap: () {
-                              if (message.text.isEmpty) return;
-                              proChat.generateRandomString(13);
-                              setState(() {
-                                messageCount++;
-                              });
-                              proChat.sendTextMessage(context, message, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
-                              message.clear();
-                              _scrollDown();
-                            },
-                            child: Image.asset(
-                              "assets/images/icons/send_arrow.png",
-                              height: 20,
-                              width: 20,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () {
+                                if (message.text.isEmpty) return;
+                                proChat.generateRandomString(13);
+                                setState(() {
+                                  messageCount++;
+                                });
+                                proChat.sendTextMessage(context, message, widget.recieverPhone, messageCount.toString(), widget.recieverName, widget.profileImage);
+                                message.clear();
+                                _scrollDown();
+                              },
+                              child: Image.asset(
+                                "assets/images/icons/send_arrow.png",
+                                height: 20,
+                                width: 20,
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Offstage(
-                offstage: !emojiShowing,
-                child: SizedBox(
-                  height: 250,
-                  child: EmojiPicker(
-                      onEmojiSelected: (Category category, Emoji emoji) {
-                        _onEmojiSelected(emoji);
-                      },
-                      onBackspacePressed: _onBackspacePressed,
-                      config: Config(
-                          columns: 7,
-                          // Issue: https://github.com/flutter/flutter/issues/28894
-                          emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
-                          verticalSpacing: 0,
-                          horizontalSpacing: 0,
-                          initCategory: Category.RECENT,
-                          bgColor: const Color(0xFFF2F2F2),
-                          indicatorColor: Colors.blue,
-                          iconColor: Colors.grey,
-                          iconColorSelected: Colors.blue,
-                          progressIndicatorColor: Colors.blue,
-                          backspaceColor: Colors.blue,
-                          showRecentsTab: true,
-                          recentsLimit: 28,
-                          noRecentsText: 'No Recents',
-                          noRecentsStyle: const TextStyle(fontSize: 20, color: Colors.black26),
-                          tabIndicatorAnimDuration: kTabScrollDuration,
-                          categoryIcons: const CategoryIcons(),
-                          buttonMode: ButtonMode.MATERIAL)),
+                Offstage(
+                  offstage: !emojiShowing,
+                  child: SizedBox(
+                    height: 250,
+                    child: EmojiPicker(
+                        onEmojiSelected: (Category category, Emoji emoji) {
+                          _onEmojiSelected(emoji);
+                        },
+                        onBackspacePressed: _onBackspacePressed,
+                        config: Config(
+                            columns: 7,
+                            // Issue: https://github.com/flutter/flutter/issues/28894
+                            emojiSizeMax: 32 * (Platform.isIOS ? 1.30 : 1.0),
+                            verticalSpacing: 0,
+                            horizontalSpacing: 0,
+                            initCategory: Category.RECENT,
+                            bgColor: const Color(0xFFF2F2F2),
+                            indicatorColor: Colors.blue,
+                            iconColor: Colors.grey,
+                            iconColorSelected: Colors.blue,
+                            progressIndicatorColor: Colors.blue,
+                            backspaceColor: Colors.blue,
+                            showRecentsTab: true,
+                            recentsLimit: 28,
+                            noRecentsText: 'No Recents',
+                            noRecentsStyle: const TextStyle(fontSize: 20, color: Colors.black26),
+                            tabIndicatorAnimDuration: kTabScrollDuration,
+                            categoryIcons: const CategoryIcons(),
+                            buttonMode: ButtonMode.MATERIAL)),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -525,7 +540,11 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      final proChat = Provider.of<ChatProvider>(context,listen: false);
+                      proChat.changeIsScreenOnValue();
+                      Navigator.pop(context);
+                    },
                     icon: const Icon(Icons.arrow_back_ios),
                   ),
                   Column(

@@ -31,6 +31,17 @@ class ChatProvider extends ChangeNotifier {
   List<ContModel> nameCont = [];
   List<MoveListModel> moveListt = [];
 
+  bool isScreenOn = true;
+  bool isFirstLoad = true;
+
+  void changeIsScreenOnValue(){
+    isScreenOn = false;
+  }
+
+  void changeIsFirstLoad(){
+    isFirstLoad = false;
+  }
+
   AudioCache audio = AudioCache(fixedPlayer: AudioPlayer());
 
   playSendMusic() {
