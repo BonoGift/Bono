@@ -140,46 +140,94 @@ class _FeedsState extends State<Feeds> {
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             color: Colors.white,
-                            child: Row(
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Stack(
                               children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                                    child: Text(
-                                      pro.feeds[i].profileName,
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                                ClipOval(
-                                  child: CachedNetworkImage(
-                                    imageUrl: pro.feeds[i].profileImage,
-                                    progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                                      width: 64,
-                                      height: 64,
-                                      child: Shimmer.fromColors(
-                                        baseColor: Colors.grey[300]!,
-                                        highlightColor: Colors.white,
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Colors.grey,
-                                          ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                                        child: Text(
+                                          pro.feeds[i].profileName,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
-                                    fit: BoxFit.cover,
-                                    width: 64,
-                                    height: 64,
-                                  ),
+                                    ClipOval(
+                                      child: CachedNetworkImage(
+                                        imageUrl: pro.feeds[i].profileImage,
+                                        progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                                          width: 64,
+                                          height: 64,
+                                          child: Shimmer.fromColors(
+                                            baseColor: Colors.grey[300]!,
+                                            highlightColor: Colors.white,
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        fit: BoxFit.cover,
+                                        width: 64,
+                                        height: 64,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        formt.format(pro.feeds[i].date).toString(),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: Text(
-                                    formt.format(pro.feeds[i].date).toString(),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                                Positioned(
+                                  top: -12,
+                                  right: 0,
+                                  child: InkWell(
+                                    onTap: () {
+                                      print('clicked');
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: (cntext) {
+                                            return Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const SizedBox(height: 12),
+                                                const Text(
+                                                  'Report Abuse',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 20),
+                                                _getReportBottomSheetTextWidget(context, title: 'Spam or fake'),
+                                                _getReportBottomSheetDividerWidget(),
+                                                _getReportBottomSheetTextWidget(context, title: 'Harasment or hateful'),
+                                                _getReportBottomSheetDividerWidget(),
+                                                _getReportBottomSheetTextWidget(context, title: 'Violence'),
+                                                _getReportBottomSheetDividerWidget(),
+                                                _getReportBottomSheetTextWidget(context, title: 'Adult content or nuddity'),
+                                                _getReportBottomSheetDividerWidget(),
+                                                _getReportBottomSheetTextWidget(context, title: 'Copy right violation'),
+                                                _getReportBottomSheetDividerWidget(),
+                                                _getReportBottomSheetTextWidget(context, title: 'Other'),
+                                                const SizedBox(height: 40),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: Icon(
+                                      Icons.more_horiz,
+                                      color: Colors.grey.withOpacity(0.6),
+                                      size: 48,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -207,183 +255,173 @@ class _FeedsState extends State<Feeds> {
                               height: getHeight(context) * 0.7,
                               fit: BoxFit.cover,
                             ),
-                            /*Image.network(
-                                  pro.feeds[i].image,
-                                  width: getWidth(context),
-                                  fit: BoxFit.cover,
-                                ),*/
                             Positioned(
                               bottom: 0,
                               right: 0,
-                              // alignment: Alignment.bottomRight,
-                              child: Container(
-                                // color:Colors.black.withOpacity(0.2),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    const SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          pro.sharePost(
-                                            pro.feeds[i].title,
-                                            pro.feeds[i].image,
-                                          );
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              sharedIcon,
-                                              height: 40,
-                                              width: 40,
-                                            ),
-                                            const Text(
-                                              "",
-                                              style: TextStyle(color: Colors.white),
-                                            )
-                                          ],
-                                        ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        pro.sharePost(
+                                          pro.feeds[i].title,
+                                          pro.feeds[i].image,
+                                        );
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            sharedIcon,
+                                            height: 40,
+                                            width: 40,
+                                          ),
+                                          const Text(
+                                            "",
+                                            style: TextStyle(color: Colors.white),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                          onTap: () {
-                                            showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                useRootNavigator: true,
-                                                context: context,
-                                                builder: (contxt) {
-                                                  commnetController.clear();
-                                                  return Scaffold(
-                                                    backgroundColor: Colors.transparent,
-                                                    resizeToAvoidBottomInset: true,
-                                                    body: Container(
-                                                      decoration: const BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius: BorderRadius.only(
-                                                          topLeft: Radius.circular(10.0),
-                                                          topRight: Radius.circular(10.0),
-                                                        ),
-                                                      ),
-                                                      //height: MediaQuery.of(context).size.height,
-                                                      child: SingleChildScrollView(
-                                                        child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                          children: [
-                                                            _getCommentsWidget(pro, i, commentDateFormat),
-                                                            _writeCommentWidget(context, pro, i),
-                                                          ],
-                                                        ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                        onTap: () {
+                                          showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              useRootNavigator: true,
+                                              context: context,
+                                              builder: (contxt) {
+                                                commnetController.clear();
+                                                return Scaffold(
+                                                  backgroundColor: Colors.transparent,
+                                                  resizeToAvoidBottomInset: true,
+                                                  body: Container(
+                                                    decoration: const BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(10.0),
+                                                        topRight: Radius.circular(10.0),
                                                       ),
                                                     ),
+                                                    //height: MediaQuery.of(context).size.height,
+                                                    child: SingleChildScrollView(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          _getCommentsWidget(pro, i, commentDateFormat),
+                                                          _writeCommentWidget(context, pro, i),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              commentIcon,
+                                              height: 40,
+                                              width: 40,
+                                            ),
+                                            StreamBuilder(
+                                              stream: FirebaseFirestore.instance.collection('userPosts').doc(pro.feeds[i].docid).collection('comments').snapshots(),
+                                              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                                if (snapshot.data == null) {
+                                                  return const Text(
+                                                    "0",
+                                                    style: TextStyle(color: Colors.white),
                                                   );
-                                                });
-                                          },
-                                          child: Column(
-                                            children: [
-                                              Image.asset(
-                                                commentIcon,
-                                                height: 40,
-                                                width: 40,
-                                              ),
-                                              StreamBuilder(
-                                                stream: FirebaseFirestore.instance.collection('userPosts').doc(pro.feeds[i].docid).collection('comments').snapshots(),
-                                                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                                  if (snapshot.data == null) {
-                                                    return const Text(
-                                                      "0",
-                                                      style: TextStyle(color: Colors.white),
-                                                    );
-                                                  } else {
-                                                    return Text(
-                                                      snapshot.data!.docs.length.toString(),
-                                                      style: const TextStyle(color: Colors.white),
-                                                    );
-                                                  }
-                                                },
-                                              )
-                                            ],
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          if (!pro.feeds[i].isLiked) {
-                                            pro.playLikeAudio();
-                                          }
-                                          pro.incrementLike(i);
-                                          pro.addLike(pro.feeds[i].docid, pro.feeds[i].like, context, i);
-                                          pro.callGetLike(context, pro.feeds[i].docid);
-
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              pro.feeds[i].isLiked ? "assets/feeds_icons/like-icon.png" : "assets/feeds_icons/like-icon-grey-.png",
-                                              height: 40,
-                                              width: 40,
-                                            ),
-                                            Text(
-                                              pro.feeds[i].like.toString(),
-                                              style: const TextStyle(color: Colors.white),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(recieverName: pro.feeds[i].profileName, profileImage: pro.feeds[i].profileImage, recieverPhone: pro.feeds[i].phone)));
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              chatIconNew,
-                                              height: 40,
-                                              width: 40,
-                                            ),
-                                            // Text("0",style: TextStyle(color: Colors.white),)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => SendGiftPage(
-                                                username: pro.feeds[i].profileName,
-                                                phone: pro.feeds[i].phone,
-                                                photo: pro.feeds[i].profileImage,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Image.asset(
-                                              giftICon,
-                                              height: 40,
-                                              width: 40,
-                                            ),
-                                            const Text(
-                                              "",
-                                              style: TextStyle(color: Colors.white),
+                                                } else {
+                                                  return Text(
+                                                    snapshot.data!.docs.length.toString(),
+                                                    style: const TextStyle(color: Colors.white),
+                                                  );
+                                                }
+                                              },
                                             )
                                           ],
-                                        ),
+                                        )),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (!pro.feeds[i].isLiked) {
+                                          pro.playLikeAudio();
+                                        }
+                                        pro.incrementLike(i);
+                                        pro.addLike(pro.feeds[i].docid, pro.feeds[i].like, context, i);
+                                        pro.callGetLike(context, pro.feeds[i].docid);
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            pro.feeds[i].isLiked ? "assets/feeds_icons/like-icon.png" : "assets/feeds_icons/like-icon-grey-.png",
+                                            height: 40,
+                                            width: 40,
+                                          ),
+                                          Text(
+                                            pro.feeds[i].like.toString(),
+                                            style: const TextStyle(color: Colors.white),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(recieverName: pro.feeds[i].profileName, profileImage: pro.feeds[i].profileImage, recieverPhone: pro.feeds[i].phone)));
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            chatIconNew,
+                                            height: 40,
+                                            width: 40,
+                                          ),
+                                          // Text("0",style: TextStyle(color: Colors.white),)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => SendGiftPage(
+                                              username: pro.feeds[i].profileName,
+                                              phone: pro.feeds[i].phone,
+                                              photo: pro.feeds[i].profileImage,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            giftICon,
+                                            height: 40,
+                                            width: 40,
+                                          ),
+                                          const Text(
+                                            "",
+                                            style: TextStyle(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             Positioned(
@@ -469,6 +507,45 @@ class _FeedsState extends State<Feeds> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _getReportBottomSheetTextWidget(BuildContext context, {required String title}) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: InkWell(
+            splashColor: Colors.lightBlue,
+            onTap: () {
+              Future.delayed(const Duration(milliseconds: 300), () {
+                Navigator.pop(context);
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Center(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _getReportBottomSheetDividerWidget() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: const Divider(
+        thickness: 1.0,
+        color: Colors.grey,
       ),
     );
   }
