@@ -1,11 +1,12 @@
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/helper/decorated_container.dart';
-import 'package:bono_gifts/helper/decorated_image.dart';
 import 'package:bono_gifts/views/gift/model/history_model.dart';
 import 'package:bono_gifts/views/gift/widgets/primary_text.dart';
 import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../provider/feeds_provider.dart';
 import '../../../routes/routes_names.dart';
@@ -39,10 +40,29 @@ class HistoryListItem extends StatelessWidget {
                 );
               },
               child: Expanded(
-                child: DecoratedImage(
-                  image: history.giftImage!,
-                  width: getWidth(context) * 0.25,
-                  height: getWidth(context) * 0.25,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black26, width: 5),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: history.giftImage!,
+                    width: getWidth(context) * 0.25,
+                    height: getWidth(context) * 0.25,
+                    progressIndicatorBuilder: (context, url, progress) => SizedBox(
+                      width: getWidth(context) * 0.25,
+                      height: getWidth(context) * 0.25,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.white,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
