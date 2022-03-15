@@ -1,5 +1,4 @@
 import 'package:bono_gifts/config/constants.dart';
-import 'package:bono_gifts/helper/helper.dart';
 import 'package:bono_gifts/models/move_list_model.dart';
 import 'package:bono_gifts/provider/chat_provider.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
@@ -9,8 +8,6 @@ import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/contact.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
@@ -24,17 +21,6 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> with TickerProviderStateMixin {
   late TabController _tabController;
-
-  getFirebaseContact() {
-    FirebaseFirestore.instance.collection('users').get().then((value) {
-      for (var d in value.docs) {
-        print("calling");
-        phones.add(d['searchPhone']);
-        print(d['searchPhone']);
-      }
-      getContacts();
-    });
-  }
 
   List<String> phones = [];
   List<String> contactList = [];
@@ -54,120 +40,10 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     }
   }
 
-  void getContacts() async {
-    newList.clear();
-    contactList.clear();
-    newDbList.clear();
-    newContList.clear();
-    if (await FlutterContacts.requestPermission()) {
-      List<Contact> contacts = await FlutterContacts.getContacts();
-      contacts = await FlutterContacts.getContacts(withProperties: true, withPhoto: true);
-      for (var i = 0; i < contacts.length; i++) {
-        setState(() {
-          contactList.add(contacts[i].phones[0].number.replaceAll(' ', ''));
-          nameCont.add(
-            ContModel(
-              name: "${contacts[i].name.first} ${contacts[i].name.last}",
-              phone: contacts[i].phones[0].number,
-            ),
-          );
-          // print(contactList);
-        });
-      }
-    }
-    Future.delayed(const Duration(seconds: 2), () {
-      fetchNewtrork();
-    });
-  }
-
   List<NewtWorkModel> netWorkLsit = [];
   final service = ChatService();
 
-  fetchNewtrork() {
-    for (var i = 0; i < contactList.length; i++) {
-      service.fetchSearch1(contactList, i, 'searchPhone1').then((value) {
-        for (var d = 0; d < value.docs.length; d++) {
-          print(value.docs[d]['name']);
-          if (!netWorkLsit.contains(value.docs[d]['phone'])) {
-            setState(() {
-              netWorkLsit.add(
-                NewtWorkModel(
-                  name: value.docs[d]['name'],
-                  phone: value.docs[d]['phone'],
-                  photo: value.docs[d]['profile_url'],
-                  isSelect: false,
-                ),
-              );
-            });
-          }
-        }
-      });
-      service.fetchSearch1(contactList, i, 'phone').then((value) {
-        for (var d = 0; d < value.docs.length; d++) {
-          print(value.docs[d]['name']);
-          if (!netWorkLsit.contains(value.docs[d]['phone'])) {
-            setState(() {
-              netWorkLsit.add(
-                NewtWorkModel(
-                  name: value.docs[d]['name'],
-                  phone: value.docs[d]['phone'],
-                  photo: value.docs[d]['profile_url'],
-                  isSelect: false,
-                ),
-              );
-            });
-          }
-        }
-      });
-      service.fetchSearch1(contactList, i, 'searchPhone').then((value) {
-        for (var d = 0; d < value.docs.length; d++) {
-          print(value.docs[d]['name']);
-          if (!netWorkLsit.contains(value.docs[d]['phone'])) {
-            setState(() {
-              netWorkLsit.add(
-                NewtWorkModel(
-                  name: value.docs[d]['name'],
-                  phone: value.docs[d]['phone'],
-                  photo: value.docs[d]['profile_url'],
-                  isSelect: false,
-                ),
-              );
-            });
-          }
-        }
-      });
-    }
-    Future.delayed(const Duration(seconds: 2), () {
-      removeDuplicate();
-    });
-  }
-
-  removeDuplicate() {
-    setState(() {
-      netWorkLsit.toSet().toList();
-    });
-  }
-
-  void pro() {
-    print(newContList);
-    print(newDbList);
-  }
-
-  Future<void> readJson() async {
-    DailCode().dailCode.forEach((element) {
-      print(element['dial_code']!.replaceAll(' ', ''));
-    });
-  }
-
   List<NewtWorkModel> moveList = [];
-
-  makeNetWorkSelect(int index) {
-    setState(() {
-      netWorkLsit[index].isSelect = !netWorkLsit[index].isSelect;
-    });
-  }
-
-  String otp = '';
 
   List<NetCatMo> networkCat = [
     //NetCatMo(name: 'All', isSel: false),
@@ -178,23 +54,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
     NetCatMo(name: 'Neigbour', isSel: false),
     NetCatMo(name: 'Others', isSel: false),
   ];
-
-  makeCatSE(int idn) {
-    setState(() {
-      networkCat[idn].isSel = !networkCat[idn].isSel;
-    });
-  }
-
-  makeselect(int i) {
-    setState(() {
-      for (var l in networkCat) {
-        l.isSel = false;
-      }
-      networkCat[i].isSel = true;
-    });
-  }
-
-  List matchList = [];
 
   @override
   void initState() {
@@ -230,11 +89,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Image.asset(
-                logo,
-                height: 70,
-                width: 70,
-              ),
+              Image.asset(logo, height: 70, width: 70),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -246,12 +101,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                   child: TabBar(
                     controller: _tabController,
                     labelPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                    // give the indicator a decoration (color and border radius)
-                    /*indicator: BoxDecoration(
-                      border: Border.all(color: Colors.blue),
-                      borderRadius: BorderRadius.circular(10.0),
-                      // color: Colors.green,
-                    ),*/
                     indicatorColor: Colors.transparent,
                     labelColor: Colors.blue,
                     unselectedLabelColor: Colors.black,
@@ -423,24 +272,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                               ),
                                             ),
                                           ),
-
-                                          /*SlidableAction(
-                                            flex: 1,
-                                            onPressed: (c) {
-                                              print(data['isSeen']);
-                                            },
-                                            backgroundColor: Colors.grey,
-                                            foregroundColor: Colors.white,
-                                            icon: Icons.list,
-                                            label: 'Archive',
-                                          ),*/
-                                          /*SlidableAction(
-                                            onPressed: (c) {},
-                                            backgroundColor: Colors.blue,
-                                            foregroundColor: Colors.white,
-                                            icon: Icons.shopping_basket,
-                                            label: 'Gift',
-                                          ),*/
                                         ],
                                       ),
                                       child: ListTile(
@@ -534,7 +365,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ),
-                                  // SizedBox(height: getHeight(context) / 3,),
                                 ],
                               ),
                             );
@@ -557,7 +387,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 ),
                                 child: TextField(
                                   onChanged: (val) {
-                                    print('on changed ${_tabController.index}');
                                     proChat.searchNetwork(val);
                                     if (val.isEmpty) {
                                       proChat.getContactsFromFirebase(context);
@@ -651,7 +480,6 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                                 return _getContactsByCategoryWidget(context, proChat.othersList, proChat, i, 5);
                               },
                             ),
-                            // -------------------------------------------------
                           ],
                         )
                       : SingleChildScrollView(
@@ -934,18 +762,18 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
 Widget alPhabat(String name, {double? fontSize}) {
   return Container(
     padding: const EdgeInsets.all(8),
-    // height: 20,
     width: double.infinity,
     color: Colors.grey[200],
     child: Center(
-        child: Text(
-      name,
-      style: TextStyle(
-        color: Colors.grey,
-        fontSize: fontSize ?? 18,
-        fontWeight: FontWeight.w500,
+      child: Text(
+        name,
+        style: TextStyle(
+          color: Colors.grey,
+          fontSize: fontSize ?? 18,
+          fontWeight: FontWeight.w500,
+        ),
       ),
-    )),
+    ),
   );
 }
 
