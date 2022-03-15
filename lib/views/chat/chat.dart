@@ -422,7 +422,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                             ),
                             Visibility(
                               visible: proChat.familyList.isNotEmpty,
-                              child: alPhabat("Family", fontSize: 17),
+                              child: alPhabat("Family", fontSize: 14),
                             ),
                             ListView.builder(
                               shrinkWrap: true,
@@ -434,7 +434,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                             ),
                             Visibility(
                               visible: proChat.workList.isNotEmpty,
-                              child: alPhabat("Work", fontSize: 17),
+                              child: alPhabat("Work", fontSize: 14),
                             ),
                             ListView.builder(
                               shrinkWrap: true,
@@ -446,7 +446,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                             ),
                             Visibility(
                               visible: proChat.schoolList.isNotEmpty,
-                              child: alPhabat("School", fontSize: 17),
+                              child: alPhabat("School", fontSize: 14),
                             ),
                             ListView.builder(
                               shrinkWrap: true,
@@ -458,7 +458,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                             ),
                             Visibility(
                               visible: proChat.neighborList.isNotEmpty,
-                              child: alPhabat("Neigbhour", fontSize: 17),
+                              child: alPhabat("Neigbhour", fontSize: 14),
                             ),
                             ListView.builder(
                               shrinkWrap: true,
@@ -470,7 +470,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                             ),
                             Visibility(
                               visible: proChat.othersList.isNotEmpty,
-                              child: alPhabat("Others", fontSize: 17),
+                              child: alPhabat("Others", fontSize: 14),
                             ),
                             ListView.builder(
                               shrinkWrap: true,
@@ -650,7 +650,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
             backgroundColor: Colors.transparent,
             insetPadding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
-              padding: EdgeInsets.only(left: 24),
+              padding: const EdgeInsets.only(left: 24),
               height: 150,
               width: double.infinity,
               color: Colors.white,
@@ -682,7 +682,7 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
-                            color: index == status ? const Color(0xFF0000F9) : Colors.grey.withOpacity(0.3),
+                            color: index == status ? Colors.blue : Colors.grey.withOpacity(0.3),
                           ),
                           child: Text(
                             element.name,

@@ -325,7 +325,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding: const EdgeInsets.symmetric(vertical: 2.0),
                   child: Column(
                     crossAxisAlignment: data['senderID'] == pro.phone ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                     children: [
@@ -399,7 +399,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               : const SizedBox.shrink()
                                         ],
                                       ),
-                                      const SizedBox(height: 4),
+                                      const SizedBox(height: 2),
                                       Text(
                                         timeFormat.format(DateTime.parse(data['timestamp'].toDate().toString())).toString(),
                                         style: const TextStyle(
