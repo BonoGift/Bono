@@ -164,20 +164,10 @@ class ChatProvider extends ChangeNotifier {
     if (await FlutterContacts.requestPermission()) {
       List<Contact> contacts = await FlutterContacts.getContacts();
       contacts = await FlutterContacts.getContacts(withProperties: true, withPhoto: true);
-
       for (var i = 0; i < contacts.length; i++) {
-        try {
-          contactList.add(contacts[i].phones[0].number.replaceAll(' ', ''));
-          nameCont.add(
-            ContModel(
-              name: "${contacts[i].name.first} ${contacts[i].name.last}",
-              phone: contacts[i].phones[0].number,
-            ),
-          );
-        } catch (e) {
-          print('found ' + e.toString());
-        }
-
+        contactList.add(contacts[i].phones[0].number.replaceAll(' ', ''));
+        nameCont.add(ContModel(name: "${contacts[i].name.first} ${contacts[i].name.last}", phone: contacts[i].phones[0].number));
+        // print(contactList);
         notifyListeners();
       }
     }
@@ -268,7 +258,6 @@ class ChatProvider extends ChangeNotifier {
                     'imageUrl': d.photo,
                     'phone': d.phone,
                     'name': d.name,
-                    'country': d.country,
                   },
                   d.phone)
               .then((value) {

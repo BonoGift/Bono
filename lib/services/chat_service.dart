@@ -72,7 +72,6 @@ class ChatService {
       'name': map['name'],
       'imageUrl': map['imageUrl'],
       'status': 0,
-      'country':map['country'],
     });
     return true;
   }
