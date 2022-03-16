@@ -2,6 +2,7 @@ import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/feeds_provider.dart';
 import 'package:bono_gifts/routes/routes_names.dart';
 import 'package:bono_gifts/views/chat/chat_screen.dart';
+import 'package:bono_gifts/widgets/ClipOvalImageWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -146,26 +147,10 @@ class _FeedsState extends State<Feeds> {
                                         ),
                                       ),
                                     ),
-                                    ClipOval(
-                                      child: CachedNetworkImage(
-                                        imageUrl: pro.feeds[i].profileImage,
-                                        progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                                          width: 64,
-                                          height: 64,
-                                          child: Shimmer.fromColors(
-                                            baseColor: Colors.grey[300]!,
-                                            highlightColor: Colors.white,
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        fit: BoxFit.cover,
-                                        width: 64,
-                                        height: 64,
-                                      ),
+                                    ClipOvalImageWidget(
+                                      imageUrl: pro.feeds[i].profileImage,
+                                      imageHeight: 64,
+                                      imageWidth: 64,
                                     ),
                                     Expanded(
                                       child: Text(
