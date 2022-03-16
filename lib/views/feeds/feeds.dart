@@ -111,9 +111,7 @@ class _FeedsState extends State<Feeds> {
               ),
               const SizedBox(height: 10),
               if (pro.feeds.isEmpty)
-                const Center(
-                  child: CircularProgressIndicator(),
-                )
+                const Center(child: CircularProgressIndicator())
               else
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),

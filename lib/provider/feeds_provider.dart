@@ -45,14 +45,6 @@ class FeedsProvider extends ChangeNotifier {
     audio.play("like.wav");
   }
 
-  /*List<AllDestinations> allDestinations = [
-    AllDestinations(name: 'Chat', icon: index == 0 ? chatIconBlue : chatIconGrey),
-    AllDestinations(name: 'Buy', icon: index == 1 ? giftIconBlue : giftIConGrey),
-    AllDestinations(name: 'Feeds', icon: index == 2 ? feedIconBlue : feedIConGrey),
-    AllDestinations(name: 'Camera', icon: index == 3 ? cameraIconBlue : cameraIconGrey),
-    AllDestinations(name: 'Profile', icon: index == 4 ? profileIconBlue : profileIconGrey),
-  ];*/
-
   final colRef = FirebaseFirestore.instance.collection('userPosts');
 
   dispostCameraController() {
@@ -210,21 +202,21 @@ class FeedsProvider extends ChangeNotifier {
             isLiked: false,
           ),
         );
-        print("Feeds list length ${feeds.length}");
+        //print("Feeds list length ${feeds.length}");
         notifyListeners();
       });
-      print("docs length ${value.docs.length}");
+      //print("docs length ${value.docs.length}");
       for (var f = 0; f < feeds.length; f++) {
         service.getLikePost(pro.phone!, feeds[f].docid).then((value) {
           if (value == true) {
-            print("true");
+            //print("true");
             feeds[f].isLiked = true;
           } else {
-            print("false");
+            //print("false");
             feeds[f].isLiked = false;
           }
+          notifyListeners();
         });
-        notifyListeners();
       }
     });
     //notifyListeners();
