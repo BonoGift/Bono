@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bono_gifts/config/constants.dart';
-import 'package:bono_gifts/config/destination.dart';
 import 'package:bono_gifts/models/feeds_models.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/services/feeds_services.dart';
@@ -11,7 +10,6 @@ import 'package:bono_gifts/views/camera/camera_view.dart';
 import 'package:bono_gifts/views/camera/video_view.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -196,7 +194,6 @@ class FeedsProvider extends ChangeNotifier {
     final pro = Provider.of<SignUpProvider>(context, listen: false);
     await service.getFeedsPosts().then((value) {
       value.docs.forEach((fed) {
-        //if(feeds.isNotEmpty) return;
         feeds.add(
           FeedsModels(
             image: fed['image url'],
@@ -230,6 +227,7 @@ class FeedsProvider extends ChangeNotifier {
         notifyListeners();
       }
     });
+    //notifyListeners();
   }
 
   addComment(String docRed, String text, BuildContext context) async {
@@ -368,6 +366,9 @@ class FeedsProvider extends ChangeNotifier {
     var daOfBirth = DateTime(d.year, dob!.month, dob!.day);
     var todayDate = DateTime(d.year, d.month, d.day);
     var io = daOfBirth.difference(todayDate).inDays;
+    if (io < 0) {
+      io = io + 365;
+    }
     networkDiffDays = io.toString();
     notifyListeners();
   }

@@ -295,6 +295,9 @@ class SignUpProvider extends ChangeNotifier {
     var daOfBirth = DateTime(d.year, dobFormat.month, dobFormat.day);
     var todayDate = DateTime(d.year, d.month, d.day);
     var io = daOfBirth.difference(todayDate).inDays;
+    if (io < 0) {
+      io = io + 365;
+    }
     diffDays = io.toString();
   }
 
