@@ -724,9 +724,15 @@ class _ChatState extends State<Chat> with TickerProviderStateMixin {
                       children: [
                         Text(
                           chat.nameCont[i].name,
-                          style: const TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 14),
                         ),
-                        Text(chat.nameCont[i].phone),
+                        const SizedBox(height: 2),
+                        Text(
+                          chat.nameCont[i].phone,
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   ],
