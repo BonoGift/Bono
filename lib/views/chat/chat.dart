@@ -775,7 +775,7 @@ Widget alPhabat(String name, {double? fontSize}) {
         name,
         style: TextStyle(
           color: Colors.grey,
-          fontSize: fontSize ?? 18,
+          fontSize: fontSize ?? 14,
           fontWeight: FontWeight.w500,
         ),
       ),
