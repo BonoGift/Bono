@@ -134,6 +134,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             child: ListView.separated(
               itemCount: product!.images!.length,
               shrinkWrap: true,
+              scrollDirection: Axis.vertical,
               padding: const EdgeInsets.all(0),
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
@@ -149,7 +150,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       children: [
                         CachedNetworkImage(
                           imageUrl: product.images![index].src!,
-                          height: ((getHeight(context) * 0.35) / product.images!.length) - 8,
+                          height: ((getHeight(context) * 0.35) / 5) - 8,
                           width: double.infinity,
                           fit: BoxFit.cover,
                           progressIndicatorBuilder: (context, url, progress) => SizedBox(
@@ -345,7 +346,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
       child: Center(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             /*_getTabTextWidget(
               title: 'Details',
