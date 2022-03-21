@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../config/constants.dart';
+import '../models/wcmp_api/vendor_product.dart';
 
 class CarouselWidget extends StatefulWidget {
-  final List<String> images;
+  final List<Images> images;
   final int initialPage;
 
   const CarouselWidget({
@@ -92,12 +93,12 @@ class _CarouselWidgetState extends State<CarouselWidget> {
     );
   }
 
-  List<Widget> _getCarouselItemsWidget(List<String> items) {
+  List<Widget> _getCarouselItemsWidget(List<Images> items) {
     return items.map((e) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: CachedNetworkImage(
-          imageUrl: e,
+          imageUrl: e.src ?? '',
           progressIndicatorBuilder: (context, url, progress) => SizedBox(
             child: Shimmer.fromColors(
               baseColor: Colors.grey[300]!,

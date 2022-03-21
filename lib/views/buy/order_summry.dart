@@ -55,8 +55,6 @@ class _OrderSummryState extends State<OrderSummry> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              // const Center(child: Text("Buy Gifts",style: TextStyle(fontSize: 20),)),
-              // const SizedBox(height: 10,),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
@@ -130,25 +128,32 @@ class _OrderSummryState extends State<OrderSummry> {
                                     padding: const EdgeInsets.all(1.0),
                                     child: Hero(
                                       tag: wooCommerceMarketPlaceProvider.selectedProduct?.images?.first.src.toString() ?? '',
-                                      child: Image.network(
-                                        wooCommerceMarketPlaceProvider.selectedProduct?.images?.first.src.toString() ?? '',
-                                        height: 148,
-                                        fit: BoxFit.contain,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (c) => const ProductDetailsPage(),
+                                            ),
+                                          );
+                                        },
+                                        child: Image.network(
+                                          wooCommerceMarketPlaceProvider.selectedProduct?.images?.first.src.toString() ?? '',
+                                          height: 148,
+                                          fit: BoxFit.contain,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   Positioned(
                                     bottom: -25,
-                                    left: 33,
-                                    right: 33,
-                                    child: SizedBox(
-                                      width: 150,
-                                      child: FittedBox(
-                                        child: PrimaryText(
-                                          text: 'Quantity: 1',
-                                          fontSize: 15,
-                                        ),
-                                      ),
+                                    left: -50,
+                                    right: -50,
+                                    child: PrimaryText(
+                                      text: wooCommerceMarketPlaceProvider.selectedProduct?.name ?? '',
+                                      fontSize: 15,
+                                      textAlign: TextAlign.center,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ],
@@ -159,16 +164,6 @@ class _OrderSummryState extends State<OrderSummry> {
                       ),
                     ],
                   ),
-                  // Container(
-                  //   width: double.infinity,
-                  //   color: Colors.transparent,
-                  //   child: Image.network(
-                  //     wooCommerceMarketPlaceProvider.selectedProduct?.image!,
-                  //     fit: BoxFit.cover,
-                  //     height: 200,
-                  //     width: 200,
-                  //   ),
-                  // ),
                 ],
               ),
               Container(
@@ -193,11 +188,13 @@ class _OrderSummryState extends State<OrderSummry> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: InkWell(
-                            onTap: (){
-                              Navigator.push(context,  MaterialPageRoute(
-                                builder: (c) => ProductDetailsPage(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (c) => const ProductDetailsPage(),
                                 ),
-                              ),);
+                              );
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -1,8 +1,13 @@
 import 'package:bono_gifts/config/constants.dart';
+import 'package:bono_gifts/models/wcmp_api/vendor_product.dart';
 import 'package:bono_gifts/widgets/carousel_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../provider/wcmp_provider.dart';
 
 enum ProductDetailsTab { detailsTab, descTab, aboutSellerTab }
 
@@ -15,60 +20,68 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int _selectedIndex = 0;
-  ProductDetailsTab _selectedTab = ProductDetailsTab.detailsTab;
+  ProductDetailsTab _selectedTab = ProductDetailsTab.descTab;
 
   @override
   Widget build(BuildContext context) {
+    final wcmp = Provider.of<WooCommerceMarketPlaceProvider>(context);
+    VendorProduct? _product = wcmp.selectedProduct;
+    print(_product?.toJson());
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: const EdgeInsets.only(left: 16, top: 16),
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black,
-                  size: 28,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 16, top: 16),
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                      size: 28,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            _getTitleWidget(title: 'Chocolate Cake'),
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Column(
-                children: [
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                _getTitleWidget(title: _product?.name ?? ''),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Column(
                     children: [
-                      _getProductBasicInfoWidget(title: 'Size', info: '1k'),
-                      _getProductBasicInfoWidget(title: 'Quantity', info: '11'),
-                      _getProductBasicInfoWidget(title: 'Price', info: '30\$', textColor: Colors.blue),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _getProductBasicInfoWidget(title: 'Size', info: _product?.weight?.isEmpty ?? false ? 'N/A' : _product?.weight ?? ''),
+                          _getProductBasicInfoWidget(title: 'Quantity', info: '1'),
+                          _getProductBasicInfoWidget(title: 'Price', info: '\$${_product?.price.toString() ?? '0'}', textColor: Colors.blue),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      _getProductImagesWidget(context, _product),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  _getProductImagesWidget(context),
-                ],
-              ),
+                ),
+                _getShipmentInfoWidget(wcmp),
+                _getTabWidget(),
+                _getDividerWidget(),
+                //_getDetailsInfoWidget(_product),
+                _getDescriptionInfoWidget(_product),
+                //_getAboutInfoWidget(_product),
+              ],
             ),
-            _getShipmentInfoWidget(),
-            _getTabWidget(),
-            _getDividerWidget(),
-            _getDetailsInfoWidget(),
-            _getDescriptionInfoWidget(),
-            _getAboutInfoWidget(),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _getProductImagesWidget(BuildContext context) {
+  Widget _getProductImagesWidget(BuildContext context, VendorProduct? product) {
     return SizedBox(
       height: getHeight(context) * 0.35,
       child: Row(
@@ -88,7 +101,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         void Function(void Function()) setState,
                       ) {
                         return CarouselWidget(
-                          images: dummyImageList,
+                          images: product?.images ?? [],
                           initialPage: _selectedIndex,
                         );
                       },
@@ -97,7 +110,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 );
               },
               child: CachedNetworkImage(
-                imageUrl: dummyImageList[_selectedIndex],
+                imageUrl: product?.images![_selectedIndex].src ?? '',
                 height: getHeight(context) * 0.35,
                 fit: BoxFit.fill,
                 progressIndicatorBuilder: (context, url, progress) => SizedBox(
@@ -119,7 +132,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           Expanded(
             flex: 2,
             child: ListView.separated(
-              itemCount: dummyImageList.length,
+              itemCount: product!.images!.length,
               shrinkWrap: true,
               padding: const EdgeInsets.all(0),
               itemBuilder: (BuildContext context, int index) {
@@ -135,8 +148,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     child: Stack(
                       children: [
                         CachedNetworkImage(
-                          imageUrl: dummyImageList[index],
-                          height: ((getHeight(context) * 0.35) / 5) - 8,
+                          imageUrl: product.images![index].src!,
+                          height: ((getHeight(context) * 0.35) / product.images!.length) - 8,
                           width: double.infinity,
                           fit: BoxFit.cover,
                           progressIndicatorBuilder: (context, url, progress) => SizedBox(
@@ -180,6 +193,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     return Center(
       child: Text(
         title,
+        textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -188,115 +202,35 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Widget _getAboutInfoWidget() {
+  Widget _getAboutInfoWidget(VendorProduct? product) {
     return Visibility(
       visible: _selectedTab == ProductDetailsTab.aboutSellerTab,
       child: Container(
-        padding: const EdgeInsets.only(left: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _getRichTextWidget(
-              title: 'About',
-              info: 'For Product Multimedia,',
-            ),
-            _getRichTextWidget(
-              title: 'Refresh Rate',
-              info: '60 Hz',
-            ),
-            _getRichTextWidget(
-              title: 'Brand Sceptre',
-              info: '',
-            ),
-            _getRichTextWidget(
-              title: 'Screen Size',
-              info: '24 inches',
-            ),
-            _getRichTextWidget(
-              title: 'Special Feature',
-              info: 'Blue Light Filter,',
-            ),
-            _getRichTextWidget(
-              title: 'Tilt Adjustment,',
-              info: 'Flicker-Free, Build-In speaker',
-            ),
-          ],
+        padding: const EdgeInsets.only(left: 20),
+        child: Html(
+          data: product?.vendor ?? '',
         ),
       ),
     );
   }
 
-  Widget _getDescriptionInfoWidget() {
+  Widget _getDescriptionInfoWidget(VendorProduct? product) {
     return Visibility(
       visible: _selectedTab == ProductDetailsTab.descTab,
       child: Container(
-        padding: const EdgeInsets.only(left: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _getRichTextWidget(
-              title: 'Description',
-              info: 'For Product Multimedia,',
-            ),
-            _getRichTextWidget(
-              title: 'Refresh Rate',
-              info: '60 Hz',
-            ),
-            _getRichTextWidget(
-              title: 'Brand Sceptre',
-              info: '',
-            ),
-            _getRichTextWidget(
-              title: 'Screen Size',
-              info: '24 inches',
-            ),
-            _getRichTextWidget(
-              title: 'Special Feature',
-              info: 'Blue Light Filter,',
-            ),
-            _getRichTextWidget(
-              title: 'Tilt Adjustment,',
-              info: 'Flicker-Free, Build-In speaker',
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.only(left: 20),
+        child: Html(data: product?.description ?? ''),
       ),
     );
   }
 
-  Widget _getDetailsInfoWidget() {
+  Widget _getDetailsInfoWidget(VendorProduct? product) {
     return Visibility(
       visible: _selectedTab == ProductDetailsTab.detailsTab,
       child: Container(
-        padding: const EdgeInsets.only(left: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _getRichTextWidget(
-              title: 'Specific Uses',
-              info: 'For Product Multimedia,',
-            ),
-            _getRichTextWidget(
-              title: 'Refresh Rate',
-              info: '60 Hz',
-            ),
-            _getRichTextWidget(
-              title: 'Brand Sceptre',
-              info: '',
-            ),
-            _getRichTextWidget(
-              title: 'Screen Size',
-              info: '24 inches',
-            ),
-            _getRichTextWidget(
-              title: 'Special Feature',
-              info: 'Blue Light Filter,',
-            ),
-            _getRichTextWidget(
-              title: 'Tilt Adjustment,',
-              info: 'Flicker-Free, Build-In speaker',
-            ),
-          ],
+        padding: const EdgeInsets.only(left: 20),
+        child: Html(
+          data: product?.description ?? '',
         ),
       ),
     );
@@ -333,7 +267,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  Widget _getShipmentInfoWidget() {
+  Widget _getShipmentInfoWidget(WooCommerceMarketPlaceProvider provider) {
     return Container(
       color: Colors.black.withOpacity(0.55),
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -342,20 +276,20 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         child: RichText(
           text: TextSpan(
             children: [
-              TextSpan(
+              const TextSpan(
                 text: 'SHIPMENT = Standard Delivery ',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 13,
                 ),
               ),
               TextSpan(
-                text: '(7USD)',
+                text: '(\$${provider.deliveryPrice})',
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.blue[300],
                 ),
               ),
-              TextSpan(
+              const TextSpan(
                 text: ': 3 hrs to 24 hrs',
                 style: TextStyle(
                   fontSize: 13,
@@ -413,18 +347,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _getTabTextWidget(
+            /*_getTabTextWidget(
               title: 'Details',
               targetTab: ProductDetailsTab.detailsTab,
-            ),
+            ),*/
             _getTabTextWidget(
               title: 'Description',
               targetTab: ProductDetailsTab.descTab,
             ),
-            _getTabTextWidget(
+            /*_getTabTextWidget(
               title: 'About',
               targetTab: ProductDetailsTab.aboutSellerTab,
-            ),
+            ),*/
           ],
         ),
       ),
