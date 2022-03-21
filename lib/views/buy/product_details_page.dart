@@ -112,7 +112,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               child: CachedNetworkImage(
                 imageUrl: product?.images![_selectedIndex].src ?? '',
                 height: getHeight(context) * 0.35,
-                fit: BoxFit.fill,
+                fit: BoxFit.fitHeight,
                 progressIndicatorBuilder: (context, url, progress) => SizedBox(
                   height: getHeight(context) * 0.35,
                   child: Shimmer.fromColors(
