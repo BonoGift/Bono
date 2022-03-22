@@ -32,33 +32,32 @@ class HistoryListItem extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.push(
+                /*Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (c) => ProductDetailsPage(),
+                    builder: (c) => const ProductDetailsPage(),
                   ),
-                );
+                );*/
               },
-              child: Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black26, width: 5),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: history.giftImage!,
+              child: Container(
+                width: getWidth(context) * 0.25,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black26, width: 5),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: history.giftImage!,
+                  width: getWidth(context) * 0.25,
+                  height: getWidth(context) * 0.25,
+                  progressIndicatorBuilder: (context, url, progress) => SizedBox(
                     width: getWidth(context) * 0.25,
                     height: getWidth(context) * 0.25,
-                    progressIndicatorBuilder: (context, url, progress) => SizedBox(
-                      width: getWidth(context) * 0.25,
-                      height: getWidth(context) * 0.25,
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.white,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                          ),
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.white,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.grey,
                         ),
                       ),
                     ),
@@ -66,39 +65,37 @@ class HistoryListItem extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    PrimaryText(
-                      text: giftStatus(history.isReceived),
-                      maxLines: 2,
-                      fontSize: 13,
-                      color: history.isReceived ? Colors.deepPurple : Colors.blue,
-                    ),
-                    PrimaryText(
-                      text: 'Status: ${history.status}',
-                      fontSize: 13,
-                      maxLines: 2,
-                    ),
-                    PrimaryText(
-                      text: history.date.toString(),
-                      fontSize: 13,
-                    ),
-                    PrimaryText(
-                      text: '\$${history.price}',
-                      fontSize: 13,
-                    ),
-                  ],
-                ),
+            Container(
+              width: getWidth(context) * 0.45,
+              padding: const EdgeInsets.only(left: 10.0, right: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  PrimaryText(
+                    text: giftStatus(history.isReceived),
+                    maxLines: 2,
+                    fontSize: 13,
+                    color: history.isReceived ? Colors.deepPurple : Colors.blue,
+                  ),
+                  PrimaryText(
+                    text: 'Status: ${history.status}',
+                    fontSize: 13,
+                    maxLines: 2,
+                  ),
+                  PrimaryText(
+                    text: history.date.toString(),
+                    fontSize: 13,
+                  ),
+                  PrimaryText(
+                    text: '\$${history.price}',
+                    fontSize: 13,
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              flex: 1,
+            Container(
+              width: getWidth(context) * 0.225,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -116,12 +113,10 @@ class HistoryListItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Flexible(
-                    child: PrimaryText(
-                      text: history.isReceived ? history.senderName! : history.receiverName!,
-                      fontSize: 9,
-                      textAlign: TextAlign.center,
-                    ),
+                  PrimaryText(
+                    text: history.isReceived ? history.senderName! : history.receiverName!,
+                    fontSize: 9,
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                 ],
