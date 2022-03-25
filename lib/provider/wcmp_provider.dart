@@ -130,9 +130,9 @@ class WooCommerceMarketPlaceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int finalPrice() {
-    final int actualPrice = int.parse(selectedProduct!.price!);
-    final int totalPrice = actualPrice + deliveryPrice.toInt();
+  double finalPrice() {
+    final double actualPrice = double.parse(selectedProduct!.price!);
+    final double totalPrice = actualPrice + deliveryPrice.toDouble();
     return totalPrice;
   }
 
