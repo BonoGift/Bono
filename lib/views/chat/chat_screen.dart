@@ -317,7 +317,6 @@ class _ChatScreenState extends State<ChatScreen> {
               if (allDateTimeList.contains(dateTime)) return;
               allDateTimeList.add(dateTime);
             });
-            print('here');
             return ListView(
               controller: _controller,
               // physics: NeverScrollableScrollPhysics(),

@@ -1,5 +1,6 @@
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/feeds_provider.dart';
+import 'package:bono_gifts/views/birthday/birthday.dart';
 import 'package:bono_gifts/views/camera/camera.dart';
 import 'package:bono_gifts/views/chat/chat.dart';
 import 'package:bono_gifts/views/feeds/feeds.dart';
@@ -26,7 +27,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
     const BuyPage(),
     //const HistoryPage(fromHomepage: true),
     Feeds(),
-    const CameraScreen(),
+    //const CameraScreen(),
+    const BirthdayPage(),
     const ProfilePage()
   ];
 
@@ -62,7 +64,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 children: allPages,
               ),
               Visibility(
-                visible: index == 4 || index == 1,
+                visible: index == 4 || index == 1 || index == 3,
                 child: Positioned(
                   top: index == 1 ? 16 : 0,
                   left: index == 1 ? 16 : 8,
@@ -74,7 +76,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         setState(() {});
                       }
                     },
-                    child:  Icon(
+                    child: Icon(
                       Icons.arrow_back_ios,
                       color: index == 1 ? Colors.white : Colors.black,
                       size: 24,
@@ -121,11 +123,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 label: 'Feeds'),
             BottomNavigationBarItem(
                 icon: Image.asset(
-                  index == 3 ? cameraIconBlue : cameraIconGrey,
+                  index == 3 ? coneIconBlue : coneIconGrey,
                   height: 20,
                   width: 20,
                 ),
-                label: 'Camera'),
+                label: 'Birthday'),
             BottomNavigationBarItem(
                 icon: Image.asset(
                   index == 4 ? profileIconBlue : profileIconGrey,

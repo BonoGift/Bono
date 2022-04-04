@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:bono_gifts/models/birthday_network_model.dart';
 import 'package:bono_gifts/models/contact_model.dart';
 import 'package:bono_gifts/models/move_list_model.dart';
 import 'package:bono_gifts/models/network_cat_model.dart';
@@ -10,6 +11,7 @@ import 'package:bono_gifts/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
@@ -25,6 +27,23 @@ class ChatProvider extends ChangeNotifier {
   List<NetWorkModel> schoolList = [];
   List<NetWorkModel> othersList = [];
 
+  //List<NetWorkModel> birthdayNetworkList = [];
+  List<BirthdayNetworkModel> birthdayNetworkList = [
+    BirthdayNetworkModel(month: 'January', items: [], sequence: 1),
+    BirthdayNetworkModel(month: 'February', items: [], sequence: 2),
+    BirthdayNetworkModel(month: 'March', items: [], sequence: 3),
+    BirthdayNetworkModel(month: 'April', items: [], sequence: 4),
+    BirthdayNetworkModel(month: 'May', items: [], sequence: 5),
+    BirthdayNetworkModel(month: 'June', items: [], sequence: 6),
+    BirthdayNetworkModel(month: 'July', items: [], sequence: 7),
+    BirthdayNetworkModel(month: 'August', items: [], sequence: 8),
+    BirthdayNetworkModel(month: 'September', items: [], sequence: 9),
+    BirthdayNetworkModel(month: 'October', items: [], sequence: 10),
+    BirthdayNetworkModel(month: 'November', items: [], sequence: 11),
+    BirthdayNetworkModel(month: 'December', items: [], sequence: 12),
+  ];
+  List<BirthdayNetworkModel> formattedBirthdayNetworkList = [];
+
   List<NetWorkModel> moveList = [];
 
   List<String> newList = [];
@@ -34,11 +53,13 @@ class ChatProvider extends ChangeNotifier {
   bool isScreenOn = true;
   bool isFirstLoad = true;
 
-  void changeIsScreenOnValue(){
+  List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  void changeIsScreenOnValue() {
     isScreenOn = false;
   }
 
-  void changeIsFirstLoad(){
+  void changeIsFirstLoad() {
     isFirstLoad = false;
   }
 
@@ -197,7 +218,6 @@ class ChatProvider extends ChangeNotifier {
 
   addinMatchList(String char) {
     matchList.add(char);
-    // notifyListeners();
   }
 
   List<NetWorkModel> netWorkLsit = [];
@@ -215,33 +235,37 @@ class ChatProvider extends ChangeNotifier {
   ];
 
   fetchNewtrork(BuildContext context) {
-    print(contactList);
-    // .where('searchPhone',isLessThanOrEqualTo: contactList[i]).where('searchPhone1',isEqualTo: contactList[i])
+    //print(contactList);
     for (var i = 0; i < contactList.length; i++) {
       service.fetchSearch1(contactList, i, 'searchPhone1').then((value) {
         for (var d = 0; d < value.docs.length; d++) {
-          print(value.docs[d]['name']);
           netWorkLsit.add(NetWorkModel(
             name: value.docs[d]['name'],
             phone: value.docs[d]['phone'],
             photo: value.docs[d]['profile_url'],
+            dobFormat: value.docs[d]['dobFormat'],
             isSelect: false,
           ));
         }
       });
       service.fetchSearch1(contactList, i, 'phone').then((value) {
         for (var d = 0; d < value.docs.length; d++) {
-          print(value.docs[d]['name']);
-          netWorkLsit.add(NetWorkModel(name: value.docs[d]['name'], phone: value.docs[d]['phone'], photo: value.docs[d]['profile_url'], isSelect: false));
-        }
-      });
-      service.fetchSearch1(contactList, i, 'searchPhone').then((value) {
-        for (var d = 0; d < value.docs.length; d++) {
-          print(value.docs[d]['name']);
           netWorkLsit.add(NetWorkModel(
             name: value.docs[d]['name'],
             phone: value.docs[d]['phone'],
             photo: value.docs[d]['profile_url'],
+            dobFormat: value.docs[d]['dobFormat'],
+            isSelect: false,
+          ));
+        }
+      });
+      service.fetchSearch1(contactList, i, 'searchPhone').then((value) {
+        for (var d = 0; d < value.docs.length; d++) {
+          netWorkLsit.add(NetWorkModel(
+            name: value.docs[d]['name'],
+            phone: value.docs[d]['phone'],
+            photo: value.docs[d]['profile_url'],
+            dobFormat: value.docs[d]['dobFormat'],
             isSelect: false,
           ));
         }
@@ -265,6 +289,7 @@ class ChatProvider extends ChangeNotifier {
                     'imageUrl': d.photo,
                     'phone': d.phone,
                     'name': d.name,
+                    'dobFormat': d.dobFormat,
                   },
                   d.phone)
               .then((value) {
@@ -296,31 +321,33 @@ class ChatProvider extends ChangeNotifier {
       service.getContactsFromFirebase(pro.phone!, d).then((value) {
         try {
           for (var dd in value.docs) {
+            formatBirthdayNetworkList(
+              NetWorkModel(
+                phone: dd['phone'],
+                photo: dd['imageUrl'],
+                isSelect: false,
+                name: dd['name'],
+                dobFormat: dd['dobFormat'],
+              ),
+            );
             switch (dd['status']) {
               case 0:
                 friendsList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //print(friendsList.toString() + '--------- friendList');
-                //notifyListeners();
                 break;
               case 1:
                 familyList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
                 break;
               case 2:
                 workList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
                 break;
               case 3:
                 schoolList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
                 break;
               case 4:
                 neighborList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
                 break;
               case 5:
                 othersList.add(NetWorkModel(phone: dd['phone'], photo: dd['imageUrl'], isSelect: false, name: dd['name']));
-                //notifyListeners();
                 break;
             }
             notifyListeners();
@@ -331,7 +358,171 @@ class ChatProvider extends ChangeNotifier {
       });
       notifyListeners();
     }
-    //notifyListeners();
+    sortBirthdayNetworkList();
+  }
+
+  void formatBirthdayNetworkList(NetWorkModel data) {
+    DateFormat dateFormat = DateFormat('MMMM');
+
+    String month = dateFormat.format(DateTime.parse(data.dobFormat!.toDate().toString())).toString();
+
+    int index = birthdayNetworkList.indexWhere((element) => element.month == month);
+    birthdayNetworkList[index].items.add(data);
+  }
+
+  void sortBirthdayNetworkList() {
+    if (birthdayNetworkList.isNotEmpty) {
+      List<BirthdayNetworkModel> items = [];
+
+      birthdayNetworkList.sort((a, b) {
+        return a.sequence!.compareTo(b.sequence!);
+      });
+
+      birthdayNetworkList.removeWhere((element) {
+        if (months.indexOf(element.month!) + 1 < DateTime.now().month) {
+          items.add(element);
+          return true;
+        }
+        return false;
+      });
+
+      birthdayNetworkList.addAll(items);
+
+      birthdayNetworkList.forEach((element) {
+        element.items.sort((a, b) {
+          DateTime aDateTime = a.dobFormat!.toDate();
+          DateTime bDateTime = b.dobFormat!.toDate();
+          DateTime now = DateTime.now();
+
+          var daOfBirth = DateTime(now.year, aDateTime.month, aDateTime.day);
+          var todayDate = DateTime(now.year, bDateTime.month, bDateTime.day);
+          var io = daOfBirth.difference(todayDate).inDays;
+
+          return io < 0 ? -1 : 1;
+        });
+      });
+    }
+  }
+
+  String getBirthdayDaysLeft(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    DateTime now = DateTime.now();
+    var daOfBirth = DateTime(now.year, dateTime.month, dateTime.day);
+    var todayDate = DateTime(now.year, now.month, now.day);
+    var io = daOfBirth.difference(todayDate).inDays;
+
+    if (io == 0) {
+      return 'Today';
+    }
+
+    if (io == 1) {
+      return 'Tomorrow';
+    }
+
+    if (io < 0) {
+      io = io + 365;
+    }
+    return io.toString();
+  }
+
+  String getBirthdayDate(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    var inputFormat = DateFormat('dd-MMM, EEEE');
+    String formattedDate = inputFormat.format(dateTime);
+    return formattedDate;
+  }
+
+  String getZodiacByBirthday(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    String zodiac = getZodiacSign(dateTime);
+    return zodiac;
+  }
+
+  String getZodiacSign(DateTime date) {
+    var days = date.day;
+    var months = date.month;
+    if (months == 1) {
+      if (days >= 21) {
+        return "aquarius";
+      } else {
+        return "capricorn";
+      }
+    } else if (months == 2) {
+      if (days >= 20) {
+        return "picis";
+      } else {
+        return "aquarius";
+      }
+    } else if (months == 3) {
+      if (days >= 21) {
+        return "aries";
+      } else {
+        return "pisces";
+      }
+    } else if (months == 4) {
+      if (days >= 21) {
+        return "taurus";
+      } else {
+        return "aries";
+      }
+    } else if (months == 5) {
+      if (days >= 22) {
+        return "gemini";
+      } else {
+        return "taurus";
+      }
+    } else if (months == 6) {
+      if (days >= 22) {
+        return "cancer";
+      } else {
+        return "gemini";
+      }
+    } else if (months == 7) {
+      if (days >= 23) {
+        return "leo";
+      } else {
+        return "cancer";
+      }
+    } else if (months == 8) {
+      if (days >= 23) {
+        return "virgo";
+      } else {
+        return "leo";
+      }
+    } else if (months == 9) {
+      if (days >= 24) {
+        return "libra";
+      } else {
+        return "virgo";
+      }
+    } else if (months == 10) {
+      if (days >= 24) {
+        return "scorpio";
+      } else {
+        return "libra";
+      }
+    } else if (months == 11) {
+      if (days >= 23) {
+        return "sagittarius";
+      } else {
+        return "scorpio";
+      }
+    } else if (months == 12) {
+      if (days >= 22) {
+        return "capricorn";
+      } else {
+        return "sagittarius";
+      }
+    }
+    return "";
+  }
+
+  bool checkBirthdayPassed(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    var daOfBirth = DateTime(date.year, dateTime.month, dateTime.day);
+    var todayDate = DateTime(date.year, date.month, date.day);
+    var io = daOfBirth.difference(todayDate).inDays;
+    return io < 0;
   }
 
   DateTime date = DateTime.now();

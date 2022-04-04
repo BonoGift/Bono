@@ -22,6 +22,8 @@ const String feedIConGrey = 'assets/images/Feeds-icon-grey.png';
 const String feedIconBlue = 'assets/images/Feeds-icon-blue.png';
 const String cameraIconGrey = 'assets/images/camera-icon-grey.png';
 const String cameraIconBlue = 'assets/images/camera-icon-blue.png';
+const String coneIconBlue = 'assets/images/cone-blue.png';
+const String coneIconGrey = 'assets/images/cone-grey.png';
 const String profileIconGrey = 'assets/images/profile-icon-grey.png';
 const String profileIconBlue = 'assets/images/profile-icon-blue.png';
 
