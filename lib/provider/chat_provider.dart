@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bono_gifts/models/birthday_network_model.dart';
+import 'package:bono_gifts/models/celebrities_model.dart';
+import 'package:bono_gifts/models/celebrity_item_model.dart';
 import 'package:bono_gifts/models/contact_model.dart';
 import 'package:bono_gifts/models/move_list_model.dart';
 import 'package:bono_gifts/models/network_cat_model.dart';
 import 'package:bono_gifts/models/network_model.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
+import 'package:bono_gifts/services/celebrities_service.dart';
 import 'package:bono_gifts/services/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,7 +30,8 @@ class ChatProvider extends ChangeNotifier {
   List<NetWorkModel> schoolList = [];
   List<NetWorkModel> othersList = [];
 
-  //List<NetWorkModel> birthdayNetworkList = [];
+  List<CelebritiesModel> celebritiesList = [];
+
   List<BirthdayNetworkModel> birthdayNetworkList = [
     BirthdayNetworkModel(month: 'January', items: [], sequence: 1),
     BirthdayNetworkModel(month: 'February', items: [], sequence: 2),
@@ -52,6 +56,8 @@ class ChatProvider extends ChangeNotifier {
 
   bool isScreenOn = true;
   bool isFirstLoad = true;
+
+  final celebritiesService = CelebritiesService();
 
   List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -404,8 +410,56 @@ class ChatProvider extends ChangeNotifier {
     }
   }
 
-  String getBirthdayDaysLeft(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
+  void sortCelebritiesList() {
+    if (celebritiesList.isNotEmpty) {
+      List<CelebritiesModel> items = [];
+
+      celebritiesList.sort((a, b) {
+        return a.sequence! > b.sequence! ? 1 : -1;
+      });
+
+      celebritiesList.removeWhere((element) {
+        if (months.indexOf(element.month!) + 1 < DateTime.now().month) {
+          items.add(element);
+          return true;
+        }
+        return false;
+      });
+      celebritiesList.addAll(items);
+    }
+  }
+
+  Future<void> getCelebritiesList() async {
+    await celebritiesService.getCelebritiesList().then((data) async {
+      for (var item in data.docs) {
+        List<CelebrityItemModel> items = [];
+
+        await celebritiesService.getCelebritiesDataList(id: item.reference.id).then((value) {
+          for (var snapshot in value.docs) {
+            items.add(
+              CelebrityItemModel(
+                id: snapshot.reference.id,
+                name: snapshot['name'],
+                birthday: DateTime.parse(snapshot['birthday']!),
+                zodiac: snapshot['zodiac'],
+                image: snapshot['image'],
+              ),
+            );
+          }
+          celebritiesList.add(
+            CelebritiesModel(
+              month: item['month'],
+              items: items,
+              sequence: (months.indexOf(item['month']) + 1),
+            ),
+          );
+        });
+      }
+    });
+    sortCelebritiesList();
+  }
+
+  String getBirthdayDaysLeft(DateTime dateTime) {
     DateTime now = DateTime.now();
     var daOfBirth = DateTime(now.year, dateTime.month, dateTime.day);
     var todayDate = DateTime(now.year, now.month, now.day);
@@ -425,9 +479,8 @@ class ChatProvider extends ChangeNotifier {
     return io.toString();
   }
 
-  String getBirthdayDate(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
-    var inputFormat = DateFormat('dd-MMM, EEEE');
+  String getBirthdayDate(DateTime dateTime, {DateFormat? dateFormat}) {
+    var inputFormat = dateFormat ?? DateFormat('dd-MMM, EEEE');
     String formattedDate = inputFormat.format(dateTime);
     return formattedDate;
   }
@@ -517,8 +570,7 @@ class ChatProvider extends ChangeNotifier {
     return "";
   }
 
-  bool checkBirthdayPassed(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
+  bool checkBirthdayPassed(DateTime dateTime) {
     var daOfBirth = DateTime(date.year, dateTime.month, dateTime.day);
     var todayDate = DateTime(date.year, date.month, date.day);
     var io = daOfBirth.difference(todayDate).inDays;
