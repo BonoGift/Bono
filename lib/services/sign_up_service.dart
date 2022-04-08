@@ -75,10 +75,12 @@ class SignUpService {
         'dobFormat': map['dobFormat'],
         'country': map['country'],
         'villa': map['villa'],
+        'direction': map['direction'],
         'buildingName': map['buildingName'],
         'area': map['area'],
         'city': map['city'],
         'street': map['street'],
+        'location_title': map['location_title'],
         'searchPhone': map['searchPhone'],
         'searchPhone1': '00${map['phone'].toString().substring(1, map['phone'].length)}',
       };
@@ -100,9 +102,11 @@ class SignUpService {
         'country': map['country'],
         'city': map['city'],
         'villa': map['villa'],
+        'direction': map['direction'],
         'buildingName': map['buildingName'],
         'area': map['area'],
         'street': map['street'],
+        'location_title': map['location_title'],
         'searchPhone': map['searchPhone'],
         'searchPhone1': '00${map['phone'].toString().substring(1, map['phone'].length)}',
       };
@@ -127,9 +131,11 @@ class SignUpService {
           'country': map['country'],
           'city': map['city'],
           'villa': map['villa'],
+          'direction': map['direction'],
           'buildingName': map['buildingName'],
           'area': map['area'],
           'street': map['street'],
+          'location_title': map['location_title'],
         };
         await ref.update(userData);
       } else {
@@ -148,9 +154,11 @@ class SignUpService {
           'country': map['country'],
           'city': map['city'],
           'villa': map['villa'],
+          'direction': map['direction'],
           'buildingName': map['buildingName'],
           'area': map['area'],
           'street': map['street'],
+          'location_title': map['location_title'],
         };
         await ref.update(userData);
       }

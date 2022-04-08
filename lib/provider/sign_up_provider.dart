@@ -30,6 +30,8 @@ class SignUpProvider extends ChangeNotifier {
   TextEditingController area = TextEditingController();
   TextEditingController street = TextEditingController();
   TextEditingController city = TextEditingController();
+  TextEditingController direction = TextEditingController();
+  TextEditingController custom = TextEditingController();
   double? latitude;
   double? longitude;
   Map<MarkerId, Marker> markers = {};
@@ -71,6 +73,10 @@ class SignUpProvider extends ChangeNotifier {
   setStreet(String sStreet) => street = TextEditingController(text: sStreet);
 
   setCity(String sCity) => city = TextEditingController(text: sCity);
+
+  setTitle(String sTitle) => deliTitleContr = TextEditingController(text: sTitle);
+
+  setOptional(String sOptional) => direction = TextEditingController(text: sOptional);
 
   setPhoneNum(String phone) {
     phoneNumber = TextEditingController(text: phone);
@@ -156,7 +162,11 @@ class SignUpProvider extends ChangeNotifier {
 
   addMarker() {
     MarkerId markerId = const MarkerId("map");
-    Marker marker = Marker(markerId: markerId, icon: BitmapDescriptor.defaultMarker, position: LatLng(latitude!, longitude!));
+    Marker marker = Marker(
+      markerId: markerId,
+      icon: BitmapDescriptor.defaultMarker,
+      position: LatLng(latitude!, longitude!),
+    );
     markers[markerId] = marker;
   }
 
@@ -175,7 +185,9 @@ class SignUpProvider extends ChangeNotifier {
       'area': area.text,
       'street': street.text,
       'searchPhone': '0${phoneNumber.text}',
+      'direction': direction.text,
       'dailCode': dailCode,
+      'location_title': deliTitleContr.text,
     };
     service.saveToFirebase(userMap).then((value) {
       saveToShared(true);
@@ -203,7 +215,9 @@ class SignUpProvider extends ChangeNotifier {
       'buildingName': buildingName.text,
       'area': area.text,
       'street': street.text,
+      'direction': direction.text,
       'dailCode': dailCode,
+      'location_title': deliTitleContr.text,
     };
     phone = phoneNumber.text;
     await service.checkIfUserAlready(phoneNumber.text).then((value) {
@@ -239,9 +253,11 @@ class SignUpProvider extends ChangeNotifier {
       country = data['country'];
       city = TextEditingController(text: data['city']);
       room = TextEditingController(text: data['villa']);
+      direction = TextEditingController(text: data['direction']);
       buildingName = TextEditingController(text: data['buildingName']);
       area = TextEditingController(text: data['area']);
       street = TextEditingController(text: data['street']);
+      deliTitleContr = TextEditingController(text: data['location_title']);
       code = data['dailCode'] ?? '';
       getDateDiff();
       notifyListeners();

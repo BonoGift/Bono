@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:bono_gifts/config/constants.dart';
 import 'package:bono_gifts/provider/sign_up_provider.dart';
 import 'package:bono_gifts/views/signup/delivery_address.dart';
@@ -292,8 +293,15 @@ class _CreateProfileState extends State<CreateProfile> {
                       pro.makeWaitingState();
                       pro.signUpUser(context,true);
                     },
-                    child: pro.isWaitingCon ? const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),):const Text("Done",style: TextStyle(color: Colors.white),),
-                  )
+                    child: pro.isWaitingCon
+                        ? const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          )
+                        : const Text(
+                            "Done",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                  ),
                 ],
               ),
             ),
