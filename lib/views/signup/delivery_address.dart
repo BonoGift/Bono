@@ -47,7 +47,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       final pro = Provider.of<SignUpProvider>(context, listen: false);
       pro.setLocation(_controller!);
       isHomeSelected = pro.deliTitleContr.text == 'Home' ? true : false;
@@ -1345,7 +1345,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
             ),
             child: Icon(
               icon,
-              color: isSelected ? Colors.green : Colors.black.withOpacity(0.6),
+              color: isSelected ? Colors.blue : Colors.black.withOpacity(0.6),
               size: 28,
             ),
           ),
