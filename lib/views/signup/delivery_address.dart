@@ -294,7 +294,7 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                   height: getHeight(context),
                   width: getWidth(context),
                   child: GoogleMap(
-                    initialCameraPosition: CameraPosition(target: latLng, zoom: 3.0),
+                    initialCameraPosition: CameraPosition(target: latLng, zoom: 16.5),
                     onMapCreated: onMapCreated,
                     myLocationEnabled: true,
                     myLocationButtonEnabled: false,
@@ -990,73 +990,73 @@ class _DeliveryAddressState extends State<DeliveryAddress> {
                   context: context,
                   barrierDismissible: true,
                   builder: (context) {
-                    return Container(
-                      height: 200,
-                      color: Colors.transparent,
-                      margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 300),
-                      child: StatefulBuilder(builder: (
-                        BuildContext context,
-                        void Function(void Function()) setState,
-                      ) {
-                        return Scaffold(
-                          backgroundColor: Colors.white,
-                          resizeToAvoidBottomInset: false,
-                          body: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: Form(
-                                  key: customLocationKey,
-                                  child: TextFormField(
-                                    controller: pro.custom,
-                                    validator: (val) {
-                                      if (val?.isEmpty ?? true) {
-                                        return "Location title is required";
-                                      }
-                                    },
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter you custom title for this location',
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
+                    return StatefulBuilder(builder: (
+                      BuildContext context,
+                      void Function(void Function()) setState,
+                    ) {
+                      return Dialog(
+                        insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: SizedBox(
+                          height: 200,
+                          child: Scaffold(
+                            backgroundColor: Colors.white,
+                            body: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  child: Form(
+                                    key: customLocationKey,
+                                    child: TextFormField(
+                                      controller: pro.custom,
+                                      validator: (val) {
+                                        if (val?.isEmpty ?? true) {
+                                          return "Location title is required";
+                                        }
+                                      },
+                                      decoration: const InputDecoration(
+                                        hintText: 'Enter you custom title for this location',
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  if (customLocationKey.currentState!.validate()) {
-                                    setState(() {
-                                      pro.setTitle(pro.custom.text);
-                                    });
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                  margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(32),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Save',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                InkWell(
+                                  onTap: () {
+                                    if (customLocationKey.currentState!.validate()) {
+                                      setState(() {
+                                        pro.setTitle(pro.custom.text);
+                                      });
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(32),
+                                    ),
+                                    child: const Center(
+                                      child: Text(
+                                        'Save',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        );
-                      }),
-                    );
+                        ),
+                      );
+                    });
                   });
             },
             child: _getLocationNameWidget(
