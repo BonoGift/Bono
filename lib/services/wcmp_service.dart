@@ -16,7 +16,7 @@ class WooCommerceMarketPlaceService {
       contentType: 'application/json',
       headers: {
         'authorization':
-            'Basic ${base64Encode(utf8.encode('ck_542ab1805cfc5701ef7abdc54de9650bf59ede78:cs_fa172cd7845d961d251e6b41c2db37c4d8aab9ae'))}',
+            'Basic ${base64Encode(utf8.encode('ck_b7380eae008aeb8dc81dce2fc5378c58866fbc5b:cs_1e58611ffbecf461f78bf5dcf0b1d252493fc999'))}',
       },
     ),
   );
